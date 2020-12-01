@@ -33,7 +33,7 @@ describe CustomersController do
   #   must_respond_with :ok
   # end
 
-  CUSTOMER_FIELDS = ["id", "name", "registered_at", "address", "city", "state", "postal_code", "phone", "videos_checked_out_count"].sort
+  CUSTOMER_FIELDS = ["id", "name", "registered_at", "address", "city", "state", "postal_code", "phone"].sort
 
   describe "index" do
     it "must get index" do

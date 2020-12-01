@@ -47,10 +47,11 @@ describe VideosController do
       body = JSON.parse(response.body)
 
       # Assert
-      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
+      fields = ["id", "title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields
+      expect(body["id"]).must_equal wonder_woman.id
       expect(body["title"]).must_equal "Wonder Woman 2"
-      expect(body["release_date"]).must_equal "December 25th 2020"
+      expect(body["release_date"]).must_equal "2020-12-25"
       expect(body["available_inventory"]).must_equal 100
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
       expect(body["total_inventory"]).must_equal 100
@@ -58,33 +59,34 @@ describe VideosController do
       must_respond_with :ok
     end
 
-    it "responds with a 404 for non-existant videos" do
-      # Act
+    it 'will return a 404 request with json for a non-existent video' do
       get video_path(-1)
-      body = JSON.parse(response.body)
 
-      # Assert
-      expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include  "Not Found"
-      must_respond_with :not_found      
+      must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['message']).must_equal 'Not found'
     end
   end
 
   describe "create" do
-    it "can create a valid video" do
-      # Arrange
-      video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
+    let(:video_params) {
+      {
+          video_hash: {
+              title: "Alf the movie",
+              overview: "The most early 90s movie of all time",
+              release_date: "2020-12-25",
+              total_inventory: 6,
+              available_inventory: 6
+          }
       }
-
+    }
+    it "can create a valid video" do
       # Assert
       expect {
-        post videos_path, params: video_hash
-      }.must_change "Video.count", 1
+        post videos_path, params: video_params
+      }.must_differ "Video.count", 1
 
       must_respond_with :created
     end
