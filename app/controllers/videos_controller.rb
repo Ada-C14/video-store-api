@@ -1,15 +1,15 @@
 class VideosController < ApplicationController
   def index
-    customers = Customer.all.order(:name)
+    videos = Video.all.order(:name)
 
-    render json: customers.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :postal_code, :phone]),
+    render json: videos.as_json(only: [:id, :title, :overview, :release_date, :total_inventory, :available_inventory]),
            status: :ok
   end
 
   def show
-    customer = Customer.find_by(id: params[:id])
+    video = Video.find_by(id: params[:id])
 
-    if customer.nil?
+    if video.nil?
       render json: {
           ok: false,
           message: 'Not found',
@@ -18,24 +18,23 @@ class VideosController < ApplicationController
       return
     end
 
-    render json: customer.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :postal_code, :phone]),
+    render json: video.as_json(only: [:id, :title, :overview, :release_date, :total_inventory, :available_inventory]),
            status: :ok
   end
 
   def create
-    customer = Customer.new(pet_params)
+    video = Video.new(video_params)
 
-    if customer.save
-      render json: customer.as_json(only: [:id]), status: :created
+    if video.save
+      render json: video.as_json(only: [:id]), status: :created
     else
-      render json: { errors: customer.errors.messages }, status: :bad_request
+      render json: { errors: video.errors.messages }, status: :bad_request
     end
   end
 
   private
 
-  def pet_params
-    return params.require(:customer).permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone)
+  def video_params
+    return params.require(:video).permit(:title, :overview, :release_date, :total_inventory, :available_inventory)
   end
-end
 end

@@ -23,7 +23,7 @@ class CustomersController < ApplicationController
   end
 
   def create
-    customer = Customer.new(pet_params)
+    customer = Customer.new(customer_params)
 
     if customer.save
       render json: customer.as_json(only: [:id]), status: :created
@@ -34,7 +34,7 @@ class CustomersController < ApplicationController
 
   private
 
-  def pet_params
+  def customer_params
     return params.require(:customer).permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone)
   end
 end
