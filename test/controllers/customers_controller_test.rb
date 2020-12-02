@@ -47,6 +47,17 @@ describe CustomersController do
       expect(response.header['Content-Type']).must_include 'json'
       expect(body.keys.sort).must_equal FIELDS
     end
+
+    it "it will return a not_found request if customer doesn't exist" do
+      get customer_path(-1)
+
+      body = JSON.parse(response.body)
+
+      must_respond_with :not_found
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['message']).must_equal "Not Found"
+    end
   end
 
 
