@@ -16,7 +16,6 @@ class VideosController < ApplicationController
               [
                   "Not Found"
               ]
-
       }, status: :not_found
       return
     end
