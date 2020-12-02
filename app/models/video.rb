@@ -14,9 +14,7 @@ class Video < ApplicationRecord
 
   def valid_date
     begin
-      unless release_date.is_a?(Date)
-        Date.parse(release_date)
-      end
+      Date.parse(release_date)
     rescue
       errors.add(:release_date, "must be valid date")
     end

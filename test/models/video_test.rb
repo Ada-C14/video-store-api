@@ -78,8 +78,11 @@ describe Video do
     end
 
     it "must have a total_inventory greater than 0" do
+      Rental.destroy_all
+
       videos(:black_widow).total_inventory = -1
       videos(:wonder_woman).total_inventory = 0
+      videos(:sing_street).total_inventory = -1
 
       videos.each do |video|
         expect(video.valid?).must_equal false
