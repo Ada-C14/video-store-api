@@ -23,7 +23,11 @@ class CustomersController < ApplicationController
     if customer.save
       render json: customer.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :phone, :postal_code, :videos_checked_out_count]), status: :created
     else
-      render json: customer.errors, status: :unprocessable_entity
+      render json: {
+          ok: false,
+          errors: customer.errors.messages
+      }, status: :bad_request
+      return
     end
   end
 

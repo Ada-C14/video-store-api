@@ -88,7 +88,7 @@ describe CustomersController do
 
     it "should create customer" do
       expect {
-        post customers_url, params: customer_hash
+        post customers_path, params: customer_hash
       }.must_differ "Customer.count"
 
       expect(response.header['Content-Type']).must_include 'json'
@@ -105,6 +105,18 @@ describe CustomersController do
 
       must_respond_with :created
     end
-  end
 
+    it "will not create a customer with invalid params" do
+
+      expect {
+        post customers_path, params: { customer: { name: "doggie" } }
+      }.wont_change "Customer.count"
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body["errors"].keys).must_include "phone"
+      must_respond_with :bad_request
+    end
+  end
 end
