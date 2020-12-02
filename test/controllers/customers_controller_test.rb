@@ -71,12 +71,39 @@ describe CustomersController do
   end
 
   describe "create" do
-    it "should create customer" do
-      value do
-        post customers_url, params: { customer: { create: @customer.create, index: @customer.index, show: @customer.show } }, as: :json
-      end.must_differ "Customer.count"
+    let (:customer_hash) do
+      {
+        customer: {
+          name: "Test Customer",
+          registered_at: "2020-12-02 11:23:09 -0800",
+          address: "123 Fake Street",
+          city: "Seattle",
+          state: "WA",
+          postal_code: "99999",
+          phone: "(123)456-7890",
+          videos_checked_out_count: 1
+        }
+      }
+    end
 
-      must_respond_with 201
+    it "should create customer" do
+      expect {
+        post customers_url, params: customer_hash
+      }.must_differ "Customer.count"
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body["name"]).must_equal customer_hash[:customer][:name]
+      expect(Time.new(body["registered_at"])).must_equal Time.new(customer_hash[:customer][:registered_at])
+      expect(body["postal_code"]).must_equal customer_hash[:customer][:postal_code]
+      expect(body["phone"]).must_equal customer_hash[:customer][:phone]
+      expect(body["address"]).must_equal customer_hash[:customer][:address]
+      expect(body["city"]).must_equal customer_hash[:customer][:city]
+      expect(body["state"]).must_equal customer_hash[:customer][:state]
+      expect(body["videos_checked_out_count"]).must_equal customer_hash[:customer][:videos_checked_out_count]
+
+      must_respond_with :created
     end
   end
 

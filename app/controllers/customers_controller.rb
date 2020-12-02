@@ -21,7 +21,7 @@ class CustomersController < ApplicationController
     customer = Customer.new(customer_params)
 
     if customer.save
-      render json: customer, status: :created, location: customer
+      render json: customer.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :phone, :postal_code, :videos_checked_out_count]), status: :created
     else
       render json: customer.errors, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class CustomersController < ApplicationController
   private
 
   def customer_params
-    params.require(:customer).permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone)
+    params.require(:customer).permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone, :videos_checked_out_count)
   end
 
 end
