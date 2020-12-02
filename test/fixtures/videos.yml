@@ -10,3 +10,9 @@ black_widow:
   available_inventory: 6
   overview: At birth the Black Widow (aka Natasha Romanova) is given to the KGB, which grooms her to become its ultimate operative. When the U.S.S.R. breaks up, the government tries to kill her as the action moves to present-day New York, where she is a freelance operative.
   total_inventory: 7
+holidate:
+  title: Holidate
+  release_date: "2020-07-05"
+  available_inventory: 6
+  overview: A love story which starts in a holiday.
+  total_inventory: 7
