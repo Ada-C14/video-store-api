@@ -40,6 +40,14 @@ describe Video do
       expect(video.errors.messages[:release_date]).must_equal ["can't be blank"]
     end
 
+    it 'is invalid without a total inventory number' do
+      @video_info["total_inventory"] = nil
+      video = Video.new(@video_info)
+
+      expect(video.valid?).must_equal false
+      expect(video.errors.messages[:total_inventory]).must_equal ["is not a number"]
+    end
+
     it 'is invalid without an available inventory number' do
       @video_info["available_inventory"] = nil
       video = Video.new(@video_info)
