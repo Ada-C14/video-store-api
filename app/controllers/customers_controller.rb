@@ -13,7 +13,7 @@ class CustomersController < ApplicationController
       return render json: {ok: false, message: "Customer not found"}, status: :not_found
     end
 
-    render json: customer, status: :ok
+    render json: customer.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :phone, :postal_code, :videos_checked_out_count]), status: :ok
   end
 
 

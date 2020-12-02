@@ -1,7 +1,9 @@
 require "test_helper"
 
 describe CustomersController do
-  let(:customer) { customers(:one) }
+  let(:customer1) { customers(:customer_one) }
+  let(:customer2) { customers(:customer_two) }
+
   describe "index" do
     it "must get index" do
       # Act
@@ -37,33 +39,45 @@ describe CustomersController do
     end
   end
 
-  # Rails scaffold generated tests below
+  describe "show" do
+    it "should show an existing customer" do
+      get customer_path(customer1.id)
 
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body["name"]).must_equal "Simon Del Rosario"
+      expect(body["registered_at"]).must_equal "2015-04-29T14:54:14.000Z"
+      expect(body["postal_code"]).must_equal "75007"
+      expect(body["phone"]).must_equal "(469) 734-9111"
+      expect(body["address"]).must_equal "1314 Elm Street"
+      expect(body["city"]).must_equal "Seattle"
+      expect(body["state"]).must_equal "WA"
+      expect(body["videos_checked_out_count"]).must_equal 3
 
-  it "should create customer" do
-    value do
-      post customers_url, params: { customer: { create: @customer.create, index: @customer.index, show: @customer.show } }, as: :json
-    end.must_differ "Customer.count"
+      must_respond_with :ok
+    end
+    it "should return a descriptive json for a nonexisting customer" do
+      get customer_path(-1)
 
-    must_respond_with 201
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['message']).must_equal "Customer not found"
+
+      must_respond_with :not_found
+    end
   end
 
-  it "should show customer" do
-    get customer_url(@customer), as: :json
-    must_respond_with :success
+  describe "create" do
+    it "should create customer" do
+      value do
+        post customers_url, params: { customer: { create: @customer.create, index: @customer.index, show: @customer.show } }, as: :json
+      end.must_differ "Customer.count"
+
+      must_respond_with 201
+    end
   end
 
-  it "should update customer" do
-    patch customer_url(@customer), params: { customer: { create: @customer.create, index: @customer.index, show: @customer.show } }, as: :json
-    must_respond_with 200
-  end
-
-  it "should destroy customer" do
-    value do
-      delete customer_url(@customer), as: :json
-    end.must_differ "Customer.count", -1
-
-    must_respond_with 204
-  end
 end
-
