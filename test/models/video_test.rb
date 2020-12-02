@@ -17,7 +17,13 @@ describe Video do
   end
 
   describe "relations" do
+    it "has a list of rentals" do
+      expect(videos(:sing_street)).must_respond_to :rentals
+    end
 
+    it "has a list of renting customers" do
+      expect(videos(:sing_street)).must_respond_to :customers
+    end
   end
 
   describe "validations" do
