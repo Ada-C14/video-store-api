@@ -16,9 +16,16 @@ class VideosController < ApplicationController
   end
 end
 
-# def create
-#
-# end
+def create
+  video = Video.new(video_params)
+
+  if video.save
+    render json: video.as_json(only: [:id]), status: :ok
+    return
+  else
+    bad_request(video)
+  end
+end
 
 private
 
