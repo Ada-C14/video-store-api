@@ -1,0 +1,15 @@
+rental1:
+  customer: customer_two
+  video: black_widow
+
+rental2:
+  customer: customer_one
+  video: sing_street
+
+rental3:
+  customer: customer_one
+  video: sing_street
+
+rental4:
+  customer: customer_one
+  video: sing_street

@@ -1,16 +1,25 @@
 require "test_helper"
 
 describe Video do
-  describe "validations" do
-    it "must consider videos with valid fields valid" do
-      # really a sanity check
+  it "can be instantiated" do
+    # really a sanity check
 
-      videos.each do |video|
-        expect(video.valid?).must_equal true
-        expect(video.errors).must_be_empty
-      end
-
+    videos.each do |video|
+      expect(video.valid?).must_equal true
+      expect(video.errors).must_be_empty
     end
+  end
+
+  it "will have the required fields" do
+    Video.column_names.each do |field|
+      expect(videos(:black_widow)).must_respond_to field
+    end
+  end
+
+
+
+
+  describe "validations" do
     it "must contain the required fields" do
       empty_video = Video.create
 
