@@ -11,15 +11,13 @@ describe VideosController do
     expect(body).must_be_kind_of expected_type
     return body
   end
-  
+
   describe "index" do
     it "must get index" do
       # Act
       get videos_path
-      body = JSON.parse(response.body)
-
       # Assert
-      expect(body).must_be_instance_of Array
+      body = check_response(expected_type: Array)
       expect(body.length).must_equal Video.count
 
       # Check that each customer has the proper keys
@@ -28,8 +26,6 @@ describe VideosController do
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
       end
-
-      must_respond_with :ok
     end
 
     it "works even with no videos" do
@@ -38,13 +34,8 @@ describe VideosController do
 
       # Act
       get videos_path
-      body = JSON.parse(response.body)
-
-      # Assert
-      expect(body).must_be_instance_of Array
+      body = check_response(expected_type: Array)
       expect(body.length).must_equal 0
-
-      must_respond_with :ok
     end
   end
 
@@ -55,30 +46,26 @@ describe VideosController do
 
       # Act
       get video_path(wonder_woman.id)
-      body = JSON.parse(response.body)
+      body = check_response(expected_type: Hash)
 
       # Assert
       fields = REQUIRED_VIDEO_FIELDS.concat(["overview", "total_inventory"]).sort
 
       expect(body.keys.sort).must_equal fields
-      expect(body["title"]).must_equal wonder_woman.title
-      expect(body["release_date"]).must_equal wonder_woman.release_date
-      expect(body["available_inventory"]).must_equal wonder_woman.available_inventory
-      expect(body["overview"]).must_equal wonder_woman.overview
-      expect(body["total_inventory"]).must_equal wonder_woman.total_inventory
-      
-      must_respond_with :ok
+
+      fields.each do |field|
+        expect(body[field]).must_equal wonder_woman.read_attribute(field)
+      end
     end
 
     it "responds with a 404 for non-existant videos" do
       # Act
       get video_path(-1)
-      body = JSON.parse(response.body)
+      body = check_response(expected_type: Hash, expected_status: :not_found)
 
       # Assert
       expect(body.keys).must_include "errors"
       expect(body["errors"]).must_include  "Not Found"
-      must_respond_with :not_found      
     end
   end
 
