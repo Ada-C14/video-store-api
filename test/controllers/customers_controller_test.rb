@@ -35,6 +35,7 @@ describe CustomersController do
 
       expect(body).must_be_instance_of Array
       expect(body).must_equal []
+      must_respond_with 200
     end
   end
 
