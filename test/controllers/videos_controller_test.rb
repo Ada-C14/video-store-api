@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe VideosController do
-  VIDEO_FIELDS = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
+  VIDEO_FIELDS = ["id", "title", "release_date", "available_inventory"].sort
   describe "index" do
     it "must get index" do
       # Act
@@ -49,8 +49,6 @@ describe VideosController do
       expect(body["title"]).must_equal "Wonder Woman 2"
       expect(body["release_date"]).must_equal "2020-12-25"
       expect(body["available_inventory"]).must_equal 100
-      expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
-      expect(body["total_inventory"]).must_equal 100
       
       must_respond_with :ok
     end
@@ -71,13 +69,13 @@ describe VideosController do
     it "can create a valid video" do
       # Arrange
       video_hash = {
-          video: {
+          # video: {
               title: "Alf the movie",
               overview: "The most early 90s movie of all time",
               release_date: "2025-12-16",
               total_inventory: 6,
               available_inventory: 6
-          }
+          # }
       }
 
       # Assert
