@@ -47,9 +47,8 @@ describe VideosController do
       body = JSON.parse(response.body)
 
       # Assert
-      fields = ["id", "title", "overview", "release_date", "total_inventory", "available_inventory"].sort
+      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields
-      expect(body["id"]).must_equal wonder_woman.id
       expect(body["title"]).must_equal "Wonder Woman 2"
       expect(body["release_date"]).must_equal "2020-12-25"
       expect(body["available_inventory"]).must_equal 100
