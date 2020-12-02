@@ -1,7 +1,7 @@
 class CreateVideos < ActiveRecord::Migration[6.0]
   def change
     create_table :videos do |t|
-      t.sting :title
+      t.string :title
       t.string :overview
       t.date :release_date
       t.integer :total_inventory
