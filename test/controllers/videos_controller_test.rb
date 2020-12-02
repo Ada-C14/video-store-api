@@ -8,7 +8,7 @@ describe VideosController do
       get videos_path
       body = JSON.parse(response.body)
 
-      fields = ["id", "title", "release_date", "available_inventory"]
+      fields = ["id", "title", "release_date", "available_inventory"].sort
       # Assert
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Video.count
@@ -45,7 +45,7 @@ describe VideosController do
       get video_path(wonder_woman.id)
       body = JSON.parse(response.body)
 
-      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"]
+      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       # Assert
       expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
