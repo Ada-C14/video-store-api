@@ -1,28 +1,32 @@
 require "test_helper"
 
-describe CustomersController do
-  let(:required_customer_attrs) {
-    ["id", "name", "registered_at", "postal_code", "phone", "videos_checked_out_count"]
-  }
+REQUIRED_CUSTOMER_FIELDS = ["id", "name", "registered_at", "postal_code", "phone", "videos_checked_out_count"].sort
 
+def check_response(expected_type:, expected_status: :success)
+  must_respond_with expected_status
+  expect(response.header['Content-Type']).must_include 'json'
+
+  body = JSON.parse(response.body)
+  expect(body).must_be_kind_of expected_type
+  return body
+end
+
+describe CustomersController do
   describe "index" do
     it "responds with JSON and ok" do
       get customers_path
 
-      expect(response.header["Content-Type"]).must_include "json"
-      must_respond_with 200
+      check_response(expected_type: Array)
     end
 
     it "returns an array of customer hashes" do
       get customers_path
 
-      body = JSON.parse(response.body)
-
-      expect(body).must_be_instance_of Array
+      body = check_response(expected_type: Array)
 
       body.each do |customer|
         expect(customer).must_be_instance_of Hash
-        expect(customer.keys.sort).must_equal required_customer_attrs.sort
+        expect(customer.keys.sort).must_equal REQUIRED_CUSTOMER_FIELDS
       end
     end
 
@@ -31,12 +35,8 @@ describe CustomersController do
 
       get customers_path
 
-      body = JSON.parse(response.body)
-
-      expect(body).must_be_instance_of Array
+      body = check_response(expected_type: Array)
       expect(body).must_equal []
-      must_respond_with 200
     end
   end
-
 end
