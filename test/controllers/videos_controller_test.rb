@@ -49,11 +49,11 @@ describe VideosController do
       # Assert
       fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields
-      expect(body["title"]).must_equal "Wonder Woman 2"
-      expect(body["release_date"]).must_equal "December 25th 2020"
-      expect(body["available_inventory"]).must_equal 100
-      expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
-      expect(body["total_inventory"]).must_equal 100
+      expect(body["title"]).must_equal wonder_woman.title
+      expect(body["release_date"]).must_equal wonder_woman.release_date
+      expect(body["available_inventory"]).must_equal wonder_woman.available_inventory
+      expect(body["overview"]).must_equal wonder_woman.overview
+      expect(body["total_inventory"]).must_equal wonder_woman.total_inventory
       
       must_respond_with :ok
     end
