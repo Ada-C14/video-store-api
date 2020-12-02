@@ -9,7 +9,6 @@ class VideosController < ApplicationController
 
     if video.nil?
       render json: {
-          # ok: false,
           errors: ["Not Found"]
       }, status: :not_found
       return
@@ -36,6 +35,6 @@ class VideosController < ApplicationController
   private
 
   def video_params
-    return params.require(:video).permit(:title, :overview, :release_date, :available_inventory.to_i, :total_inventory.to_i)
+    return params.require(:video).permit(:title, :overview, :release_date, :available_inventory, :total_inventory)
   end
 end
