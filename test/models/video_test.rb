@@ -16,8 +16,9 @@ describe Video do
     end
   end
 
+  describe "relations" do
 
-
+  end
 
   describe "validations" do
     it "must contain the required fields" do
