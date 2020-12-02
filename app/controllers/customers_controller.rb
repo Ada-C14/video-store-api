@@ -1,7 +1,7 @@
 class CustomersController < ApplicationController
   def index
     customers = Customer.all
-    render json: customers.as_json(except: [:created_at, :updated_at]), status: :ok
+    render json: customers.as_json(only: [:id, :name, :phone, :postal_code, :registered_at, :videos_checked_out_count]), status: :ok
   end
 
   def show
@@ -13,6 +13,6 @@ class CustomersController < ApplicationController
       }, status: :not_found
       return
     end
-    render json: customer.as_json(except: [:created_at, :updated_at]), status: :ok
+    render json: customer.as_json(only: [:id, :name, :phone, :postal_code, :registered_at, :videos_checked_out_count]), status: :ok
   end
 end
