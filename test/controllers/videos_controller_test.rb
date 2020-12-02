@@ -74,11 +74,13 @@ describe VideosController do
     it "can create a valid video" do
       # Arrange
       video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
+          video: {
+            title: "Alf the movie",
+            overview: "The most early 90s movie of all time",
+            release_date: "December 16th 2025",
+            total_inventory: 6,
+            available_inventory: 6
+          }
       }
 
       # Assert
@@ -92,14 +94,16 @@ describe VideosController do
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
       video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
+          video: {
+            title: "Alf the movie",
+            overview: "The most early 90s movie of all time",
+            release_date: "December 16th 2025",
+            total_inventory: 6,
+            available_inventory: 6
+          }
       }
   
-      video_hash[:title] = nil
+      video_hash[:video][:title] = ""
   
       # Assert
       expect {
