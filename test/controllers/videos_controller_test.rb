@@ -1,5 +1,7 @@
 require "test_helper"
 
+REQUIRED_VIDEO_FIELDS = ['id', 'title', 'release_date', 'available_inventory'].sort
+
 describe VideosController do
   it "must get index" do
     get videos_path
@@ -31,5 +33,22 @@ describe VideosController do
   end
 
 
+  describe "show" do
+    it "will return a hash with the proper fields for an existing video" do
+      video = videos(:wonder_woman)
 
+      get video_path(video)
+
+      body = check_response(expected_type: Hash)
+      expect(body.keys.sort).must_equal REQUIRED_VIDEO_FIELDS
+    end
+
+    it "will return a 404 response with json for a non-existent pet" do
+      get video_path(-1)
+
+      body = check_response(expected_type: Hash, expected_status: 404)
+      expect(body['ok']).must_equal false
+      expect(body['message']).must_equal "Not found"
+    end
+  end
 end
