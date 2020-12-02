@@ -1,7 +1,15 @@
 require "test_helper"
 
 describe Customer do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+
+  before do
+    @simon = customers(:customer_one)
+  end
+
+  describe "validations" do
+    it "requires a name" do
+      @simon.name = nil
+      expect(@simon.valid?).must_equal false
+    end
+  end
 end
