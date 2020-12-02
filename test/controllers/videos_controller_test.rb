@@ -1,6 +1,9 @@
 require "test_helper"
 
 describe VideosController do
+  let(:video1) { videos(:wonder_woman) }
+  let(:video2) { videos(:black_widow) }
+
   describe "index" do
     it "must get index" do
       # Act
@@ -37,38 +40,6 @@ describe VideosController do
     end
   end
 
-  describe "show" do
-    it "can get a video" do
-      # Arrange
-      wonder_woman = videos(:wonder_woman)
-
-      # Act
-      get video_path(wonder_woman.id)
-      body = JSON.parse(response.body)
-
-      # Assert
-      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
-      expect(body.keys.sort).must_equal fields
-      expect(body["title"]).must_equal "Wonder Woman 2"
-      expect(body["release_date"]).must_equal "December 25th 2020"
-      expect(body["available_inventory"]).must_equal 100
-      expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
-      expect(body["total_inventory"]).must_equal 100
-      
-      must_respond_with :ok
-    end
-
-    it "responds with a 404 for non-existant videos" do
-      # Act
-      get video_path(-1)
-      body = JSON.parse(response.body)
-
-      # Assert
-      expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include  "Not Found"
-      must_respond_with :not_found      
-    end
-  end
 
   describe "create" do
     it "can create a valid video" do
@@ -98,9 +69,9 @@ describe VideosController do
         total_inventory: 6,
         available_inventory: 6
       }
-  
+
       video_hash[:title] = nil
-  
+
       # Assert
       expect {
         post videos_path, params: video_hash
@@ -110,8 +81,43 @@ describe VideosController do
       expect(body.keys).must_include "errors"
       expect(body["errors"].keys).must_include "title"
       expect(body["errors"]["title"]).must_include "can't be blank"
-  
+
       must_respond_with :bad_request
     end
   end
+
+
+  describe "show" do
+    it "can get a video" do
+      # Arrange
+      wonder_woman = videos(:wonder_woman)
+
+      # Act
+      get video_path(wonder_woman.id)
+      body = JSON.parse(response.body)
+
+      # Assert
+      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
+      expect(body.keys.sort).must_equal fields
+      expect(body["title"]).must_equal "Wonder Woman 2"
+      expect(body["release_date"]).must_equal "December 25th 2020"
+      expect(body["available_inventory"]).must_equal 100
+      expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
+      expect(body["total_inventory"]).must_equal 100
+
+      must_respond_with :ok
+    end
+
+    it "responds with a 404 for non-existant videos" do
+      # Act
+      get video_path(-1)
+      body = JSON.parse(response.body)
+
+      # Assert
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include  "Not Found"
+      must_respond_with :not_found
+    end
+  end
 end
+
