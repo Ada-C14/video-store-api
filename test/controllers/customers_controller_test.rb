@@ -10,7 +10,7 @@ describe CustomersController do
       get customers_path
 
       expect(response.header["Content-Type"]).must_include "json"
-      must_respond_with :success
+      must_respond_with 200
     end
 
     it "returns an array of customer hashes" do
