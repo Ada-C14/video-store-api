@@ -10,6 +10,7 @@ class CustomersController < ApplicationController
         state
         postal_code
         phone
+        videos_checked_out_count
       ]
     ), status: :ok
   end
