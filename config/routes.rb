@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :customers, only: :index
   resources :videos, only: [:index, :show, :create]
 
+
   # auto-populated routes
   # get 'customers/index'
   # get 'videos/index'
