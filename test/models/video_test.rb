@@ -19,10 +19,18 @@ describe Video do
   describe "relations" do
     it "has a list of rentals" do
       expect(videos(:sing_street)).must_respond_to :rentals
+
+      videos(:sing_street).rentals.each do |rental|
+        expect(rental).must_be_kind_of Rental
+      end
     end
 
     it "has a list of renting customers" do
       expect(videos(:sing_street)).must_respond_to :customers
+
+      videos(:sing_street).customers.each do |customer|
+        expect(customer).must_be_kind_of Customer
+      end
     end
   end
 
