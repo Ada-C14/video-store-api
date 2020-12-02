@@ -2,12 +2,12 @@ require "test_helper"
 
 describe VideosController do
   it "must get index" do
-    get videos_index_url
+    get videos_path
     must_respond_with :success
   end
 
   it 'responds with an array of video hashes' do
-    get v
+    get videos_path
 
     body = JSON.parse(response.body)
 
@@ -20,14 +20,16 @@ describe VideosController do
 
   end
 
-  it "must get show" do
-    get videos_show_url
-    must_respond_with :success
+  it 'will respond with an empty array when there are no videos' do
+    Video.destroy_all
+
+    get videos_path
+    body = JSON.parse(response.body)
+
+    expect(body).must_be_instance_of Array
+    expect(body).must_equal []
   end
 
-  it "must get create" do
-    get videos_create_url
-    must_respond_with :success
-  end
+
 
 end
