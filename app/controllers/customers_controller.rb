@@ -1,26 +1,36 @@
 class CustomersController < ApplicationController
-  before_action :set_customer, only: [:show, :update, :destroy]
 
-  # GET /customers
   def index
-    @customers = Customer.all
+    customers = Customer.all
 
-    render json: @customers
+    render json: customers, status: :ok
   end
 
-  # GET /customers/1
   def show
-    render json: @customer
+    customer = Customer.find_by(id: params[:id])
+
+    if customer.nil?
+      return render json: {ok: false, message: "Customer not found"}, status: :not_found
+    end
+
+    render json: customer, status: :ok
   end
 
-  # POST /customers
-  def create
-    @customer = Customer.new(customer_params)
 
-    if @customer.save
-      render json: @customer, status: :created, location: @customer
+  def create
+    customer = Customer.new(customer_params)
+
+    if customer.save
+      render json: customer, status: :created, location: customer
     else
-      render json: @customer.errors, status: :unprocessable_entity
+      render json: customer.errors, status: :unprocessable_entity
     end
   end
+
+  private
+
+  def customer_params
+    params.require(:customer).permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone)
+  end
+
 end
