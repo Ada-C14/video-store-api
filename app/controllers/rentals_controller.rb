@@ -38,31 +38,40 @@ class RentalsController < ApplicationController
   end
 
   def check_out
-    video = Video.find_by(rental_params)
-    customer = Customer.find_by(rental_params)
+    video = Video.find_by(id: params[:video_id])
+    customer = Customer.find_by(id: params[:customer_id])
+
     if video.nil? || customer.nil?
-        render json: {
-            ok: false,
-            message: 'Not found',
-        }, status: :not_found
+      render json: {
+        ok: false,
+        message: 'Not found',
+      }, status: :not_found
+      return
     end
-    due_date = Date.new + 1.week
-    rental = Rental.new(customer_id: customer.id, video_id: video.id, due_date: due_date)
+
+    rental = Rental.create(rental_params)
+
     if rental.save
       video.decrease_available_inventory
       customer.increase_video_checked_out_count
 
-      render json: rental.as_json(only: [:id]), status: :created
+      render json: {
+          customer_id: customer.id,
+          video_id: video.id,
+          due_date: Date.today + 1.week,
+          videos_checked_out_count: customer.videos_checked_out_count,
+          available_inventory: video.available_inventory
+      }, status: :ok
+      return
     else
       render json: { errors: rental.errors.messages }, status: :bad_request
+      return
     end
-    render json: rental.as_json(only: [:customer_id, :video_id, :due_date, :videos_checked_out_count, :available_inventory]),
-           status: :ok
   end
 
   private
 
   def rental_params
-    return params.require(:rental).permit(:video_id, :customer_id)
+    return params.permit(:video_id, :customer_id)
   end
 end
