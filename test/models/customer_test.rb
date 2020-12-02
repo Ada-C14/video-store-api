@@ -1,6 +1,7 @@
 require "test_helper"
 
 describe Customer do
+
   before do
     @customer = customers(:customer_one)
   end
@@ -19,6 +20,28 @@ describe Customer do
 
   describe "validations" do
 
+    it "must have a name" do
+      @customer.name = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.errors.messages).must_include :name
+      expect(@customer.errors.messages[:name]).must_equal ["can't be blank"]
+    end
+    
+    it "must have videos checked out count greater than 0" do
+      @customer.videos_checked_out_count = -5
 
+      expect(@customer.valid?).must_equal false
+      expect(@customer.errors.messages).must_include :videos_checked_out_count
+      expect(@customer.errors.messages[:videos_checked_out_count]).must_equal ["must be greater than 0"]
+    end
+    
+  end
+  
+  describe "relations" do 
+    
+  end
+
+  describe "custom methods" do
+    
   end
 end
