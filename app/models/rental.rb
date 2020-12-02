@@ -3,7 +3,12 @@ class Rental < ApplicationRecord
   belongs_to :video
 
   validates :customer, :video, :due_date, presence: true
-  # validates :return_date, presence: true, on: :update
+  validates :return_date, absence: true, on: :create
+  validate :return_after_renting
 
-
+  def return_after_renting
+    if return_date.present? && created_at.present? && Date.parse(return_date) < created_at
+      errors.add(:return_date, "video cannot be returned before being rented")
+    end
+  end
 end

@@ -39,5 +39,21 @@ describe Rental do
       expect(rental.valid?).must_equal false
       expect(rental.errors.messages[:due_date]).must_equal ["can't be blank"]
     end
+
+    it 'is invalid with a return date upon create' do
+      @rental_info["return_date"] = Date.today
+      rental = Rental.new(@rental_info)
+
+      expect(rental.valid?).must_equal false
+      expect(rental.errors.messages[:return_date]).must_equal ["must be blank"]
+    end
+
+    it 'is invalid if returned date occurs before the rental is created' do
+      rental = Rental.create(@rental_info)
+      rental.return_date = Date.today - 1
+
+      expect(rental.valid?).must_equal false
+      expect(rental.errors.messages[:return_date]).must_equal ["video cannot be returned before being rented"]
+    end
   end
 end
