@@ -1,19 +1,20 @@
 require "test_helper"
 
 describe VideosController do
-  VIDEO_FIELDS = ["id", "title", "release_date", "available_inventory"].sort
+
   describe "index" do
     it "must get index" do
       # Act
       get videos_path
       body = JSON.parse(response.body)
 
+      fields = ["id", "title", "release_date", "available_inventory"]
       # Assert
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Video.count
 
       body.each do |customer|
-        expect(customer.keys.sort).must_equal VIDEO_FIELDS
+        expect(customer.keys.sort).must_equal fields
       end
 
       must_respond_with :ok
@@ -44,11 +45,14 @@ describe VideosController do
       get video_path(wonder_woman.id)
       body = JSON.parse(response.body)
 
+      fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"]
       # Assert
-      expect(body.keys.sort).must_equal VIDEO_FIELDS
+      expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
       expect(body["release_date"]).must_equal "2020-12-25"
       expect(body["available_inventory"]).must_equal 100
+      expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
+      expect(body["total_inventory"]).must_equal 100
       
       must_respond_with :ok
     end

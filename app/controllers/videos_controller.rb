@@ -14,7 +14,7 @@ class VideosController < ApplicationController
       return
     end
 
-    render json: video.as_json(only: [:id, :title, :release_date, :available_inventory]),
+    render json: video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory]),
                              status: :ok
   end
 
