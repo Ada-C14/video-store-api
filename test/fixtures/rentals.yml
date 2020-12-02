@@ -1,0 +1,12 @@
+rental_one:
+  customer_id: customer_one
+  video_id: black_widow
+  due_date: "2020-06-12"
+rental_two:
+  customer_id: customer_one
+  video_id: wonder_woman, holidate
+  due_date: "2020-03-25"
+rental_three:
+  customer_id: customer_two
+  video_id: wonder_woman
+  due_date: "2020-05-06"
