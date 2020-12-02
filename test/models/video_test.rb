@@ -41,6 +41,18 @@ describe Video do
       end
     end
 
+    it "must have integer values for total/available inventory" do
+      videos.each do |video|
+        video.total_inventory = 1.5
+        video.available_inventory = 1.5
+
+        expect(video.valid?).must_equal false
+
+        expect(video.errors[:available_inventory]).must_include "must be an integer"
+        expect(video.errors[:total_inventory]).must_include "must be an integer"
+      end
+    end
+
     it "must have a total_inventory greater than 0" do
       videos(:black_widow).total_inventory = -1
       videos(:wonder_woman).total_inventory = 0
