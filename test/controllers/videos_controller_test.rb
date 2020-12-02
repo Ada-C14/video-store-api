@@ -11,7 +11,7 @@ describe VideosController do
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Video.count
 
-      # Check that each customer has the proper keys
+      # Check that each video has the proper keys
       fields = ["id", "title", "release_date", "available_inventory"].sort
 
       body.each do |customer|
@@ -58,14 +58,14 @@ describe VideosController do
       must_respond_with :ok
     end
 
-    it "responds with a 404 for non-existant videos" do
+    it "responds with a 404 for non-existent videos" do
       # Act
       get video_path(-1)
       body = JSON.parse(response.body)
 
       # Assert
       expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include  "Not Found"
+      expect(body["errors"]).must_include  "This video doesn't exist):"
       must_respond_with :not_found      
     end
   end
