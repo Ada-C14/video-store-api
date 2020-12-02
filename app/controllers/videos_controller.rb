@@ -7,10 +7,9 @@ class VideosController < ApplicationController
   def create
     video = Video.new(video_params)
     if video.save
-      render json: {id: video.id}, status: :created
+      render json: video.as_json(only: [:id]), status: :created
     else
-      render json: {ok: false,
-                    errors: video.errors.messages},
+      render json: {errors: video.errors.messages},
              status: :bad_request
     end
     return
@@ -20,7 +19,6 @@ class VideosController < ApplicationController
 
   private
   def video_params
-    p params
-    return params.require(:video).permit(:id, :title, :release_date, :available_inventory, :overview, :total_inventory)
+    return params.permit(:id, :title, :release_date, :available_inventory, :overview, :total_inventory)
   end
 end
