@@ -18,4 +18,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def check_invalid(model: , attribute: )
+    expect(model.valid?).must_equal false
+    expect(model.errors.keys).must_include attribute
+  end
 end
