@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'customer/index'
+  get 'customer/show'
+  get 'customer/create'
   get 'videos/index'
   get 'videos/show'
   get 'videos/create'
