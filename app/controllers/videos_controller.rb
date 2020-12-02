@@ -30,5 +30,5 @@ end
 private
 
 def video_params
-  params.require(:video).permit(:title, :overview, :release_date, :inventory)
+  params.require(:video).permit(:title, :overview, :release_date, :total_inventory)
 end
