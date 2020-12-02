@@ -1,3 +1,5 @@
+require 'date'
+
 class VideosController < ApplicationController
 
   def index
@@ -31,6 +33,10 @@ class VideosController < ApplicationController
              status: :bad_request
     end
     return
+  end
+
+  def checkout
+
   end
 
 
