@@ -53,38 +53,23 @@ describe Video do
       expect(videos(:black_widow).errors[:title]).must_include "has already been taken"
     end
 
-    it "must have numerical values for total/available inventory" do
-      videos.each do |video|
-        video.total_inventory = "NaN"
-        video.available_inventory = "NaN"
+    it "must have numerical, integer values for total/available inventory" do
+      error_message_hash = {"NaN" => "is not a number", 1.5 => "must be an integer"}
+      # ^ allows us to test for invalid number and integer input in one neat test :)
+      [:total_inventory, :available_inventory].each do |field|
+        error_message_hash.each do |error, message|
+          videos(:black_widow)[field] = error
 
-        expect(video.valid?).must_equal false
+          expect(videos(:black_widow).valid?).must_equal false
 
-        expect(video.errors[:available_inventory]).must_include "is not a number"
-        expect(video.errors[:total_inventory]).must_include "is not a number"
-      end
-    end
-
-    it "must have integer values for total/available inventory" do
-      videos.each do |video|
-        video.total_inventory = 1.5
-        video.available_inventory = 1.5
-
-        expect(video.valid?).must_equal false
-
-        expect(video.errors[:available_inventory]).must_include "must be an integer"
-        expect(video.errors[:total_inventory]).must_include "must be an integer"
+          expect(videos(:black_widow).errors[field]).must_include message
+        end
       end
     end
 
     it "must have a total_inventory greater than 0" do
-      Rental.destroy_all
-
-      videos(:black_widow).total_inventory = -1
-      videos(:wonder_woman).total_inventory = 0
-      videos(:sing_street).total_inventory = -1
-
       videos.each do |video|
+        video.total_inventory = 0
         expect(video.valid?).must_equal false
         expect(video.errors[:total_inventory]).must_include "must be greater than 0"
       end
@@ -94,11 +79,8 @@ describe Video do
       [-1, videos(:black_widow).total_inventory + 1].each do |stock|
         videos(:black_widow).available_inventory = stock
         expect(videos(:black_widow).valid?).must_equal false
-        if stock < 0
-          expect(videos(:black_widow).errors[:available_inventory]).must_include "must be greater than or equal to 0"
-        else
-          expect(videos(:black_widow).errors[:available_inventory]).must_include "must be less than or equal to #{videos(:black_widow).total_inventory}"
-        end
+        message = stock < 0 ? "must be greater than or equal to 0" : "must be less than or equal to #{videos(:black_widow).total_inventory}"
+        expect(videos(:black_widow).errors[:available_inventory]).must_include message
       end
     end
 
