@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe CustomersController do
-  CUSTOMER_FIELDS = %w[id name registered_at postal_code phone videos_checked_out_count].sort
+  CUSTOMER_FIELDS = %w[id name registered_at postal_code phone videos_checked_out_count]
 
   describe "index" do
 
