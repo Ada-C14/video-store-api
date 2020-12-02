@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :videos, only: [:index, :show, :create]
 
+  post 'rentals/checkout', to 'rentals#checkout'
   post 'rentals/checkin', to: 'rentals#checkin'
 
 end
