@@ -1,6 +1,9 @@
 require "test_helper"
 
 describe CustomersController do
+  # Check that each customer has the proper keys
+  FIELDS = ["id", "name", "registered_at", "postal_code",
+            "phone", "videos_checked_out_count"].sort
   describe "index" do
     it "must get index" do
       # Act
