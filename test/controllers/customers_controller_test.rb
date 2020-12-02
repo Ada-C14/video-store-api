@@ -1,6 +1,9 @@
 require "test_helper"
 
 describe CustomersController do
+  # Check that each customer has the proper keys
+  FIELDS = ["id", "name", "address", "city", "state",  "postal_code","phone", "registered_at", "videos_checked_out_count"].sort
+
   describe 'index' do
     it "must get index" do
       # Act
@@ -11,12 +14,8 @@ describe CustomersController do
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Customer.count
 
-      # Check that each customer has the proper keys
-      fields = ["id", "name", "registered_at", "postal_code",
-        "phone", "videos_checked_out_count"].sort
-
       body.each do |customer|
-        expect(customer.keys.sort).must_equal fields
+        expect(customer.keys.sort).must_equal FIELDS
         expect(customer).must_be_instance_of Hash
       end
 
@@ -46,8 +45,6 @@ describe CustomersController do
   describe 'show' do
     # nominal
     it 'should return a hash with proper fields for an existing customer' do
-      fields = ["id", "name", "registered_at", "postal_code",
-                "phone", "videos_checked_out_count"].sort
 
       customer = customers(:customer_one)
 
@@ -60,7 +57,7 @@ describe CustomersController do
       expect(response.header['Content-Type']).must_include 'json'
 
       expect(body).must_be_instance_of Hash
-      expect(body.keys.sort).must_equal fields.sort
+      expect(body.keys.sort).must_equal FIELDS.sort
 
     end
 
