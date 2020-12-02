@@ -20,8 +20,8 @@ describe VideosController do
       body = check_response(expected_type: Array)
       expect(body.length).must_equal Video.count
 
-      # Check that each customer has the proper keys
-      fields = REQUIRED_VIDEO_FIELDS.concat(["id"]).sort
+      # Check t(hat each customer has the proper keys
+      fields = (REQUIRED_VIDEO_FIELDS + ["id"]).sort
 
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
@@ -47,9 +47,8 @@ describe VideosController do
       # Act
       get video_path(wonder_woman.id)
       body = check_response(expected_type: Hash)
-
       # Assert
-      fields = REQUIRED_VIDEO_FIELDS.concat(["overview", "total_inventory"]).sort
+      fields = (REQUIRED_VIDEO_FIELDS + ["overview", "total_inventory"]).sort
 
       expect(body.keys.sort).must_equal fields
 
