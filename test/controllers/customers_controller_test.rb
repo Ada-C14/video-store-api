@@ -1,4 +1,3 @@
-
 require "test_helper"
 
 describe CustomersController do
@@ -10,12 +9,12 @@ describe CustomersController do
       body = JSON.parse(response.body)
 
       # Assert
+      expect(response.header['Content-Type']).must_include 'json'
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Customer.count
 
       # Check that each customer has the proper keys
-      fields = ["id", "name", "registered_at", "postal_code",
-                "phone", "videos_checked_out_count"].sort
+      fields = ["id", "name", "registered_at", "address", "city", "state","postal_code", "phone", "videos_checked_out_count"].sort
 
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
@@ -28,8 +27,9 @@ describe CustomersController do
       Customer.destroy_all
 
       get customers_path
-      body = JSON.parse(response.body)
 
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal 0
 
