@@ -25,8 +25,8 @@ class VideosController < ApplicationController
         release_date: params[:release_date],
         total_inventory: params[:total_inventory],
         available_inventory: params[:available_inventory]
-
     )
+
     if video.save
       render json: video.as_json(only: :id),
                                  status: :created
@@ -44,3 +44,4 @@ class VideosController < ApplicationController
   # end
 
 end
+
