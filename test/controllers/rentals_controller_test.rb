@@ -149,6 +149,7 @@ describe RentalsController do
       post rentals_check_out_path, params: @rental_hash
 
       @rental_hash[:customer_id] = customers(:customer_two).id
+      @rental_hash[:video_id] = videos(:black_widow).id
 
       post rentals_check_in_path, params: @rental_hash
 

@@ -5,7 +5,7 @@ describe Rental do
 
   let (:rental_hash) do {
       customer_id: customers(:customer_two).id,
-      video_id: videos(:wonder_woman).id,
+      video_id: videos(:black_widow).id,
       due_date: Date.today + 7.days
   }
   end
