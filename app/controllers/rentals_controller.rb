@@ -1,5 +1,6 @@
 class RentalsController < ApplicationController
   def check_out
+
     rental = Rental.new(video: @video, customer: @customer ,due_date: Time.now + 7.days )
 
     if rental.save
@@ -22,11 +23,11 @@ class RentalsController < ApplicationController
 
   private
 
-  def find_customer
-    @customer = Customer.find_by(id: params[:id])
-  end
-
-  def find_video
-    @video = Video.find_by(id: params[:id])
-  end
+  # def find_customer
+  #   @customer = Customer.find_by(id: params[:id])
+  # end
+  #
+  # def find_video
+  #   @video = Video.find_by(id: params[:id])
+  # end
 end

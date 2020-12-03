@@ -3,14 +3,15 @@ require "test_helper"
 describe Rental do
 
   describe "validations" do
-    it "has a due date" do
-      video = Video.first
-      video.due_date = nil
-      video.save
 
-      expect(video.valid?).must_equal false
-      expect(video.errors.messages).must_include :due_date
-      expect(video.errors.messages[:due_date]).must_equal ["can't be blank"]
+    it "has a due date" do
+      rental = Rental.first
+      rental.due_date = nil
+      rental.save
+
+      expect(rental.valid?).must_equal false
+      expect(rental.errors.messages).must_include :due_date
+      expect(rental.errors.messages[:due_date]).must_equal ["can't be blank"]
     end
   end
 

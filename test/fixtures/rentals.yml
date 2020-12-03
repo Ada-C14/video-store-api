@@ -1,12 +1,12 @@
 rental_one:
   customer: customer_one
   video: wonder_woman
-  due_date: "December 9th 2020"
+  due_date: 2020-12-25
 rental_two:
   customer: customer_one
   video: black_widow
-  due_date: "December 9th 2020"
+  due_date: 2020-12-25
 rental_three:
   customer: customer_two
   video: black_widow
-  due_date: "December 10th 2020"
+  due_date: 2020-12-25

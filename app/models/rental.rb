@@ -14,5 +14,4 @@ class Rental < ApplicationRecord
     self.customer.save!
   end
 
-
 end
