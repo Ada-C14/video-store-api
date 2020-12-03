@@ -1,5 +1,4 @@
 class RentalsController < ApplicationController
-  before_action :find_rental, only: [:update]
 
   def check_out
     rental = Rental.new(customer_id: params[:customer_id], video_id: params[:video_id], due_date: Date.today + 7)
