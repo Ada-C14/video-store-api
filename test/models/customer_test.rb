@@ -82,6 +82,10 @@ describe Customer do
       expect(customer_copy.errors_messages).must_include :phone
     end
 
+    it "must be valid when created with all the required fields" do
+      expect(@user.valid?).must_equal true
+    end
+
   end
 
 end
