@@ -5,22 +5,24 @@ class Rental < ApplicationRecord
   # validates :customer_id, presence: true
   # validates :video_id, presence: true
 
-  def valid_rental?
-
+  def is_valid?
+    video = Video.find_by(id: self.video_id)
+    
+    return video.available_inventory.positive?
   end
 
   def initialize_rental
-    Video.find_by(id: self.video_id).check_out
-    Customer.find_by(id: self.customer_id).check_out
+    Video.find_by(id: video_id).check_out
+    Customer.find_by(id: customer_id).check_out
     self.checked_out = Date.today
-    self.due_date = self.checked_out + 7
-    self.save
+    self.due_date = checked_out + 7
+    save
   end
 
   def checked_in_time
-    if self.customer_id.check_in && self.video_id.check_in
-      return self.checked_in
+    if customer_id.check_in && video_id.check_in
+      return checked_in
      end
-    self.save
+    save
   end
 end

@@ -3,22 +3,16 @@ class RentalsController < ApplicationController
   def check_out_rental
     rental = Rental.new(rental_params)
 
-    if rental.save
-      # Video.find_by(id: rental.video_id).check_out
-      # Customer.find_by(id: rental.customer_id).check_out
-      # rental.checked_out = Date.today
-      # rental.due_date = rental.checked_out + 7
-      # rental.save
-      initialize_rental(rental)
-
+    if rental.save && rental.is_valid?
+      rental.initialize_rental
       render json: rental.as_json(only: [:id]), status: :created
       return
-    else
-      render json: {
-        errors: rental.errors.messages
-      }, status: :bad_request
-      return
     end
+
+    render json: {
+      errors: rental.errors.messages
+    }, status: :bad_request
+    return
   end
 
   def check_in_rental
