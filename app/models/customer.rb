@@ -1,6 +1,6 @@
 class Customer < ApplicationRecord
   has_many :rentals
-  # has_many :videos, through: :rentals
+  has_many :videos, through: :rentals
 
   validates :name, presence: true, uniqueness: true
   validates :address, presence: true
