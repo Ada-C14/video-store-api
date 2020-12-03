@@ -104,8 +104,8 @@ describe RentalsController do
     end
 
     it "will respond with not found and errors for an invalid rental" do
-      @customer.id = -3
-      @video.id = -3
+      @customer.id = nil
+      @video.id = nil
 
       post check_in_path, params: rental_params
 
