@@ -1,5 +1,11 @@
 class RentalsController < ApplicationController
 
+  def index
+    rentals = Rental.all.order(:id)
+    render json: rentals.as_json(only: [:id, :customer_id, :video_id, :available_inventory, :videos_checked_out_count]),
+           status: :ok
+  end
+
   def checkout
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
@@ -22,6 +28,8 @@ class RentalsController < ApplicationController
       rental.videos_checked_out_count = customer.toggle_up_video_count
       # # call method to decrease available inventory
       rental.available_inventory = video.toggle_down_inventory
+      rental.save
+
       render json: rental.as_json(only: [:customer_id, :video_id, :due_date, :videos_checked_out_count, :available_inventory]),
              status: :ok
     else
@@ -33,18 +41,30 @@ class RentalsController < ApplicationController
   def check_in
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
-    rental = Rental.find_by(video_id: video.id, customer_id: customer.id)
-    binding.pry
-    if video.nil? || customer.nil? || rental.nil?
+
+    if video.nil? || customer.nil?
       render json: { errors: ["Not Found"] }, status: :not_found
       return
     end
 
-    rental.videos_checked_out_count = customer.toggle_down_video_count
-    rental.available_inventory = video.toggle_up_inventory
-    rental.due_date = nil
+    rental = Rental.find_by(video_id: video.id, customer_id: customer.id)
+    if rental.nil?
+      render json: { errors: ["Not Found"] }, status: :not_found
+      return
+    end
 
-    render json: { customer_id: customer.id, video_id: video.id, videos_checked_out_count: customer.videos_checked_out_count, available_inventory: video.available_inventory },
-           status: :ok
+    customer.toggle_down_video_count
+    rental.assign_attributes(videos_checked_out_count: customer.videos_checked_out_count)
+
+    video.toggle_up_inventory
+    rental.assign_attributes(available_inventory: video.available_inventory)
+    rental.due_date = nil
+    rental.save
+
+    render json: {:customer_id => customer.id, :video_id => video.id, :videos_checked_out_count => customer.videos_checked_out_count, :available_inventory => video.available_inventory},
+    #        status: :ok
+
+           #return render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count, :available_inventory]),
+            status: :ok
   end
 end
