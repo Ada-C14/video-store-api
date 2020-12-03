@@ -1,7 +1,21 @@
 require "test_helper"
 
 describe Rental do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  describe "validations" do
+    it "requires a customer id" do
+      skip
+    end
+
+    it "fails with an invalid customer id" do
+      skip
+    end
+
+    it "requires a video id" do
+      skip
+    end
+
+    it "fails with an invalid video id" do
+      skip
+    end
+  end
 end
