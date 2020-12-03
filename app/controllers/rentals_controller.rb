@@ -68,8 +68,6 @@ class RentalsController < ApplicationController
                 }
 
       render json: response.as_json, status: :ok
-
-    # render json: rental.as_json(include: {customer: {only: [:videos_checked_out_count]}, video: {only: [:available_inventory]}}, only: [:customer_id, :video_id, :due_date]), status: :ok
     else
       render json: { errors: rental.errors.messages }, status: :bad_request
     end
