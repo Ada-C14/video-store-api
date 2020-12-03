@@ -2,7 +2,7 @@ class RentalsController < ApplicationController
   def check_out
     rental = Rental.new(rental_params)
     rental.due_date = Date.today + 7.days
-    
+
     if rental.save
 
       rental.customer.increment_checkout_count
