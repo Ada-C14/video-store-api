@@ -9,12 +9,12 @@ class VideosController < ApplicationController
     video = Video.find_by(id: params[:id])
 
     if video
-      render json: video.as_json(only: [:id, :title, :overview, :release_date, :available_inventory])
+      render json: video.as_json(only: [:id, :title, :overview, :release_date, :available_inventory]), status: :created
+      return
     else
       render json: {
-          errors: ["Not Found"],
-      }, status: :not_found
-
+          errors: video.errors
+      }, status: :bad_request
       return
     end
   end
