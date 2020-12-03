@@ -1,17 +1,20 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
-  # def toggle_up_video_count(customer)
-  #   video_count = customer.videos_checked_out_count += 1
-  #   customer.save
-  #
-  #   return video_count
-  # end
-  #
-  # def toggle_down_inventory(video)
-  #   inventory = video.available_inventory
-  #   video.save
-  #
-  #   return inventory
-  # end
+  # a method for Customer objects
+  def toggle_up_video_count
+    self.videos_checked_out_count += 1
+
+    self.save
+
+    return self.videos_checked_out_count
+  end
+
+  # a method for Video objects
+  def toggle_down_inventory
+    self.available_inventory -= 1
+    self.save
+
+    return self.available_inventory
+  end
 end
