@@ -3,6 +3,7 @@ class Rental < ApplicationRecord
   belongs_to :video
 
   validates :due_date, presence: true
+  # validates :customer, presence: true
 
   def decrease_available_inventory
     self.video.available_inventory -= 1

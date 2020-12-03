@@ -26,10 +26,15 @@ class RentalsController < ApplicationController
       }, status: :ok
       return
     else # doesn't save, surface error messages
-      render json: {ok: false, errors: rental.errors.messages}, status: :bad_request
-      return
+      if @customer.nil?
+        render json: { errors: ['Not Found'] }, status: :not_found
+      elsif @video.nil?
+        render json: { errors: ['Not Found'] }, status: :not_found
+      else
+        render json: { errors: rental.errors.messages}, status: :not_found
+        return
+      end
     end
-
   end
 
   def check_in

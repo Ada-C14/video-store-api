@@ -34,7 +34,7 @@ describe RentalsController do
 
       expect(body.keys).must_include "errors"
       expect(body["errors"].keys).must_include "customer"
-      must_respond_with :bad_request
+      must_respond_with :not_found
 
     end
   end
