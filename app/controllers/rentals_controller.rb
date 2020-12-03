@@ -31,7 +31,7 @@ class RentalsController < ApplicationController
   end
 
   def check_in
-    rental = Rental.find_by(customer_id: params[:customer_id], video_id: params[:video_id])
+    rental = Rental.where(customer_id: params[:customer_id], video_id: params[:video_id]).order(:created_at).last
 
     if rental.nil?
       render json: {
