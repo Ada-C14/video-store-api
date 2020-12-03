@@ -14,7 +14,7 @@ describe Video do
     it "has customers through rentals" do
       video_one = videos(:wonder_woman)
       expect(video_one).must_respond_to :customers
-      video_one.customer.each do |customer|
+      video_one.customers.each do |customer|
         expect(customer).must_be_kind_of Customer
       end
     end
@@ -63,7 +63,7 @@ describe Video do
       video_copy = Video.new(title: title)
       result = (video_copy.save)
       expect(result).must_equal false
-      expect(video_copy.errors_messages).must_include :title
+      expect(video_copy.errors.messages).must_include :title
     end
 
     it "must be valid when created with all the required fields" do

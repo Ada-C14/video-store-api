@@ -49,19 +49,19 @@ describe Customer do
     it "must have a state" do
       @customer.state = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.errors_messages).must_include :state
+      expect(@customer.errors.messages).must_include :state
     end
 
     it "must have a postal code" do
       @customer.postal_code = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.errors_messages).must_include :postal_code
+      expect(@customer.errors.messages).must_include :postal_code
     end
 
     it "must have a phone" do
       @customer.phone = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.errors_messages).must_include :phone
+      expect(@customer.errors.messages).must_include :phone
     end
 
     it "must have a unique name" do
@@ -70,7 +70,7 @@ describe Customer do
       customer_copy = Customer.new(name: name)
       result = customer_copy.save
       expect(result).must_equal false
-      expect(customer_copy.errors_messages).must_include :name
+      expect(customer_copy.errors.messages).must_include :name
     end
     
     it "must have a unique phone" do
@@ -79,11 +79,11 @@ describe Customer do
       customer_copy = Customer.new(phone: phone)
       result = customer_copy.save
       expect(result).must_equal false
-      expect(customer_copy.errors_messages).must_include :phone
+      expect(customer_copy.errors.messages).must_include :phone
     end
 
     it "must be valid when created with all the required fields" do
-      expect(@user.valid?).must_equal true
+      expect(@customer.valid?).must_equal true
     end
 
   end
