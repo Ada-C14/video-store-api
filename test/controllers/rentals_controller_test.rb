@@ -52,15 +52,16 @@ describe RentalsController do
     end
 
     it "returns bad request for video with no available inventory" do
-      video = Video.first
-      video.available_inventory = 0
+      video = videos(:fury_road)
+      @new_rental[:video_id] = video.id
 
       expect {
         post checkout_path, params: @new_rental
       }.wont_change "Rental.count"
 
       body = check_response(expected_type: Hash, expected_status: :bad_request)
-      expect(body["errors"].keys).must_include "age"
+      expect(body.keys).must_include "error"
+      expect(body["error"]).must_include "Not In Stock"
     end
 
     it "returns bad request if given no customer or video id" do

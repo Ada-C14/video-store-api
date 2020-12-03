@@ -3,8 +3,16 @@ class RentalsController < ApplicationController
     customer = Customer.find_by(id: params[:customer_id])
     video = Video.find_by(id: params[:video_id])
 
+    # error handling!
+    # what if no such customer/video?
+    # what if insufficient params?
+
     if video.available_inventory <= 0
-      # return errors
+      render json: {
+          ok: false,
+          error: "Not In Stock"
+      }, status: :bad_request
+      return
     end
 
     checkout_date = Date.today
