@@ -3,10 +3,9 @@ class VideosController < ApplicationController
     videos = Video.all
     render json: videos.as_json(
       only: %i[
+        id
         title
-        overview
         release_date
-        total_inventory
         available_inventory
       ]
     ), status: :ok
