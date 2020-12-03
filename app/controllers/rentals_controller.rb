@@ -4,8 +4,13 @@ class RentalsController < ApplicationController
     rental = Rental.new(rental_params)
 
     if rental.save
-      Video.find_by(id: rental.video_id).check_out
-      Customer.find_by(id: rental.customer_id).check_out
+      # Video.find_by(id: rental.video_id).check_out
+      # Customer.find_by(id: rental.customer_id).check_out
+      # rental.checked_out = Date.today
+      # rental.due_date = rental.checked_out + 7
+      # rental.save
+      initialize_rental(rental)
+
       render json: rental.as_json(only: [:id]), status: :created
       return
     else
@@ -45,7 +50,7 @@ class RentalsController < ApplicationController
       :video_id,
       :customer_id,
       :due_date,
-      :check_out,
+      :checked_out,
       :checked_in
     )
   end
