@@ -60,5 +60,45 @@ describe CustomersController do
     end
   end
 
+  describe "create" do
+    let(:customer_params) {
+      {
+        customer: {
+            name: "Ryan Shubbawoo",
+            registered_at: "2014-07-04T18:05:11.000Z",
+            address: "308399 Bubble Road",
+            city: "Seattle",
+            state: "WA",
+            postal_code: "98224",
+            phone: "(206)986-2739",
+            videos_checked_out_count: 5,
+        },
+      }
+    }
+
+    it "can create a new customer" do
+      expect {
+        post customers_path, params: customer_params
+      }.must_differ "Customer.count", 1
+
+      must_respond_with :created
+    end
+
+    it "can respond with a bad_request if customer gives bad data" do
+      customer_params[:customer][:name] = nil
+
+
+      expect {
+        post customers_path, params: customer_params
+      }.wont_change "Customer.count"
+
+      must_respond_with :bad_request
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body['errors'].keys).must_include 'name'
+    end
+  end
+
 
 end
