@@ -8,6 +8,6 @@ class Customer < ApplicationRecord
   validates :phone, presence: true, uniqueness: true
   validates :videos_checked_out_count, numericality: true #not sure about this? customer can have 0 checked out
 
-  #has_many :videos, through: rentals?
+  has_many :videos, through: :rentals
 
 end
