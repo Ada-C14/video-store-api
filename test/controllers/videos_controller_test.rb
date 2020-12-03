@@ -129,11 +129,48 @@ describe VideosController do
 
 
   describe "currently_checked_out_to" do
-    it "returns a list of customers to whom the video is currently checked out" do
+    it "can get route for existing, responds with :ok" do
+      rentals(:rental_one)
+      rentals(:rental_two)
+      rentals(:rental_three)
+      get video_current_customers_path(video1.id)
 
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+      expect(body.length).must_equal 2
+      must_respond_with :ok
     end
-    it "returns an empty array if the video is not currently checked out to anyone" do
+    it "gets a descriptive error if video is not checked out to anyone, responds with :no_content" do
+      get video_current_customers_path(videos(:out_of_stock).id)
 
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal true
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include "This video is not currently checked out to any customer"
+
+      must_respond_with :ok
+    end
+    it "responds with a 404 for nonexistent videos" do
+      # Act
+      get video_path(-1)
+      body = JSON.parse(response.body)
+
+      # Assert
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body["message"]).must_equal  "Video not found"
+      must_respond_with :not_found
+    end
+  end
+
+  describe "checkout_history" do
+    it "can get route, responds with :ok" do
+      get video_checkout_history_path
+
+      must_respond_with :ok
     end
   end
 end

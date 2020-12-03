@@ -120,5 +120,22 @@ describe Video do
       end
     end
 
+    describe "currently checked out to" do
+      it "returns a list of customers to whom the video is currently checked out" do
+        customers = video_one.currently_checked_out_to
+        expect(customers).must_be_instance_of Array
+        expect(customers.length).must_equal 2
+        customers.each do |customer|
+          expect(customer).must_be_instance_of Customer
+        end
+      end
+      it "returns an empty array if the video is not currently checked out to anyone" do
+        Rental.delete_all
+        customers = video_one.currently_checked_out_to
+        expect(customers).must_be_instance_of Array
+        expect(customers.length).must_equal 0
+      end
+    end
+
   end
 end

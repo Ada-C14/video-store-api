@@ -12,4 +12,8 @@ class Video < ApplicationRecord
   def increment_inventory
     self.available_inventory += 1
   end
+
+  def currently_checked_out_to
+    return self.rentals.filter { |rental| rental.updated_at == rental.created_at }.map { |rental| rental.customer }
+  end
 end
