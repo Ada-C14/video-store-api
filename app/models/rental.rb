@@ -15,7 +15,7 @@ class Rental < ApplicationRecord
     Video.find_by(id: video_id).check_out
     Customer.find_by(id: customer_id).check_out
     self.checked_out = Date.today
-    self.due_date = checked_out + 7
+    self.due_date = Date.today + 7
     save
   end
 
