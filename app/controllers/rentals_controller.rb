@@ -39,10 +39,8 @@ class RentalsController < ApplicationController
         due_date: due_date)
 
     if rental.save
-      customer.videos_checked_out_count += 1
-      customer.save
-      video.available_inventory -= 1
-      video.save
+      customer.increment_rentals
+      video.decrement_stock
 
       response = {
           customer_id: rental.customer_id,
