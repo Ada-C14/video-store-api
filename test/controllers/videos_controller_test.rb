@@ -38,15 +38,15 @@ describe VideosController do
       get video_path(video)
 
       body = check_response(expected_type: Hash)
-      expect(body.keys.sort).must_equal REQUIRED_VIDEO_FIELDS
+      expect(body.keys.sort).must_equal REQUIRED_VIDEO_FIELDS - ['id']
     end
 
-    it "will return a 404 response with json for a non-existent pet" do
+    it "will return a 404 response with json for a non-existent video" do
       get video_path(-1)
 
       body = check_response(expected_type: Hash, expected_status: 404)
       # expect(body['ok']).must_equal false # To make smoke test pass
-      expect(body['message']).must_equal "Not found"
+      expect(body['errors']).must_equal ["Not Found"]
     end
   end
 
