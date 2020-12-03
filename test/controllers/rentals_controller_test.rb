@@ -31,12 +31,28 @@ describe RentalsController do
       expect(body["available_inventory"]).must_equal video.available_inventory
     end
 
-    it "creates a new rental" do
+    it "creates a new rental and responds with 200 status (:ok)" do
       expect {
         post check_out_path, params: rental_params
       }.must_differ "Rental.count", 1
 
       must_respond_with :ok
+    end
+
+    it "it decreases the video's available_inventory by 1" do
+      post check_out_path, params: rental_params
+
+      video = Video.find_by(id: @video.id)
+
+      expect(video.available_inventory).must_equal 97
+    end
+
+    it "it increases the customer's videos_checked_out_count by 1" do
+      post check_out_path, params: rental_params
+
+      customer = Customer.find_by(id: @customer.id)
+
+      expect(customer.videos_checked_out_count).must_equal 4
     end
 
     it "responds with 'Not Found' if customer is nil" do
@@ -47,6 +63,9 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
     end
 
     it "responds with 'Not Found' if video is nil" do
@@ -57,6 +76,9 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
     end
   end
 
@@ -68,8 +90,8 @@ describe RentalsController do
 
     let(:rental_params) {
       {
-          video_id: @video.id,
-          customer_id: @customer.id
+        video_id: @video.id,
+        customer_id: @customer.id
       }
     }
 
@@ -91,6 +113,30 @@ describe RentalsController do
       expect(body["available_inventory"]).must_equal video.available_inventory
     end
 
+    it "it responds with 200 status (:ok)" do
+      post check_out_path, params: rental_params
+
+      post check_in_path, params: rental_params
+
+      must_respond_with :ok
+    end
+
+    it "it increases the video's available_inventory by 1" do
+      post check_in_path, params: rental_params
+
+      video = Video.find_by(id: @video.id)
+
+      expect(video.available_inventory).must_equal 98
+    end
+
+    it "it decreases the customer's videos_checked_out_count by 1" do
+      post check_in_path, params: rental_params
+
+      customer = Customer.find_by(id: @customer.id)
+
+      expect(customer.videos_checked_out_count).must_equal 3
+    end
+
     it "if rental is nil responds with 'Not Found'" do
       @customer.id = -1
       @video.id = -1
@@ -98,6 +144,9 @@ describe RentalsController do
       post check_in_path, params: rental_params
 
       must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
     end
 
     it "responds with 'Not Found' if customer is nil" do
@@ -108,6 +157,9 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
     end
 
     it "responds with 'Not Found' if video is nil" do
@@ -118,6 +170,9 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
     end
   end
 end
