@@ -4,12 +4,7 @@ class RentalsController < ApplicationController
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
 
-    if video.nil?
-      render json: { errors: ["Not Found"] }, status: :not_found
-      return
-    end
-
-    if customer.nil?
+    if video.nil? || customer.nil?
       render json: { errors: ["Not Found"] }, status: :not_found
       return
     end
@@ -29,28 +24,26 @@ class RentalsController < ApplicationController
       rental.available_inventory = video.toggle_down_inventory
       render json: rental.as_json(only: [:customer_id, :video_id, :due_date, :videos_checked_out_count, :available_inventory]),
              status: :ok
-      return
     else
       render json: { errors: rental.errors.messages }, status: :not_found
-      return
     end
 
   end
 
   def check_in
-    rental = Rental.find_by(id: params[:id])
+    # rental = Rental.find_by(id: params[:id])
+    video = Video.find_by(id: params[:video_id])
+    customer = Customer.find_by(id: params[:customer_id])
 
-    if rental.nil?
-      render json: { errors: rental.errors.messages }, status: :bad_request
-      return
-    else
-      video = Video.find_by(id: params[:video_id])
-      customer = Customer.find_by(id: params[:customer_id])
-      customer.toggle_down_video_count
-      video.toggle_up_inventory
-      render rental.as_json(only: [:customer_id, :video_id, :due_date, :videos_checked_out_count, :available_inventory]),
-             status: :ok
+    if video.nil? || customer.nil?
+      render json: { errors: ["Not Found"] }, status: :not_found
       return
     end
+
+    customer.toggle_down_video_count
+
+    video.toggle_up_inventory
+    render json: { customer_id: customer.id, video_id: video.id, videos_checked_out_count: customer.videos_checked_out_count, available_inventory: video.available_inventory },
+           status: :ok
   end
 end

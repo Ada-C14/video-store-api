@@ -61,6 +61,27 @@ describe Video do
   end
 
   describe "relationships" do
+    it "can have many rentals" do
+      customer = customers(:customer_two)
+      customer2 = customers(:customer_one)
+      video = videos(:black_widow)
+      rental = Rental.create(due_date: Date.today + 7,
+                          customer_id: customer.id,
+                          video_id: video.id,
+                          videos_checked_out_count: customer.videos_checked_out_count,
+                          available_inventory: video.available_inventory)
 
+      rental2 = Rental.create(due_date: Date.today + 7,
+                          customer_id: customer2.id,
+                          video_id: video.id,
+                          videos_checked_out_count: customer2.videos_checked_out_count,
+                          available_inventory: video.available_inventory)
+
+      expect(video.rentals.count).must_equal 2
+      video.rentals.each do |rental|
+        expect(rental).must_be_instance_of Rental
+      end
+
+    end
   end
 end

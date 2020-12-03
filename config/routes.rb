@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   resources :customers, only: [:index]
 
   post '/rentals/check-out', to: 'rentals#checkout', as: 'checkout'
-  post '/rentals/check-in', to: 'rentals#check-in', as: 'check-in'
+  post '/rentals/check-in', to: 'rentals#check_in', as: 'check_in'
 
 end
