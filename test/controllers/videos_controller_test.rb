@@ -90,7 +90,7 @@ describe VideosController do
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      video_params[:video][:title] = nil
+      video_params[:title] = nil
   
       # Assert
       expect {
