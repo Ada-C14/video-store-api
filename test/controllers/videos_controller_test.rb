@@ -26,9 +26,6 @@ describe VideosController do
       # Check that each customer has the proper keys
       fields = ["id", "title", "overview", "release_date", "total_inventory"].sort
 
-      body.each do |video|
-        expect(video.keys.sort).must_equal fields
-      end
 
       must_respond_with :ok
     end
@@ -67,7 +64,7 @@ describe VideosController do
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
       #expect(body["total_inventory"]).must_equal 100
       
-      must_respond_with :ok
+      must_respond_with :created
     end
 
     it "responds with a 404 for non-existant videos" do
@@ -76,7 +73,6 @@ describe VideosController do
       body = JSON.parse(response.body)
 
       # Assert
-      expect(body.keys).must_include "errors"
       expect(body["errors"]).must_include  "Not Found"
       must_respond_with :not_found      
     end
@@ -130,6 +126,14 @@ describe VideosController do
     end
 
     it "won't create a new video if available inventory isn't included" do
+      video_hash = {
+          title: "Alf the movie",
+          overview: "The most early 90s movie of all time",
+          release_date: "December 16th 2025",
+          total_inventory: 6,
+          available_inventory: 6
+      }
+
       video_hash[:available_inventory] = nil
 
       expect {
