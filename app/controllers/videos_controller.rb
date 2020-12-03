@@ -1,8 +1,8 @@
 class VideosController < ApplicationController
   def index
-    # @videos = Video.all
+    videos = Video.all
     videos = Video.all.as_json(only: [:id, :title, :overview, :release_date, :total_inventory])
-    render json: movies, status: :ok
+    render json: videos, status: :ok
   end
 
   def show
