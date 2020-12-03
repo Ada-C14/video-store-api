@@ -51,7 +51,8 @@ class VideosController < ApplicationController
     end
 
     if rental.video.available_inventory < 1
-      render json: {errors: "There is no available inventory for this video."}, status: :bad_request
+      render json: {errors: "There is no available inventory for this video."},
+             status: :bad_request
       return
     end
 
@@ -64,7 +65,7 @@ class VideosController < ApplicationController
           "due_date": rental.due_date,
           "videos_checked_out_count": rental.customer.videos_checked_out_count,
           "available_inventory": rental.video.available_inventory
-      }, status: :created
+      }, status: :ok
     else
       render json: {
           "ok": false,
