@@ -12,6 +12,6 @@ class RentalsController < ApplicationController
   private
 
   def rental_params
-    params.permit(:title, :overview, :release_date, :total_inventory, :available_inventory)
+    return params.permit(:video_id, :customer_id)
   end
 end
