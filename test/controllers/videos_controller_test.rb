@@ -99,6 +99,9 @@ describe VideosController do
       }.must_change "Video.count", 1
 
       must_respond_with :created
+
+      new_video = Video.find_by(title: video_hash[:title])
+      expect(new_video.overview).must_equal video_hash[:overview]
     end
 
     it "will respond with bad request and errors for an invalid movie" do
@@ -124,6 +127,18 @@ describe VideosController do
       expect(body["errors"]["title"]).must_include "can't be blank"
   
       must_respond_with :bad_request
+    end
+
+    it "won't create a new video if available inventory isn't included" do
+      video_hash[:available_inventory] = nil
+
+      expect {
+        post videos_path, params: video_hash
+      }.wont_change "Video.count"
+
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Hash
     end
   end
 end
