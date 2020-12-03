@@ -14,7 +14,7 @@ class VideosController < ApplicationController
       video["release_date"] = formatted_release_date
       render json: video, status: :ok
     else
-      render json: { ok: false, errors: "Not Found" }, status: :not_found
+      render json: { errors: ["Not Found"] }, status: :not_found
     end
   end
 
