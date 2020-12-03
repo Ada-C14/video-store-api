@@ -40,20 +40,20 @@ describe Video do
       expect(video.errors.messages[:release_date]).must_equal ["can't be blank"]
     end
 
+    it 'is invalid without total inventory' do
+      @video["total_inventory"] = nil
+      video = Video.new(@video)
+
+      expect(video.valid?).must_equal false
+      expect(video.errors.messages[:total_inventory]).must_equal ["can't be blank"]
+    end
+
     it 'is invalid without available inventory' do
       @video["available_inventory"] = nil
       video = Video.new(@video)
 
       expect(video.valid?).must_equal false
       expect(video.errors.messages[:available_inventory]).must_equal ["can't be blank"]
-    end
-
-    it 'is invalid if inventory is negative' do # Not sure if i wrote this correctly, ill come back to it.
-      @video["available_inventory"] = -1
-      video = Video.new(@video)
-
-      expect(video.valid?).must_equal false
-      expect(video.errors.messages[:available_inventory]).must_equal ["inventory cannot be less than 0"]
     end
 
   end
