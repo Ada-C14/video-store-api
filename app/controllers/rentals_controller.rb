@@ -3,7 +3,7 @@ class RentalsController < ApplicationController
   def check_out_rental
     rental = Rental.new(rental_params)
 
-    if rental.save && rental.is_valid?
+    if rental.is_valid? && rental.save
       rental.initialize_rental
       render json: rental.as_json(only: [:id]), status: :created
       return
