@@ -11,8 +11,7 @@ class RentalsController < ApplicationController
     rental = Rental.find_by(customer_id: customer.id, video_id: video.id)
     if rental.nil?
       render json: {
-          ok: false,
-          message: 'Not found',
+          errors: 'Not found',
       }, status: :not_found
       return
     end
