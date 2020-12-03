@@ -1,36 +1,33 @@
 require "test_helper"
 
+REQUIRED_CUSTOMER_FIELDS = ["id", "name", "registered_at", "postal_code", "phone", "videos_checked_out_count"].sort
+
 describe CustomersController do
-  it "must get index" do
-    # Act
-    get customers_path
-    body = JSON.parse(response.body)
+  describe "index" do
+    it "responds with JSON and ok" do
+      get customers_path
 
-    # Assert
-    expect(body).must_be_instance_of Array
-    expect(body.length).must_equal Customer.count
-
-    # Check that each customer has the proper keys
-    fields = ["id", "name", "registered_at", "postal_code", 
-      "phone", "videos_checked_out_count"].sort
-
-    body.each do |customer|
-      expect(customer.keys.sort).must_equal fields
+      check_response(expected_type: Array)
     end
 
-    must_respond_with :ok
+    it "returns an array of customer hashes" do
+      get customers_path
+
+      body = check_response(expected_type: Array)
+
+      body.each do |customer|
+        expect(customer).must_be_instance_of Hash
+        expect(customer.keys.sort).must_equal REQUIRED_CUSTOMER_FIELDS
+      end
+    end
+
+    it "will respond with an empty array when there are no customers" do
+      Customer.destroy_all
+
+      get customers_path
+
+      body = check_response(expected_type: Array)
+      expect(body).must_equal []
+    end
   end
-
-  it "works even with no customers" do
-    Customer.destroy_all
-
-    get customers_path
-    body = JSON.parse(response.body)
-
-    expect(body).must_be_instance_of Array
-    expect(body.length).must_equal 0
-
-    must_respond_with :ok
-  end
-
 end
