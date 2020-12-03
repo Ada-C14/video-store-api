@@ -18,8 +18,10 @@ class RentalsController < ApplicationController
       # video = Video.find_by(id: rental.video_id)
       render json: rental.as_json(
         only: [:customer_id, :video_id, :due_date],
-        include: { customer: { only: [:videos_checked_out_count] } },
-        include: { video: { only: [:available_inventory] } }
+        include: {
+          customer: { only: [:videos_checked_out_count] },
+          video: { only: [:available_inventory] }
+        }
       ), status: :ok
       return
     end
