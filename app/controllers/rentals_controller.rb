@@ -1,18 +1,12 @@
 class RentalsController < ApplicationController
   def checkout
 
-    unless params[:customer_id]
-      render json: {
-          ok: false,
-          error: "Customer ID Required"
-      }, status: :bad_request
-      return
-    end
+    errors = []
 
-    unless params[:video_id]
+    unless params[:customer_id] && params[:video_id]
+      errors << "ID Required"
       render json: {
-          ok: false,
-          error: "Video ID Required"
+          errors: errors
       }, status: :bad_request
       return
     end
@@ -20,26 +14,18 @@ class RentalsController < ApplicationController
     customer = Customer.find_by(id: params[:customer_id])
     video = Video.find_by(id: params[:video_id])
 
-    if customer.nil?
+    if customer.nil? || video.nil?
+      errors << "Not Found"
       render json: {
-          ok: false,
-          error: "Customer Not Found"
-      }, status: :not_found
-      return
-    elsif video.nil?
-      render json: {
-          ok: false,
-          error: "Video Not Found"
+          errors: errors
       }, status: :not_found
       return
     end
-    # error handling!
-    # what if insufficient params?
 
     if video.available_inventory <= 0
+      errors << "Not In Stock"
       render json: {
-          ok: false,
-          error: "Not In Stock"
+          errors: errors
       }, status: :bad_request
       return
     end
@@ -54,7 +40,9 @@ class RentalsController < ApplicationController
 
     if rental.save
       customer.videos_checked_out_count += 1
+      customer.save
       video.available_inventory -= 1
+      video.save
 
       response = {
           customer_id: rental.customer_id,
@@ -68,7 +56,6 @@ class RentalsController < ApplicationController
       return
     else
       render json: {
-          ok: false,
           errors: rental.errors.messages
       }, status: :bad_request
     end
