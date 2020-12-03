@@ -99,7 +99,7 @@ class VideosController < ApplicationController
           "video_id": video.id,
           "videos_checked_out_count": customer.videos_checked_out_count,
           "available_inventory": video.available_inventory
-      }
+      },status: :ok
     end
     return
   end

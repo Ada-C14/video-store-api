@@ -132,7 +132,7 @@ describe VideosController do
 
       body = JSON.parse(response.body)
       expect(body["customer_id"]).must_equal customer.id
-      expect(body["video_id"]).must_include wonder_woman.id
+      expect(body["video_id"]).must_equal wonder_woman.id
 
     end
 
@@ -155,5 +155,62 @@ describe VideosController do
     it "will respond with 200 with valid ids" do
 
     end
+  end
+
+  describe "checkin" do
+    before do
+      @customer = customers(:customer_one)
+      @video = videos(:wonder_woman)
+      rental_hash = {
+          video_id: @video.id,
+          customer_id: @customer.id,
+          due_date: Date.today + 7
+      }
+      post checkout_path, params: rental_hash
+
+      @checkin_hash = {
+          video_id: @video.id,
+          customer_id: @customer.id,
+      }
+    end
+
+    it "will respond with 404 with invalid customer id" do
+      @checkin_hash[:customer_id] = -1
+      count = @customer.videos_checked_out_count
+
+      post checkin_path, params: @checkin_hash
+      must_respond_with :not_found
+      expect(@customer.videos_checked_out_count).must_equal count
+
+    end
+
+    it "will respond with 404 with invalid video id" do
+      @checkin_hash[:video_id] = -1
+      count = @customer.videos_checked_out_count
+
+      post checkin_path, params: @checkin_hash
+      must_respond_with :not_found
+      expect(@customer.videos_checked_out_count).must_equal count
+    end
+
+    it "will decrease customer.videos_checked_out_count by one" do
+      count = @customer.videos_checked_out_count
+
+      post checkin_path, params: @checkin_hash
+      @customer.reload
+      must_respond_with :ok
+      expect(@customer.videos_checked_out_count).must_equal count - 1
+    end
+
+    it "will increase video.available_inventory by one" do
+      count = @video.available_inventory
+
+      post checkin_path, params: @checkin_hash
+      @video.reload
+      must_respond_with :ok
+      expect(@video.available_inventory).must_equal count + 1
+    end
+
+
   end
 end
