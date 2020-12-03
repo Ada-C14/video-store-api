@@ -20,7 +20,7 @@ class VideosController < ApplicationController
   def create
     video = Video.new(video_params)
     if video.save
-      render json:video.as_json, status: :created
+      render json: video.as_json, status: :created
     else
       #
     end
