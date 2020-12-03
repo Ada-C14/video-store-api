@@ -3,8 +3,8 @@ Rails.application.routes.draw do
 
   resources :videos, only: [:index, :show, :create]
 
-  post 'rentals/checkout', to: 'rentals#checkout'
-  post 'rentals/checkin', to: 'rentals#checkin'
+  post 'rentals/check-out', to: 'rentals#checkout'
+  post 'rentals/check-in', to: 'rentals#checkin'
 
   resources :customers, only: [:index]
 end

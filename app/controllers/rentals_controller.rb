@@ -18,13 +18,12 @@ class RentalsController < ApplicationController
             customer_id: customer.id,
             video_id: video.id,
             due_date: rental.due_date,
-            videos_checked_out_count: customer.videos_checked_out_count,
-            available_inventory: video.available_inventory
+            videos_checked_out_count: rental.customer.videos_checked_out_count,
+            available_inventory: rental.video.available_inventory
         }, status: :ok
       elsif customer.nil? || video.nil?
         render json: {
-            ok: false,
-            errors: rental.errors.messages
+            errors: ["Not Found"]
         }, status: :not_found
       end
     end
@@ -37,24 +36,14 @@ class RentalsController < ApplicationController
 
     if customer && video
       rental = Rental.find_by(customer_id: customer.id, video_id: video.id)
+
+      rental ||= Rental.create(customer_id: customer.id, video_id: video.id, due_date: Date.today + 7 )
     end
 
 
-    if customer.nil?
-      render json: {
-          ok: false,
-          errors: ["customer not found"]
-      }, status: :not_found
-    elsif video.nil?
-      render json: {
-          ok: false,
-          errors: ["video not found"]
-      }, status: :not_found
-    elsif rental.nil?
-      render json: {
-          ok: false,
-          errors: ["rental not found"]
-      }, status: :not_found
+
+    if customer.nil? || video.nil?
+      render json: { errors: ['Not Found'] }, status: :not_found
     else
       rental.checkin_update
       rental.update(return_date: Date.today)
@@ -62,8 +51,8 @@ class RentalsController < ApplicationController
       render json: {
           customer_id: customer.id,
           video_id: video.id,
-          videos_checked_out_count: customer.videos_checked_out_count,
-          available_inventory: video.available_inventory
+          videos_checked_out_count: rental.customer.videos_checked_out_count,
+          available_inventory: rental.video.available_inventory
       }, status: :ok
     end
   end
@@ -75,10 +64,10 @@ class RentalsController < ApplicationController
   end
 
   def find_customer
-    Customer.find_by(id: params[:customer_id])
+    Customer.find_by(id: params[:customer_id].to_i)
   end
 
   def find_video
-    Video.find_by(id: params[:video_id])
+    Video.find_by(id: params[:video_id].to_i)
   end
 end
