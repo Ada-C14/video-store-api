@@ -1,0 +1,6 @@
+rental_one:
+  video: wonder_woman
+  customer: customer_one
+rental_two:
+  video: wonder_woman
+  customer: customer_two
