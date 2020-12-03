@@ -19,6 +19,20 @@ describe Video do
       end
     end
 
+  end
+
+  describe "validations" do
+
+    before do
+      @video = Video.new(title: "Title", overview: "Overview", release_date: "January 1st 2021", total_inventory: 10, available_inventory: 9)
+    end
+
+    it "must have a title" do
+      @video.title = nil
+      expect(@video.valid?).must_equal false
+      expect(@video.errors.messages).must_include :title
+    end
 
   end
+
 end
