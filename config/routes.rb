@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  # get 'videos/index'
-  # get 'videos/show'
 
   resources :customers, only [:index, :show]
 
+  resources :videos, only: [:index, :show]
 
 end
