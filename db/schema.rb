@@ -30,8 +30,12 @@ ActiveRecord::Schema.define(version: 2020_12_03_180842) do
 
   create_table "rentals", force: :cascade do |t|
     t.string "due_date"
+    t.bigint "customer_id", null: false
+    t.bigint "video_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_rentals_on_customer_id"
+    t.index ["video_id"], name: "index_rentals_on_video_id"
   end
 
   create_table "videos", force: :cascade do |t|
@@ -44,4 +48,6 @@ ActiveRecord::Schema.define(version: 2020_12_03_180842) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "rentals", "customers"
+  add_foreign_key "rentals", "videos"
 end
