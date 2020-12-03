@@ -36,12 +36,18 @@ class VideosController < ApplicationController
   end
 
   def checkout
-    if Customer.find_by(id: rental_params[:customer_id]) && Video.find_by(id: rental_params[:videos_id])
+    customer = Customer.find_by(id: rental_params[:customer_id])
+    video = Video.find_by(id: rental_params[:video_id])
+
+    if customer.nil?
+      render json: {errors: "Can't find the customer."}, status: :not_found
+      return
+    elsif video.nil?
+      render json: {errors: "Can't find the video."}, status: :not_found
+      return
+    else
       rental = Rental.new(rental_params)
       rental.due_date = Date.today + 7
-    else
-      render json: {errors: "Invalid id number."}, status: :not_found
-      return
     end
 
     if rental.save
@@ -75,6 +81,6 @@ class VideosController < ApplicationController
   end
 
   def rental_params
-    return params.permit(:customer_id, :videos_id, :due_date)
+    return params.permit(:customer_id, :video_id, :due_date)
   end
 end
