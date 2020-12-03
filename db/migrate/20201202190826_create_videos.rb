@@ -3,7 +3,7 @@ class CreateVideos < ActiveRecord::Migration[6.0]
     create_table :videos do |t|
       t.string :title
       t.string :overview
-      t.date :release_date
+      t.string :release_date
       t.integer :total_inventory
       t.integer :available_inventory
 
