@@ -56,4 +56,38 @@ describe Rental do
       end
     end
   end
+
+  describe "custom methods" do
+    describe "decrease available inventory" do
+      it "decreases the video's available inventory" do
+        rental = rentals(:rental_one)
+        start_inventory_count = rental.video.available_inventory
+
+        rental.decrease_available_inventory
+
+        found_rental = Rental.find_by(id: rental.id)
+        end_count = found_rental.video.available_inventory
+        expect(found_rental.video.available_inventory).must_equal start_inventory_count - 1
+        expect(end_count).must_equal start_inventory_count - 1
+      end
+      # TODO: negative or edge test case?
+    end
+
+    describe "increase_videos_checked_out" do
+      it "increases the videos checked out count for the customer" do
+        rental = rentals(:rental_one)
+        start_inventory_count = rental.customer.videos_checked_out_count
+
+        rental.increase_videos_checked_out
+
+        found_rental = Rental.find_by(id: rental.id)
+        end_count = found_rental.customer.videos_checked_out_count
+
+        expect(found_rental.customer.videos_checked_out_count).must_equal start_inventory_count + 1
+        expect(end_count).must_equal start_inventory_count + 1
+      end
+    end
+
+
+  end
 end
