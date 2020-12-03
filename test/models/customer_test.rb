@@ -51,10 +51,29 @@ describe Customer do
     end
     
   end
-  
-  describe "relations" do 
-    
+
+  describe "relations" do
+
+    it "has a list of rentals" do
+      customer = customers(:customer_one)
+      expect(customer).must_respond_to :rentals
+
+      customer.rentals.each do |rental|
+        expect(rental).must_be_kind_of Rental
+      end
+
+      expect(customer.rentals.count).must_equal 2
+    end
+
+    it "has many videos through rentals" do
+      customer = customers(:customer_one)
+      expect(customer).must_respond_to :videos
+      customer.videos.each do |video|
+        expect(video).must_be_kind_of Video
+      end
+    end
   end
+
 
   describe "custom methods" do
     
