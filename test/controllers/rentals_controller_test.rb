@@ -13,8 +13,6 @@ describe RentalsController do
 
   describe "create/checkout" do
     it "creates a new rental" do
-      post check_out_path, params: rental_data
-
       expect{
         post check_out_path, params: rental_data
       }.must_change "Rental.count", 1

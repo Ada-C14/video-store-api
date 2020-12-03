@@ -2,6 +2,7 @@ class Rental < ApplicationRecord
   belongs_to :customer
   belongs_to :video
 
+  validates_uniqueness_of :customer_id, scope: :video_id
   validates_presence_of :due_date
 
   validate :cannot_rent_unreleased, on: :create
