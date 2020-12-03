@@ -28,17 +28,20 @@ describe Video do
 
     it "requires available inventory to be numeric" do
       video.available_inventory = "five"
-
       expect(video.valid?).must_equal false
+
+      video.available_inventory = 5
+      expect(video.valid?).must_equal true
     end
 
     it "requires total inventory to be numeric" do
       video.total_inventory = "five"
-
       expect(video.valid?).must_equal false
+
+      video.total_inventory = 5
+      expect(video.valid?).must_equal true
+
     end
   end
-
-
 
 end
