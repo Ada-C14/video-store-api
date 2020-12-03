@@ -39,6 +39,7 @@ class VideosController < ApplicationController
       }, status: :not_found
       return
     end
+  end
 
   private
 
