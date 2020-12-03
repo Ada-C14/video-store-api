@@ -26,7 +26,7 @@ class RentalsController < ApplicationController
 
   def check_in
     rental = Rental.find_by(video_id: params[:video_id], customer_id: params[:customer_id])
-    if rental.save
+    if rental
       rental.customer.videos_checked_out_count -= 1
       rental.customer.save!
 
