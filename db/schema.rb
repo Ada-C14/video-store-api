@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 2020_12_03_180842) do
 
   create_table "rentals", force: :cascade do |t|
     t.string "due_date"
-    t.bigint "customer_id", null: false
-    t.bigint "video_id", null: false
+    t.bigint "customer_id"
+    t.bigint "video_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["customer_id"], name: "index_rentals_on_customer_id"

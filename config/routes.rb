@@ -5,5 +5,5 @@ Rails.application.routes.draw do
 
   post '/rentals/check-out', to: 'rentals#check_out', as: 'checkout'
 
-  post '/rentals/check-in', to: 'rentals#check-in', as: 'checkin'
+  post '/rentals/check-in', to: 'rentals#check_in', as: 'checkin'
 end
