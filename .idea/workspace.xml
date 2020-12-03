@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="81546eb2-802b-4a69-abbd-cc3c6ad7a67b" name="Default Changelist" comment="" />
+    <list default="true" id="81546eb2-802b-4a69-abbd-cc3c6ad7a67b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/customer.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/customer.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/video.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/video.rb" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,11 +134,17 @@
       <option name="presentableId" value="Default" />
       <updated>1606950666173</updated>
       <workItem from="1606950670227" duration="1621000" />
-      <workItem from="1606957258289" duration="605000" />
+      <workItem from="1606957258289" duration="3732000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2334" y="144" width="670" height="676" key="search.everywhere.popup" timestamp="1606969274589">
+      <screen x="1440" y="-157" width="1920" height="977" />
+    </state>
+    <state x="2334" y="144" width="670" height="676" key="search.everywhere.popup/1440.-157.1920.977/0.23.1440.877@1440.-157.1920.977" timestamp="1606969274589" />
   </component>
 </project>
