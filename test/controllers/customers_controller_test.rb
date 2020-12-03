@@ -69,7 +69,7 @@ describe CustomersController do
       # Our CustomersController test should just test generically
       # for any kind of invalid data, so we will randomly pick
       # the name attribute to invalidate
-      customer_data[:customer][:name] = nil
+      customer_data[:customer][:phone] = nil
 
       expect {
         # Act
