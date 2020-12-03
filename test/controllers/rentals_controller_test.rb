@@ -1,14 +1,14 @@
 require "test_helper"
 
 describe RentalsController do
-
-  describe "check-out" do
     before do
       @rental_hash = {
           video_id: videos(:wonder_woman).id,
           customer_id: customers(:customer_one).id
       }
     end
+
+  describe "check-out" do
 
     it "check-out works with valid params" do
 
@@ -29,7 +29,7 @@ describe RentalsController do
       expect(body["available_inventory"]).must_equal available_inventory - 1
 
 
-      must_respond_with :created
+      must_respond_with :ok
 
     end
 
@@ -86,10 +86,80 @@ describe RentalsController do
     end
   end
 
-  it "must get check-in" do
-    skip
-    get rentals_check_out_path
-    must_respond_with :success
-  end
+  describe "check-in" do
+    it "will successfully check in an existing checkout" do
 
+      post rentals_check_out_path, params: @rental_hash
+
+      checkout_count = Customer.find_by(id: @rental_hash[:customer_id]).videos_checked_out_count
+      available_inventory = Video.find_by(id: @rental_hash[:video_id]).available_inventory
+
+      expect {
+        post rentals_check_in_path, params: @rental_hash
+      }.wont_change "Rental.count"
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Hash
+      expect(body["customer_id"]).must_equal @rental_hash[:customer_id]
+      expect(body["video_id"]).must_equal @rental_hash[:video_id]
+      expect(body["videos_checked_out_count"]).must_equal checkout_count - 1
+      expect(body["available_inventory"]).must_equal available_inventory + 1
+
+    end
+
+    it "will not check in with invalid video_id" do
+      post rentals_check_out_path, params: @rental_hash
+
+      @rental_hash[:video_id] = nil
+
+      post rentals_check_in_path, params: @rental_hash
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['errors']).must_include "Invalid rental"
+
+      must_respond_with :not_found
+
+    end
+
+    it "will not check in with invalid customer_id" do
+
+      post rentals_check_out_path, params: @rental_hash
+
+      @rental_hash[:customer_id] = nil
+
+      post rentals_check_in_path, params: @rental_hash
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['errors']).must_include "Invalid rental"
+
+      must_respond_with :not_found
+
+    end
+
+    it "will not check in a video that was not checked out by a customer" do
+
+      post rentals_check_out_path, params: @rental_hash
+
+      @rental_hash[:customer_id] = customers(:customer_two).id
+
+      post rentals_check_in_path, params: @rental_hash
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['errors']).must_include "Invalid rental"
+
+      must_respond_with :not_found
+
+    end
+  end
 end

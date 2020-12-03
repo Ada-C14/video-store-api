@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "690f79cf-484a-4266-8d84-b668aed0c2f4",
+		"_postman_id": "54e41ee1-2de4-49d7-b6dd-8bf465f0e84c",
 		"name": "Video Store API Wave 2: Making Rentals with Checking In and Checking Out",
 		"description": "Checks the following endpoints:\n\n- POST /rentals/check-out\n- POST /rentals/check-in",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -12,7 +12,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "8b2b72e6-70c5-4ce1-afae-0e0bcb21f23f",
+						"id": "2aad34c9-b115-4884-b409-54d0f0495258",
 						"exec": [
 							"// Pre-request script:",
 							"//      1. Find and test a video that has positive available_inventory value",
@@ -71,7 +71,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5ca8ec82-7aec-4437-a668-78b477dccc4a",
+						"id": "3c28d018-b7b4-493d-aba2-db12d9ca1580",
 						"exec": [
 							"pm.test(\"response should be 200 and come back as a json object\", () => {",
 							"    pm.response.to.have.status(200);",
@@ -137,7 +137,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "34a1b6f6-3b91-448a-b396-e612025a2ee8",
+						"id": "d8094487-c93a-43ba-a1e9-5c6e1b51c175",
 						"exec": [
 							"// Pre-request script:",
 							"//      1. Find and test a video that has positive available_inventory value",
@@ -164,17 +164,17 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bf8d5d2b-8e00-42cf-9bfc-5b4b25454525",
+						"id": "030d8971-40a7-44dc-97e1-6d222309674b",
 						"exec": [
 							"pm.test(\"response should be 404 and come back as a json object\", () => {",
 							"    pm.response.to.have.status(404);",
 							"    pm.expect(pm.response.json()).to.be.an('object');",
 							"});",
 							"",
-							"pm.test(\"response should have 'errors': ['Not Found']\", () => {",
+							"pm.test(\"response should have 'errors'\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res)).to.have.members(['errors']);",
-							"    pm.expect(res['errors']).to.have.members(['Not Found']);",
+							"    pm.expect(Object.keys(res)).to.have.members(['ok', 'errors']);",
+							"    pm.expect(res['errors']).to.have.keys({ \"customer\": [\"must exist\"]});",
 							"});"
 						],
 						"type": "text/javascript"
@@ -223,7 +223,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "87b2c3ba-669a-41dd-8705-336afba0656a",
+						"id": "1252ca9c-25d4-405f-bef0-65d77735a54b",
 						"exec": [
 							"// Pre-request script:",
 							"//      1. Find and set valid existing customer ID",
@@ -254,17 +254,17 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "3ddbeb31-c014-46e7-a0cd-86d1b575b8b1",
+						"id": "3be65b9c-a5b5-440b-9f1d-a510b5923355",
 						"exec": [
 							"pm.test(\"response should be 404 and come back as a json object\", () => {",
 							"    pm.response.to.have.status(404);",
 							"    pm.expect(pm.response.json()).to.be.an('object');",
 							"});",
 							"",
-							"pm.test(\"response should have 'errors': ['Not Found']\", () => {",
+							"pm.test(\"response should have 'errors'\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res)).to.have.members(['errors']);",
-							"    pm.expect(res['errors']).to.have.members(['Not Found']);",
+							"    pm.expect(Object.keys(res)).to.have.members(['ok', 'errors']);",
+							"    pm.expect(res['errors']).to.have.keys({ \"video\": [\"must exist\"]});",
 							"});"
 						],
 						"type": "text/javascript"
@@ -313,7 +313,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "4a810fea-4a54-408c-b7f7-2a68b29a6f30",
+						"id": "179d2aac-8865-47b9-bbde-4f276ac366ed",
 						"exec": [
 							"// Pre-request script:",
 							"//      1. Find and test a video that has positive available_inventory value",
@@ -372,7 +372,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0e14e416-60b1-4d36-8cde-5c76d2169c8f",
+						"id": "1912cfba-4f57-4a0d-a504-395a398c3ab5",
 						"exec": [
 							"pm.test(\"response should be 200 and come back as a json object\", () => {",
 							"    pm.response.to.have.status(200);",
@@ -438,7 +438,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "26deee94-b703-4ef0-8d16-143b6f8b0a78",
+						"id": "905ba97e-8116-4aa7-a509-c7b61a4195a1",
 						"exec": [
 							"// Pre-request script:",
 							"//      1. Find and test a video that has positive available_inventory value",
@@ -465,17 +465,17 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "611878f7-a663-47a7-afcc-04c93633f7ea",
+						"id": "4f6e9840-090a-42c2-b0da-f0123fbe6228",
 						"exec": [
 							"pm.test(\"response should be 404 and come back as a json object\", () => {",
 							"    pm.response.to.have.status(404);",
 							"    pm.expect(pm.response.json()).to.be.an('object');",
 							"});",
 							"",
-							"pm.test(\"response should have 'errors': ['Not Found']\", () => {",
+							"pm.test(\"response should have 'errors'\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res)).to.have.members(['errors']);",
-							"    pm.expect(res['errors']).to.have.members(['Not Found']);",
+							"    pm.expect(Object.keys(res)).to.have.members(['ok', 'errors']);",
+							"    pm.expect(res['errors']).to.have.members([\"Invalid rental\"]);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -524,7 +524,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "54552b89-1abc-407f-9185-095558a230a1",
+						"id": "e6176253-57b1-40ef-8d42-d0f4e308a0e1",
 						"exec": [
 							"// Pre-request script:",
 							"//      1. Find and set valid existing customer ID",
@@ -554,17 +554,17 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "fe0f2905-b489-4c12-a3e5-3be76a6fca11",
+						"id": "cbe7278c-7aec-4fcd-856c-923374132beb",
 						"exec": [
 							"pm.test(\"response should be 404 and come back as a json object\", () => {",
 							"    pm.response.to.have.status(404);",
 							"    pm.expect(pm.response.json()).to.be.an('object');",
 							"});",
 							"",
-							"pm.test(\"response should have 'errors': ['Not Found']\", () => {",
+							"pm.test(\"response should have 'errors'\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res)).to.have.members(['errors']);",
-							"    pm.expect(res['errors']).to.have.members(['Not Found']);",
+							"    pm.expect(Object.keys(res)).to.have.members(['ok', 'errors']);",
+							"    pm.expect(res['errors']).to.have.members([\"Invalid rental\"]);",
 							"});"
 						],
 						"type": "text/javascript"

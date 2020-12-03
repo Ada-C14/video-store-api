@@ -19,7 +19,7 @@ class RentalsController < ApplicationController
       json_to_return[:videos_checked_out_count] = rental.customer.videos_checked_out_count
       json_to_return[:available_inventory] = rental.video.available_inventory
 
-      render json: json_to_return, status: :created
+      render json: json_to_return, status: :ok
       return
     else
       render json: {
@@ -36,7 +36,7 @@ class RentalsController < ApplicationController
     if rental.nil?
       render json: {
         ok: false,
-        errors: ["Video #{rental.video.title} not checked out by customer #{rental.customer.name}."]
+        errors: ["Invalid rental"]
       }, status: :not_found
       return
     else
@@ -47,7 +47,7 @@ class RentalsController < ApplicationController
       json_to_return[:videos_checked_out_count] = rental.customer.videos_checked_out_count
       json_to_return[:available_inventory] = rental.video.available_inventory
 
-      render json: json_to_return, status: :created
+      render json: json_to_return, status: :ok
       return
     end
   end
