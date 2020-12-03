@@ -2,6 +2,18 @@ require "test_helper"
 
 describe Video do
 
+  it "can be instianted with the fields" do
+    video = Video.first
+    expect(video.valid?).must_equal true
+  end
+
+  it "responds to the fields" do
+    video = Video.first
+    [:title, :release_date, :available_inventory].each do |field|
+      expect(video).must_respond_to field
+    end
+  end
+
   describe "validations" do
 
     it "video must have a title" do
