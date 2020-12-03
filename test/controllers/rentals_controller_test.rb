@@ -94,4 +94,57 @@ describe RentalsController do
       expect(body["errors"]).must_include "ID Required"
     end
   end
+
+  describe "checkin" do
+    let(:rental_data) {
+      {
+          video_id: videos(:wonder_woman).id,
+          customer_id: customers(:customer_one).id
+      }
+    }
+    before do
+      post checkout_path, params: rental_data
+    end
+
+    it "allows checkin" do
+      inventory_count = videos(:wonder_woman).available_inventory
+      video_count = customers(:customer_one).videos_checked_out_count
+
+      expect {
+        post checkin_path, params: rental_data
+      }.must_differ "Rental.count", 0
+
+      must_respond_with :success
+      expect(Rental.all.first.checkout_date).must_equal Date.today
+
+      video = Video.find_by(id: rental_data[:video_id])
+      customer = Customer.find_by(id: rental_data[:customer_id])
+
+      expect(video.available_inventory).must_equal inventory_count
+      expect(customer.videos_checked_out_count).must_equal video_count
+    end
+
+    it "prevents check in customer has not made rental" do
+      rental_data[:customer_id] = nil
+
+      expect {
+        post checkin_path, params: rental_data
+      }.must_differ "Rental.count", 0
+
+      must_respond_with :not_found
+    end
+
+    it "prevents check in if video does not exist" do
+      rental_data[:video_id] = nil
+
+      expect {
+        post checkout_path, params: rental_data
+      }.must_differ "Rental.count", 0
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body["errors"]).must_include "ID Required"
+    end
+
+
+  end
 end
