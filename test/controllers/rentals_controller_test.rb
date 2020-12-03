@@ -7,13 +7,13 @@ describe RentalsController do
 
   describe "check out" do
     let(:rental){
-      {video_id: videos(:valid_video).id,
-       customer_id: customers(:blathers).id}
+      {video_id: videos(:black_widow).id,
+       customer_id: customers(:customer_one).id}
     }
 
     it "can create a rental check out" do
-      inventory = videos(:valid_video).available_inventory
-      customer_check_out = customers(:blathers).videos_checked_out_count
+      inventory = videos(:black_widow).available_inventory
+      customer_check_out = customers(:customer_one).videos_checked_out_count
 
       expect {
         post check_out_path, params: rental
@@ -52,8 +52,8 @@ describe RentalsController do
 
   describe "check in" do
     let(:rental){
-      {video_id: videos(:valid_video).id,
-       customer_id: customers(:blathers).id,
+      {video_id: videos(:black_widow).id,
+       customer_id: customers(:customer_one).id,
        returned: false}
     }
 
@@ -62,8 +62,8 @@ describe RentalsController do
     end
 
     it "can create a rental check in" do
-      inventory = videos(:valid_video).available_inventory
-      customer_check_out = customers(:blathers).videos_checked_out_count
+      inventory = videos(:black_widow).available_inventory
+      customer_check_out = customers(:customer_one).videos_checked_out_count
 
       must_respond_with :success
 
