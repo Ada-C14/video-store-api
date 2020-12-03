@@ -38,17 +38,26 @@ describe RentalsController do
       expect(body["available_inventory"]).must_equal video_count - 1
     end
 
-    it "returns 404 for nonexistent customer or video" do
-      @new_rental[:rental][:customer_id] = -1
-      @new_rental[:rental][:video_id] = -1
+    it "returns 404 for nonexistent customer" do
+      @new_rental[:customer_id] = -1
 
       expect {
         post checkout_path, params: @new_rental
       }.wont_change "Rental.count"
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
-      expect(body["errors"].keys).must_include "customer_id"
-      expect(body["errors"].keys).must_include "video_id"
+      expect(body["error"]).must_equal "Customer Not Found"
+    end
+
+    it "returns 404 for nonexistent video" do
+      @new_rental[:video_id] = -1
+
+      expect {
+        post checkout_path, params: @new_rental
+      }.wont_change "Rental.count"
+
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      expect(body["error"]).must_equal "Video Not Found"
     end
 
     it "returns bad request for video with no available inventory" do
@@ -65,8 +74,8 @@ describe RentalsController do
     end
 
     it "returns bad request if given no customer or video id" do
-      @new_rental[:rental][:customer_id] = nil
-      @new_rental[:rental][:video_id] = nil
+      @new_rental[:customer_id] = nil
+      @new_rental[:video_id] = nil
 
       expect {
         post checkout_path, params: @new_rental
