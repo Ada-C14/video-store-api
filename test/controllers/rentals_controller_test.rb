@@ -6,7 +6,14 @@ describe RentalsController do
       customer = customers(:customer_one)
       video = videos(:wonder_woman)
 
-      expect{post checkout_path()}.must_change 'Rental.count', 1
+      rental_hash = {
+          customer_id: customer.id,
+          video_id: video.id,
+      }
+
+      expect{
+        post checkout_path, params: rental_hash
+      }.must_change 'Rental.count', 1
 
       # customer videos_checked_out should go + 1
       # video inventory should go - 1
