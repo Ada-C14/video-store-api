@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'customers/index'
+  get 'customers/show'
+  get 'customers/create'
   # get 'customer/index'
   # get 'customer/show'
   # get 'customer/create'
