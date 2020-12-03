@@ -77,9 +77,38 @@ describe Video do
       expect(video.errors.messages).must_include :available_inventory
       expect(video.errors.messages[:available_inventory]).must_include "must be greater than 0"
     end
-
   end
 
+  describe "relations" do
+    before do
+      @video_1 = videos(:inception)
+      @video_2 = videos(:black_widow)
+    end
 
+    describe "rentals" do
+      it "can have many rentals" do
+        @video_2.rentals.each do |rental|
+          expect(rental).must_be_instance_of Rental
+        end
 
+        expect(@video_2.rentals.count).must_equal 2
+      end
+
+      it "can have zero rental" do
+        expect(@video_1.rentals.count).must_equal 0
+      end
+    end
+
+    describe "customers" do
+      it "can have many customers through rentals" do
+        @video_2.customers.each do |customer|
+          expect(customer).must_be_instance_of Customer
+        end
+
+      end
+      it "can have zero customers" do
+        expect(@video_1.customers.count).must_equal 0
+      end
+    end
+  end
 end
