@@ -128,7 +128,7 @@ describe VideosController do
       }
 
       expect{post checkout_path, params: rental_hash}.must_change "Rental.count", 1
-      must_respond_with :ok
+      must_respond_with :created
 
       body = JSON.parse(response.body)
       expect(body["customer_id"]).must_equal customer.id
