@@ -15,6 +15,9 @@ require "action_cable/engine"
 # require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
+require 'active_support/core_ext/integer/inflections'
+
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -38,4 +41,5 @@ module VideoStoreApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
   end
+
 end
