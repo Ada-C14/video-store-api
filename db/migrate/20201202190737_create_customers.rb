@@ -8,7 +8,7 @@ class CreateCustomers < ActiveRecord::Migration[6.0]
       t.string :state
       t.string :postal_code
       t.string :phone
-      t.int :videos_checked_out_count
+      t.integer :videos_checked_out_count
 
       t.timestamps
     end
