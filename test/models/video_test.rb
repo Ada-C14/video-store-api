@@ -68,14 +68,14 @@ describe Video do
       expect(video.errors.messages[:available_inventory]).must_include "is not a number"
     end
 
-    it "video's available inventory must be a number" do
+    it "video's available inventory must be greater or equal to 0" do
       video = Video.last
-      video.available_inventory = 0
+      video.available_inventory = -1
       video.save
 
       expect(video.valid?).must_equal false
       expect(video.errors.messages).must_include :available_inventory
-      expect(video.errors.messages[:available_inventory]).must_include "must be greater than 0"
+      expect(video.errors.messages[:available_inventory]).must_include "must be greater than or equal to 0"
     end
   end
 
