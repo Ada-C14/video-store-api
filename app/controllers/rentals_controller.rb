@@ -29,6 +29,8 @@ class RentalsController < ApplicationController
       rental.videos_checked_out_count = customer.toggle_up_video_count
       # # call method to decrease available inventory
       rental.available_inventory = video.toggle_down_inventory
+      rental.save
+
       render json: rental.as_json(only: [:customer_id, :video_id, :due_date, :videos_checked_out_count, :available_inventory]),
              status: :ok
     else
@@ -53,15 +55,18 @@ class RentalsController < ApplicationController
       return
     end
 
-    rental.videos_checked_out_count = nil
     customer.toggle_down_video_count
-    rental.available_inventory = nil
-    video.toggle_up_inventory
+    customer.save
+    rental.assign_attributes(videos_checked_out_count: customer.videos_checked_out_count)
 
+    video.toggle_up_inventory
+    video.save
+    rental.assign_attributes(available_inventory: video.available_inventory)
     rental.due_date = nil
     rental.save
 
-    render json: { :customer_id => customer.id, :video_id => video.id, :videos_checked_out_count => customer.videos_checked_out_count, :available_inventory => video.available_inventory },
-           status: :ok
+    render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count, :available_inventory]),
+            status: :ok
+
   end
 end

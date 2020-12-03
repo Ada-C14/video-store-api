@@ -7,8 +7,8 @@ describe RentalsController do
   end
   describe 'checkout' do
     it 'can create a new rental with valid fields' do
-      initial_customer_rentals = @customer.videos_checked_out_count
-      initial_video_inventory = @video.available_inventory
+      p initial_customer_rentals = @customer.videos_checked_out_count
+      p initial_video_inventory = @video.available_inventory
 
       rental_hash = {
           customer_id: @customer.id,
@@ -19,10 +19,17 @@ describe RentalsController do
         post checkout_path, params: rental_hash
       }.must_change 'Rental.count', 1
 
+      rental = Rental.all.first
+
       # customer videos_checked_out should go + 1
       expect((initial_customer_rentals + 1) == @customer.reload.videos_checked_out_count).must_equal true
+      # customer & rental videos checked out count should be the same
+      expect(rental.videos_checked_out_count == @customer.reload.videos_checked_out_count).must_equal true
+
       # video inventory should go - 1
       expect((initial_video_inventory - 1) == @video.reload.available_inventory).must_equal true
+      # rental & video inventory should be the same
+      expect(rental.available_inventory == @video.reload.available_inventory).must_equal true
     end
 
     it 'it will respond with not found and errors for invalid customer' do
@@ -64,21 +71,32 @@ describe RentalsController do
 
   describe "check-in" do
     it "successfully checks in a video and correctly modifies customer and video data" do
-      initial_customer_rentals = @customer.videos_checked_out_count
-      initial_video_inventory = @video.available_inventory
+      p initial_customer_rentals = @customer.videos_checked_out_count
+      p initial_video_inventory = @video.available_inventory
 
       rental_hash = {
           customer_id: @customer.id,
           video_id: @video.id,
       }
 
+      # checkout/create the rental first
       expect{
         post checkout_path, params: rental_hash
       }.must_change "Rental.count", 1
 
+      p initial_customer_rentals = @customer.reload.videos_checked_out_count
+      p initial_video_inventory = @video.reload.available_inventory
+
       expect{
         post check_in_path, params: rental_hash
       }.wont_change 'Rental.count'
+
+      rental = Rental.find_by(video_id: @video.id, customer_id: @customer.id)
+      puts "Cusomter videos checked out: #{@customer.reload.videos_checked_out_count}"
+      puts "Rental videos checked out: #{rental.reload.videos_checked_out_count}"
+
+      puts "Video inventory: #{@video.reload.available_inventory}"
+      puts "Rental inventory: #{rental.reload.available_inventory}"
 
       expect((initial_customer_rentals - 1) == @customer.reload.videos_checked_out_count).must_equal true
       expect((initial_video_inventory + 1) == @video.reload.available_inventory).must_equal true
