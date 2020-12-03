@@ -11,13 +11,10 @@ class Video < ApplicationRecord
   def decrease_available_inventory
     self.available_inventory -= 1
     self.save
-    return
-
   end
 
   def increase_available_inventory
     self.available_inventory += 1
-    return self.save
-
+    self.save
   end
 end
