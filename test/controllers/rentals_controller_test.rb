@@ -16,14 +16,11 @@ describe RentalsController do
     }
 
     it "creates a new rental" do
-      print Rental.all.count
-      print @video
-      print @customer
       expect {
         post check_out_path, params: rental_params
       }.must_differ "Rental.count", 1
 
-      must_respond_with :created
+      must_respond_with :ok
     end
   end
 end

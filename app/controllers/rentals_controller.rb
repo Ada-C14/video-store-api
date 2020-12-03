@@ -44,7 +44,7 @@ class RentalsController < ApplicationController
           due_date: Date.today + 1.week,
           videos_checked_out_count: customer.videos_checked_out_count,
           available_inventory: video.available_inventory
-      }, status: :created
+      }, status: :ok
       return
     else
       render json: { errors: rental.errors.messages }, status: :bad_request
