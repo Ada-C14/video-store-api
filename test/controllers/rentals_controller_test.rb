@@ -63,4 +63,84 @@ describe RentalsController do
       must_respond_with :not_found
     end
   end
+
+  describe "check_in" do
+    before do
+      @customer = customers(:customer_one)
+      @video = videos(:wonder_woman)
+    end
+
+    let(:rental_params) {
+      {
+          customer_id: @customer.id,
+          video_id: @video.id
+      }
+    }
+
+    it "it responds with 200 status (:ok)" do
+      post check_out_path, params: rental_params
+
+      post check_in_path, params: rental_params
+
+      must_respond_with :ok
+    end
+
+    it "has the required fields" do
+      post check_out_path, params: rental_params
+
+      post check_in_path, params: rental_params
+      body = JSON.parse(response.body)
+
+      fields = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
+
+      customer = Customer.find_by(id: @customer.id)
+      video = Video.find_by(id: @video.id)
+
+      expect(body.keys.sort).must_equal fields
+      expect(body["customer_id"]).must_equal customer.id
+      expect(body["video_id"]).must_equal video.id
+      expect(body["videos_checked_out_count"]).must_equal customer.videos_checked_out_count
+      expect(body["available_inventory"]).must_equal video.available_inventory
+    end
+
+    it "will respond with not found and errors for an invalid rental" do
+      @customer.id = -3
+      @video.id = -3
+
+      post check_in_path, params: rental_params
+
+      must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
+    end
+
+    it "will respond with not found and errors for an invalid customer" do
+      @customer.id = nil
+
+      expect {
+        post check_in_path, params: rental_params
+      }.wont_change "Rental.count"
+
+      must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
+    end
+
+    it "will respond with not found and errors for an invalid video" do
+      @video.id = nil
+
+      expect {
+        post check_in_path, params: rental_params
+      }.wont_change "Rental.count"
+
+      must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
+    end
+
+
+  end
 end
