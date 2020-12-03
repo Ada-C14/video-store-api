@@ -2,10 +2,7 @@ class VideosController < ApplicationController
 
   def index
     videos = Video.all.order(:id)
-<<<<<<< HEAD
 
-=======
->>>>>>> 77f47edcdae75d39cd96924cc142a6b6e2dae4e3
     render json: videos.as_json(only: [:id, :title, :release_date, :available_inventory]),
            status: :ok
   end
