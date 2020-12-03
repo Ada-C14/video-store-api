@@ -1,21 +1,25 @@
 require "test_helper"
 
 describe Rental do
+
+  before do
+    @rental = rentals(:rental_one)
+  end
+
   describe "validations" do
-    it "requires a customer id" do
-      skip
+
+    it 'id valid when all fields are present' do
+      expect(@rental.valid?).must_equal true
     end
 
-    it "fails with an invalid customer id" do
-      skip
+    it "requires a customer id" do
+      @rental.customer_id = nil
+      expect(@rental.valid?).must_equal false
     end
 
     it "requires a video id" do
-      skip
-    end
-
-    it "fails with an invalid video id" do
-      skip
+      @rental.video_id = nil
+      expect(@rental.valid?).must_equal false
     end
   end
 end
