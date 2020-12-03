@@ -32,6 +32,12 @@ describe Rental do
       expect(@rental.errors.messages).must_include :customer_id
     end
 
+    it "must have a video_id" do
+      @rental.video_id = nil
+      expect(@rental.valid?).must_equal false
+      expect(@rental.errors.messages).must_include :video_id
+    end
+
   end
 
   end
