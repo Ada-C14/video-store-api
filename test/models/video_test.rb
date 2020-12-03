@@ -63,6 +63,9 @@ describe Video do
       expect(video.valid?).must_equal false
       expect(video.errors.messages).must_include :available_inventory
       expect(video.errors.messages[:available_inventory]).must_include "This video is out of stock"
+    end
+
+end
 
   describe 'relationships' do
     it 'has many rentals' do
