@@ -42,10 +42,15 @@ describe Customer do
 
     it "must have a city" do
       @customer.city = nil
-      exepct(@customer.valid?).must_equal false
+      expect(@customer.valid?).must_equal false
       expect(@customer.error.messages).must_include :city
     end
 
+    it "must have a state" do
+      @customer.state = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.error_messages).must_include :state
+    end
 
 
   end
