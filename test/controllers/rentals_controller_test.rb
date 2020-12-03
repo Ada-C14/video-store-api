@@ -104,15 +104,30 @@ describe RentalsController do
 
     it "decreases the customer's checked out videos" do
 
+      count = customers(:customer_one).videos_checked_out_count - 1
+
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash)
+
+      expect(body["videos_checked_out_count"]).must_equal count
+
     end
     it "increases the video's available inventory" do
+      count = videos(:wonder_woman).available_inventory + 1
+
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash)
+
+      expect(body["available_inventory"]).must_equal count
 
     end
 
     it 'returns an error and 404 if customer does not exist' do
 
       rental[:customer_id] = nil
-      post check_out_path, params: rental, as: :json
+      post check_in_path, params: rental, as: :json
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
       expect(body["errors"]).must_equal ["Not Found"]
@@ -121,7 +136,7 @@ describe RentalsController do
     it 'returns an error and 404 if video does not exist' do
 
       rental[:video_id] = nil
-      post check_out_path, params: rental, as: :json
+      post check_in_path, params: rental, as: :json
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
       expect(body["errors"]).must_equal ["Not Found"]
