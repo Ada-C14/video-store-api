@@ -50,6 +50,10 @@ describe Rental do
       expect(@rental.errors.messages).must_include :due_date
     end
 
+    it "must be valid when created with all the required fields" do
+      expect(@rental.valid?).must_equal true
+    end
+
   end
 
   end
