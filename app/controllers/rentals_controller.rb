@@ -40,6 +40,7 @@ class RentalsController < ApplicationController
       }, status: :not_found
       return
     else
+      rental.updated_at = Time.now
       rental.customer.decrement_checkout_count
       rental.video.increment_inventory
 
