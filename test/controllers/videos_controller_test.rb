@@ -119,41 +119,22 @@ describe VideosController do
 
   describe "checkout" do
     it "will checkout a video to a customer with valid ids" do
-      wonder_woman = videos(:wonder_woman)
-      customer = customers(:customer_one)
-      rental_hash = {
-          video_id: wonder_woman.id,
-          customer_id: customer.id,
-          due_date: Date.today + 7
-      }
 
-      expect{post checkout_path, params: rental_hash}.must_change "Rental.count", 1
-      must_respond_with :created
+      customer = customers(:customer_one)
+      video = videos(:wonder_woman)
+      rental_hash = {
+          video_id: video.id,
+          customer_id: customer.id,
+          due_date: Date.today + 7,
+          videos_check_out_count: 4,
+          available_inventory: 99
+      }
+      expect {post checkout_path, params: rental_hash}.must_change "Rental.count", 1
+      must_respond_with :ok
 
       body = JSON.parse(response.body)
       expect(body["customer_id"]).must_equal customer.id
-      expect(body["video_id"]).must_equal wonder_woman.id
-
-    end
-
-    it "will respond with 404 with invalid ids" do
-
-    end
-
-    it "will increase the customer's videos_checked_out_count by one" do
-
-    end
-
-    it "will decrease the video's available_inventory by one" do
-
-    end
-
-    it "create a due date" do
-
-    end
-
-    it "will respond with 200 with valid ids" do
-
+      expect(body["video_id"]).must_equal video.id
     end
   end
 
