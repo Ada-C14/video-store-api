@@ -23,17 +23,41 @@ class RentalsController < ApplicationController
   end
 
   def check_in
-    rental = Rental.find_by(id: params[:id])
-    if rental.nil?
-      render json: {ok: false, errors: "Not Found"}, status: :not_found
+    rental = Rental.find_by(video_id: params[:video_id], customer_id: params[:customer_id])
+    # if rental.nil?
+    #   return render json: {errors: rental.errors.messages}, status: :not_found
+    # end
+    if rental.save
+
+      rental.video.available_inventory += 1
+
+      if rental.video.save
+        return render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count]).merge(
+            available_inventory: rental.video.available_inventory)
+      else
+        return render json: {errors: rental.video.errors.messages}, status: :bad_request
+      end
+
+    else
+      return render json: {errors: ["Not Found"]}, status: :not_found
+
     end
-  end 
+    # rental = Rental.find_by(rental_params)
+    # if rental
+    #   rental.customer.videos_checked_out_count -= 1
+    #   rental.video.available_inventory += 1
+    # else
+    #   return render json: {errors: rental.video.errors.messages}, status: :bad_request
+    # end
+
+
+  end
   
 
     private
 
   def rental_params
-    params.permit(:video_id, :customer_id)
+    params.permit(:customer_id, :video_id)
   end
 
 end 
