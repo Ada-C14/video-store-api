@@ -18,10 +18,12 @@ class Rental < ApplicationRecord
     save
   end
 
-  def checked_in_time
-    if customer_id.check_in && video_id.check_in
-      return checked_in
-     end
+  def rental_checkin
+    Video.find_by(id: video_id).check_in
+    Customer.find_by(id: customer_id).check_in
+    self.checked_in = Date.today
     save
   end
+
+
 end
