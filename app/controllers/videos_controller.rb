@@ -39,6 +39,13 @@ class VideosController < ApplicationController
     end
   end
 
+  def check_out
+    new_rental = Rental.new(rental_params)
+    new_rental.checkout_date = Date.today
+    new_rental.due_date = Date.today + 7.days
+    new_rental.returned = false
+  end
+
   private
 
   def video_params
