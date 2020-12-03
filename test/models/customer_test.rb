@@ -26,6 +26,21 @@ describe Customer do
       expect(@customer.errors.messages).must_include :name
       expect(@customer.errors.messages[:name]).must_equal ["can't be blank"]
     end
+
+    it "must have a phone" do
+      @customer.phone = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.errors.messages).must_include :phone
+      expect(@customer.errors.messages[:phone]).must_equal ["can't be blank"]
+    end
+
+    it "must have a registered_at" do
+      @customer.registered_at = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.errors.messages).must_include :registered_at
+      expect(@customer.errors.messages[:registered_at]).must_equal ["can't be blank"]
+
+    end
     
     it "must have videos checked out count greater than 0" do
       @customer.videos_checked_out_count = -5

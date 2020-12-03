@@ -103,7 +103,7 @@ describe VideosController do
           }
       }
   
-      video_hash[:title] = nil
+      video_hash[:video][:title] = nil
   
       # Assert
       expect {
