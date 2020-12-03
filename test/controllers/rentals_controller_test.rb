@@ -44,7 +44,7 @@ describe RentalsController do
       }
       expect {post checkout_path, params: checkout_params}.wont_change "Rental.count"
       body = check_response(expected_type: Hash, expected_status: :not_found)
-      expect(body["errors"].keys).must_include "customer"
+      expect(body["errors"]).must_include "Not found"
     end
 
     it "returns back detailed errors and a status 404: Not Found if the video does not exist" do
@@ -54,7 +54,7 @@ describe RentalsController do
       }
       expect {post checkout_path, params: checkout_params}.wont_change "Rental.count"
       body = check_response(expected_type: Hash, expected_status: :not_found)
-      expect(body["errors"].keys).must_include "video"
+      expect(body["errors"]).must_include "Not found"
     end
 
     it "returns back detailed errors and a status 400: Bad Request if the video does not have any available inventory before check out" do

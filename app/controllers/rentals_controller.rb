@@ -16,7 +16,7 @@ class RentalsController < ApplicationController
         render json: {ok: false, errors: rental.video.errors.messages}, status: :bad_request
       end
     else
-      render json: {ok: false, errors: rental.errors.messages}, status: :not_found
+      render json: {errors: ['Not found']}, status: :not_found
     end
   end
 
