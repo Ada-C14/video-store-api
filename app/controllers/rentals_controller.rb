@@ -1,6 +1,5 @@
 class RentalsController < ApplicationController
-  
-  
+
   def checkout
 
     errors = []
@@ -58,6 +57,7 @@ class RentalsController < ApplicationController
       render json: {
           errors: rental.errors.messages
       }, status: :bad_request
+      return
     end
   end
   
