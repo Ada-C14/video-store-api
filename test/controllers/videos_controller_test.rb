@@ -73,7 +73,6 @@ describe VideosController do
 
   describe "create" do
     it "can create a valid video" do
-      skip
       # Arrange
       video_hash = {
         title: "Alf the movie",
@@ -92,7 +91,6 @@ describe VideosController do
     end
 
     it "will respond with bad request and errors for an invalid movie" do
-      skip
       # Arrange
       video_hash = {
         title: "Alf the movie",
