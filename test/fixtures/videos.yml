@@ -4,6 +4,7 @@ wonder_woman:
   available_inventory: 100
   overview: Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility.
   total_inventory: 100
+
 black_widow:
   title: Black Widow
   release_date: "May 7th 2021"
