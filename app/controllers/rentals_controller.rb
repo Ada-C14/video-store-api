@@ -3,7 +3,7 @@ class RentalsController < ApplicationController
   def check_out
     rental = Rental.new(customer_id: params[:customer_id], video_id: params[:video_id], due_date: Date.today + 7)
     if rental.save
-      # rental.customer.videos_checked_out_count += 1
+      rental.customer.videos_checked_out_count += 1
       rental.customer.save!
 
       rental.video.available_inventory -= 1

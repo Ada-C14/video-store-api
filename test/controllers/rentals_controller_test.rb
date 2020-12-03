@@ -77,7 +77,7 @@ describe RentalsController do
   end
 
   describe 'check-in' do
-
+    REQUIRED_CHECKIN_FIELDS = %w[customer_id video_id videos_checked_out_count available_inventory].sort
     let(:rental) { rentals(:one)}
 
     it 'can check-in a video' do
@@ -93,7 +93,7 @@ describe RentalsController do
 
       body = check_response(expected_type: Hash)
 
-      expect(body.keys.sort!).must_equal REQUIRED_FIELDS
+      expect(body.keys.sort!).must_equal REQUIRED_CHECKIN_FIELDS
       expect(body["customer_id"]).must_equal rental[:customer_id]
       expect(body["video_id"]).must_equal rental[:video_id]
       # expect(body["checkin_date"]).must_equal rental[:checkin_date]
@@ -119,7 +119,6 @@ describe RentalsController do
     end
 
     it 'returns an error and 404 if video does not exist' do
-      # rental = rentals(:one)
 
       rental[:video_id] = nil
       post check_out_path, params: rental, as: :json
