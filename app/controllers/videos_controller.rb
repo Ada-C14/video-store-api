@@ -90,10 +90,18 @@ class VideosController < ApplicationController
       return
     else
 
-      rental.customer.videos_checked_out_count -= 1
-      rental.video.available_inventory += 1
+      customer.videos_checked_out_count -= 1
+      customer.save
+      video.available_inventory += 1
+      video.save
+      render json: {
+          "customer_id": customer.id,
+          "video_id": video.id,
+          "videos_checked_out_count": customer.videos_checked_out_count,
+          "available_inventory": video.available_inventory
+      }
     end
-
+    return
   end
 
 
