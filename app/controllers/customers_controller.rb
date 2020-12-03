@@ -4,7 +4,4 @@ class CustomersController < ApplicationController
 
     render json: customers, status: 200
   end
-
-  # def show
-  # end
 end
