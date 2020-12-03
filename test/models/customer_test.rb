@@ -7,7 +7,11 @@ describe Customer do
   end
 
   describe "validations" do
-    it "requires a name" do
+    it 'id valid when all fields are present' do
+      expect(@simon.valid?).must_equal true
+    end
+
+    it "fails without a name" do
       @simon.name = nil
       expect(@simon.valid?).must_equal false
     end
