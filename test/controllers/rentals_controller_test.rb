@@ -186,4 +186,13 @@ describe RentalsController do
       must_respond_with :ok
     end
   end
+
+  describe "overdue" do
+    it "returns a list of overdue rentals" do
+
+    end
+    it "returns an empty array if there are no overdue rentals" do
+
+    end
+  end
 end

@@ -52,6 +52,12 @@ class RentalsController < ApplicationController
     end
   end
 
+  def overdue
+    rentals = Rental.parameterized_list(params[:sort], params[:n], params[:p]).filter { |rental| rental.due_date < Date.today }
+
+    render json: rentals.as_json(only: [:video_id, :title, :customer_id, :name, :postal_code, :checkout_date, :due_date), status: :ok
+  end
+
   private
 
   def rental_params
