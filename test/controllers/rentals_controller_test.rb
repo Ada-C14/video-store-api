@@ -162,5 +162,28 @@ describe RentalsController do
       must_respond_with :not_found
 
     end
+
+
+    it "will not check in an previous rental (same customer/video)" do
+      Rental.delete_all
+      @rental_hash[:due_date] = Date.today + 7.days
+      post rentals_check_out_path, params: @rental_hash
+      post rentals_check_out_path, params: @rental_hash
+      rentals = Rental.where(customer_id: @rental_hash[:customer_id], video_id: @rental_hash[:video_id])
+
+      expect {
+        post rentals_check_in_path, params: @rental_hash
+      }.wont_change "Rental.count"
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body["id"]).wont_equal rentals[0].id
+      expect(body["id"]).must_equal rentals[1].id
+      expect(body["customer_id"]).must_equal rentals[1].customer_id
+      expect(body["video_id"]).must_equal rentals[1].video_id
+
+      must_respond_with :ok
+    end
   end
 end

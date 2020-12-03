@@ -43,7 +43,7 @@ class RentalsController < ApplicationController
       rental.customer.decrement_checkout_count
       rental.video.increment_inventory
 
-      json_to_return = rental.as_json(only: [:customer_id, :video_id])
+      json_to_return = rental.as_json(only: [:id, :customer_id, :video_id])
       json_to_return[:videos_checked_out_count] = rental.customer.videos_checked_out_count
       json_to_return[:available_inventory] = rental.video.available_inventory
 

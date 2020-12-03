@@ -381,7 +381,7 @@
 							"",
 							"pm.test(\"response should give back details of the check-in: customer_id, video_id, videos_checked_out_count, available_inventory\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res)).to.have.members(['customer_id', 'video_id', 'videos_checked_out_count', 'available_inventory']);",
+							"    pm.expect(Object.keys(res)).to.have.members(['id','customer_id', 'video_id', 'videos_checked_out_count', 'available_inventory']);",
 							"});",
 							"",
 							"pm.test(\"request should have incremented videos_checked_out_count, decremented available_inventory\", () => {",
