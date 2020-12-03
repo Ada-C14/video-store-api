@@ -1,6 +1,7 @@
 require "test_helper"
 
-REQUIRED_VIDEO_FIELDS = ['id', 'title', 'release_date', 'available_inventory']
+REQUIRED_VIDEOS_FIELDS = ['id', 'title', 'release_date', 'available_inventory'].sort
+REQUIRED_VIDEO_FIELDS = ['title', 'overview', 'release_date', 'total_inventory','available_inventory'].sort
 
 describe VideosController do
   it "responds with JSON array and OK" do
@@ -16,7 +17,7 @@ describe VideosController do
 
     body.each do |video|
       expect(video).must_be_instance_of Hash
-      expect(video.keys.sort).must_equal REQUIRED_VIDEO_FIELDS
+      expect(video.keys.sort).must_equal REQUIRED_VIDEOS_FIELDS
     end
 
   end
@@ -32,7 +33,6 @@ describe VideosController do
 
 
   describe "show" do
-    REQUIRED_VIDEO_FIELDS = ['title', 'overview', 'release_date', 'total_inventory','available_inventory'].sort
     it "will return a hash with the proper fields for an existing video" do
       video = videos(:wonder_woman)
 
