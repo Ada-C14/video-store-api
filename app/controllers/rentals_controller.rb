@@ -1,7 +1,6 @@
 class RentalsController < ApplicationController
 
   def checkout
-
     existing_customer = Customer.find_by(id: params[:customer_id])
     existing_video = Video.find_by(id: params[:video_id])
 
@@ -30,7 +29,6 @@ class RentalsController < ApplicationController
       video = Video.find_by(id: existing_video.id)
 
       render json: {
-          # rental.as_json(only: [:customer_id, :video_id, :due_date]),
           customer_id: rental.customer_id,
           video_id: rental.video_id,
           due_date: rental.due_date,
@@ -39,8 +37,36 @@ class RentalsController < ApplicationController
       }, status: :ok
       return
     end
+  end
+
+  def checkin
+    #check rental exists (customer_id /video_id) combo
+    # customer_id: params[:customer_id], video_id: params[:video_id]
+    return_rental = Rental.find_by(rental_params)
 
 
+    if return_rental
+      # rid of the customer video count by 1
+      return_rental.decrease_customer_video_count
+      # increase available_inventory by 1
+      return_rental.increase_available_video_inventory
+
+      returning_customer = Customer.find_by(id: params[:customer_id])
+      returning_video = Video.find_by(id: params[:video_id])
+
+      render json: {
+          customer_id: return_rental.customer_id,
+          video_id: return_rental.video_id,
+          videos_checked_out_count: returning_customer.videos_checked_out_count,
+          available_inventory: returning_video.available_inventory
+      }, status: :ok
+      return
+    else
+      render json: {
+          errors: ['Not Found']
+      }, status: :not_found
+      return
+    end
   end
 
   private
