@@ -5,7 +5,9 @@ describe Video do
     before do
       @video = {
           title: "Ada C14",
+          overview: "best cohort ever",
           release_date: "August 30, 2020",
+          total_inventory: 52,
           available_inventory: 52
       }
     end
@@ -20,6 +22,14 @@ describe Video do
 
       expect(video.valid?).must_equal false
       expect(video.errors.messages[:title]).must_equal ["can't be blank"]
+    end
+
+    it 'is invalid without an overview' do
+      @video["overview"] = nil
+      video = Video.new(@video)
+
+      expect(video.valid?).must_equal false
+      expect(video.errors.messages[:overview]).must_equal ["can't be blank"]
     end
 
     it 'is invalid without a release date' do
