@@ -188,10 +188,10 @@ describe RentalsController do
   end
 
   describe "overdue" do
-    it "returns a list of overdue rentals" do
+    it "returns a list of overdue rentals and responds with :ok" do
 
     end
-    it "returns an empty array if there are no overdue rentals" do
+    it "returns an empty array if there are no overdue rentals and responds with :ok" do
 
     end
   end
