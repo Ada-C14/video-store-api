@@ -72,6 +72,15 @@ describe Customer do
       expect(result).must_equal false
       expect(customer_copy.errors_messages).must_include :name
     end
+    
+    it "must have a unique phone" do
+      @customer.save!
+      phone = @customer.phone
+      customer_copy = Customer.new(phone: phone)
+      result = customer_copy.save
+      expect(result).must_equal false
+      expect(customer_copy.errors_messages).must_include :phone
+    end
 
   end
 
