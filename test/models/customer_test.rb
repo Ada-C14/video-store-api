@@ -8,16 +8,13 @@ describe Customer do
       expect(customer.valid?).must_equal true
     end
 
-    it "must include customer's name and fails validation if it's not there" do
+    it "fails validation if customer's name is missing" do
       customer = customers(:customer_one)
       customer.name = nil
-
-      customer2 = Customer.find_by(name: "Becca")
 
       expect(customer.valid?).must_equal false
       expect(customer.errors.messages).must_include :name
       expect(customer.errors.messages[:name]).must_equal ["can't be blank"]
-      expect(customer2.valid?).must_equal true
     end
 
     it "fails validation if customer names are not unique" do
@@ -28,5 +25,59 @@ describe Customer do
       expect(customer2.errors.messages).must_include :name
       expect(customer2.errors.messages[:name]).must_equal ["has already been taken"]
     end
+
+    it "fails validation if registered_at is missing" do
+      customer = customers(:customer_one)
+      customer.registered_at = nil
+
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :registered_at
+      expect(customer.errors.messages[:registered_at]).must_equal ["can't be blank"]
+    end
+
+    it "fails validation if address, city, state, and postal_code is missing" do
+      customer = customers(:customer_one)
+      customer.address = nil
+      customer.city = nil
+      customer.state = nil
+      customer.postal_code = nil
+
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :address
+      expect(customer.errors.messages).must_include :city
+      expect(customer.errors.messages).must_include :state
+      expect(customer.errors.messages).must_include :postal_code
+
+      expect(customer.errors.messages[:address]).must_equal ["can't be blank"]
+      expect(customer.errors.messages[:city]).must_equal ["can't be blank"]
+      expect(customer.errors.messages[:state]).must_equal ["can't be blank"]
+      expect(customer.errors.messages[:postal_code]).must_equal ["can't be blank"]
+    end
+
+    it "fails validation if customer's phone number is missing" do
+      customer = customers(:customer_one)
+      customer.phone = nil
+
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :phone
+      expect(customer.errors.messages[:phone]).must_equal ["can't be blank"]
+    end
+
+    it "fails validation if phone number is not unique" do
+      customer = Customer.find_by(phone: "(469) 734-9111")
+      customer2 = Customer.create(name: "Simon Del Rosario", registered_at: "Thur, 29 Apr 2015 07:54:14 -0700", address: "23424 weeee", city: "Lynnwood", state: "WA", postal_code: "98126", phone: "(469) 734-9111", videos_checked_out_count: 3)
+
+      expect(customer2.valid?).must_equal false
+      expect(customer2.errors.messages).must_include :phone
+      expect(customer2.errors.messages[:phone]).must_equal ["has already been taken"]
+    end
+
+    # it "fails validation if videos_checked_out_count is blank" do
+    #
+    # end
   end
+
+  # describe "relationships" do
+  #
+  # end
 end
