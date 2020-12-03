@@ -29,6 +29,4 @@ class RentalsController < ApplicationController
   def find_video
     @video = Video.find_by(id: params[:id])
   end
-
-
 end
