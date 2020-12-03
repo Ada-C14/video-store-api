@@ -34,6 +34,14 @@ describe Customer do
       expect(@customer.error.messages).must_include :name
     end
 
+    it "must have an address" do
+      @customer.address = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.error.messages).must_include :address
+    end
+
+
+
   end
 
 end
