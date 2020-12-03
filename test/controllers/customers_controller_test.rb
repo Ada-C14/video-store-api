@@ -87,7 +87,6 @@ describe CustomersController do
     it "can respond with a bad_request if customer gives bad data" do
       customer_params[:customer][:name] = nil
 
-
       expect {
         post customers_path, params: customer_params
       }.wont_change "Customer.count"
