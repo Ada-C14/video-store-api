@@ -20,9 +20,19 @@ describe Customer do
       end
     end
 
+  end
 
+  describe "validations" do
 
+    before do
+      @customer = Customer.new(name: "Name", address: "Address", city: "City", state: "State", postal_code: "12345", phone: "1111111111" )
+    end
 
+    it "must have a name" do
+      @customer.name = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.error.messages).must_include :name
+    end
 
   end
 
