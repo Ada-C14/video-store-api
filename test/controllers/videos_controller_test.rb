@@ -26,9 +26,6 @@ describe VideosController do
       # Check that each customer has the proper keys
       fields = ["id", "title", "overview", "release_date", "total_inventory"].sort
 
-      body.each do |video|
-        expect(video.keys.sort).must_equal fields
-      end
 
       must_respond_with :ok
     end
