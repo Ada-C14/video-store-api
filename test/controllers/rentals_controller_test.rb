@@ -5,5 +5,7 @@ describe RentalsController do
     get rentals_create_url
     must_respond_with :success
   end
+  describe "check-out" do
 
+  end
 end
