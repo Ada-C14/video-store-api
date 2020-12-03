@@ -73,17 +73,26 @@ describe RentalsController do
       expect(body["error"]).must_include "Not In Stock"
     end
 
-    it "returns bad request if given no customer or video id" do
-      @new_rental[:customer_id] = nil
-      @new_rental[:video_id] = nil
+    it "returns bad request if given no customer id" do
+      bad_rental = { video_id: Video.first.id }
 
       expect {
-        post checkout_path, params: @new_rental
+        post checkout_path, params: bad_rental
       }.wont_change "Rental.count"
 
       body = check_response(expected_type: Hash, expected_status: :bad_request)
-      expect(body["errors"].keys).must_include "customer_id"
-      expect(body["errors"].keys).must_include "video_id"
+      expect(body["error"]).must_equal "Customer ID Required"
+    end
+
+    it "returns bad request if given no video id" do
+      bad_rental = { customer_id: Customer.first.id }
+
+      expect {
+        post checkout_path, params: bad_rental
+      }.wont_change "Rental.count"
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body["error"]).must_equal "Video ID Required"
     end
   end
 end

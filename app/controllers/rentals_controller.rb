@@ -1,5 +1,22 @@
 class RentalsController < ApplicationController
   def checkout
+
+    unless params[:customer_id]
+      render json: {
+          ok: false,
+          error: "Customer ID Required"
+      }, status: :bad_request
+      return
+    end
+
+    unless params[:video_id]
+      render json: {
+          ok: false,
+          error: "Video ID Required"
+      }, status: :bad_request
+      return
+    end
+
     customer = Customer.find_by(id: params[:customer_id])
     video = Video.find_by(id: params[:video_id])
 
