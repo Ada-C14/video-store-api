@@ -47,7 +47,7 @@ describe VideosController do
 
       body = check_response(expected_type: Hash, expected_status: 404)
       expect(body['ok']).must_equal false
-      expect(body['message']).must_equal "Not found"
+      expect(body['message']).must_equal "Video not found"
     end
   end
 end

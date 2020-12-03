@@ -6,11 +6,7 @@ class Video < ApplicationRecord
 
   validates :available_inventory, :total_inventory, numericality: { greater_than_or_equal_to: 0 }
 
-  validate :release_date_cannot_be_in_future
-
-  def release_date_cannot_be_in_future
-    if release_date.present? && release_date > DateTime.now
-      errors.add(:release_date, "can't be in the future")
-    end
+  def available?
+    return true if available_inventory > 0 && available_inventory.present?
   end
 end

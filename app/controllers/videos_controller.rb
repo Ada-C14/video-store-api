@@ -9,7 +9,7 @@ class VideosController < ApplicationController
     if video.nil?
       render json: {
         ok: false,
-        message: "Not found"
+        message: "Video not found"
       }, status: 404
 
     else

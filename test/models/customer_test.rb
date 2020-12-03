@@ -3,7 +3,7 @@ require "test_helper"
 describe Customer do
   describe "validations" do
     let(:customer) {
-      customer = Customer.new(
+      Customer.new(
         name: "Customer Name",
         registered_at: DateTime.now,
         videos_checked_out_count: 1,
@@ -31,6 +31,7 @@ describe Customer do
       customer.registered_at = DateTime.now + 1
 
       check_invalid(model: customer, attribute: :registered_at)
+      expect(customer.errors.messages[:registered_at]).must_include "can't be in the future"
     end
 
     it "is invalid if videos checked out is nil" do
