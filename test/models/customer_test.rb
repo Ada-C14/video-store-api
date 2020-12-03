@@ -83,7 +83,7 @@ describe Customer do
     end
 
     it "must be valid when created with all the required fields" do
-      expect(@user.valid?).must_equal true
+      expect(@customer.valid?).must_equal true
     end
 
   end

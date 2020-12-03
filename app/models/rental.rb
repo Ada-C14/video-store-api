@@ -6,4 +6,10 @@ class Rental < ApplicationRecord
   validates :video_id, presence: true
   validates :checkout_date, presence: true
   validates :due_date, presence: true
+
+
+  def self.checkout()
+
+  end
+
 end

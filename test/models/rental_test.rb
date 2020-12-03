@@ -23,7 +23,9 @@ describe Rental do
 
   describe "validations" do
     before do
-      @rental = Rental.new(customer_id: 123, video_id: 456, checkout_date: "January 1st 2020", due_date: "January 7th, 2020")
+      @video = Video.create!(title: "Title", overview: "Overview", release_date: "January 1st 2021", total_inventory: 10, available_inventory: 9)
+      @customer = Customer.create!(name: "Name", address: "Address", city: "City", state: "State", postal_code: "12345", phone: "1111111111" )
+      @rental = Rental.new(customer: @customer, video: @video, checkout_date: "January 1st 2020", due_date: "January 7th, 2020")
     end
 
     it "must have a customer_id" do
