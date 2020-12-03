@@ -27,27 +27,15 @@ describe RentalsController do
       post check_out_path, params: rental_info
 
       body = check_response(expected_type: Hash,)
+
       expect(body.keys.sort!).must_equal REQUIRED_FIELDS
+      expect(body["customer_id"]).must_equal rental_info[:customer_id]
+      expect(body["video_id"]).must_equal rental_info[:video_id]
+      expect(body["due_date"]).must_equal "2020-12-09"
+      expect(body["videos_checked_out_count"]).must_equal 4
+      expect(body["available_inventory"]).must_equal 99
     end
 
-    it "increases the customer's videos_checked_out_count by one" do
-      customer = customers(:customer_one)
-      expect(customer.videos_checked_out_count).must_equal 3
-      post check_out_path, params: rental_info
-
-      customer.reload
-      expect(customer.videos_checked_out_count).must_equal 4
-
-    end
-
-    it "decreases the video's available-inventory by 1" do
-      video = videos(:wonder_woman)
-      expect(video.available_inventory).must_equal 100
-      post check_out_path, params: rental_info
-
-      video.reload
-      expect(video.available_inventory).must_equal 99
-    end
 
     it "returns bad_request if there's no inventory of video" do
       video = Video.find_by(id: rental_info[:video_id])
@@ -57,15 +45,30 @@ describe RentalsController do
 
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       expect(body["errors"]).must_include "available_inventory"
-
     end
 
     it "returns not_found if there is no valid customer_id" do
+      rental_info[:customer_id] = nil
+      post check_out_path, params: rental_info
 
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      expect(body["errors"]).must_equal ["Not Found"]
     end
 
     it "returns not_found if there is no valid video_id" do
+      rental_info[:video_id] = nil
+      post check_out_path, params: rental_info
 
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      expect(body["errors"]).must_equal ["Not Found"]
+    end
+
+    it "returns not_found if there are no params" do
+      rental_info[:video_id] = nil
+      post check_out_path
+
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      expect(body["errors"]).must_equal ["Not Found"]
     end
   end
 end
