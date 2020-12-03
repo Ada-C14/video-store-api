@@ -308,7 +308,7 @@
 							"",
 							"pm.test(\"response should have 'errors' with details on title, overview, release_date, total_inventory, available_inventory required\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res)).to.have.members(['errors']);",
+							"    pm.expect(Object.keys(res)).to.have.members(['ok','errors']);",
 							"    pm.expect(Object.keys(res['errors'])).to.have.members(['title', 'overview', 'release_date', 'total_inventory', 'available_inventory']);",
 							"});"
 						],
