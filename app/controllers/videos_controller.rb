@@ -10,7 +10,7 @@ class VideosController < ApplicationController
     if video.nil?
       render json: {
           ok: false,
-          message: 'Not found',
+          errors: 'Not Found',
       }, status: :not_found
       return
     end
@@ -20,6 +20,7 @@ class VideosController < ApplicationController
 
   def create
     video = Video.new(video_params)
+
     if video.save
       render json: video.as_json, status: :created
     else
