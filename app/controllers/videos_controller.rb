@@ -13,7 +13,7 @@ class VideosController < ApplicationController
       }, status: 404
 
     else
-      render json: video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory]), status: :ok
+      render json: video.as_json(only: [:id, :title, :overview, :release_date, :total_inventory, :available_inventory]), status: :ok
     end
   end
 
