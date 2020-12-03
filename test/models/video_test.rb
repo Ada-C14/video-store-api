@@ -14,7 +14,7 @@ describe Video do
     it "has customers through rentals" do
       video_one = videos(:wonder_woman)
       expect(video_one).must_respond_to :customers
-      video_one.videos.each do |customer|
+      video_one.customer.each do |customer|
         expect(customer).must_be_kind_of Customer
       end
     end
