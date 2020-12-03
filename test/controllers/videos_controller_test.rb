@@ -118,6 +118,7 @@ describe VideosController do
   end
 
   describe "checkout" do
+
     before do
       @video = videos(:wonder_woman)
       @customer = customers(:customer_one)
