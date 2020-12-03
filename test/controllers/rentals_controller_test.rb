@@ -18,22 +18,54 @@ describe RentalsController do
       must_respond_with :ok
     end
 
-    it "will respond with 404 for an invalid rental" do
+    it "will respond with 404 for an invalid video_id" do
+      # Arrange  # Assert
+      invalid_video_id = [nil, -1, "bogus"]
+      invalid_video_id.each do |invalid_id|
+        rental_params[:video_id] = invalid_id
+        expect {
+          post checkout_path, params: rental_params
+        }.wont_change "Rental.count"
+        body = JSON.parse(response.body)
 
-      # Arrange
-      rental_params[:customer_id] = nil
+        expect(body.keys).must_include "errors"
+        expect(body["errors"]).must_include "Not Found"
+        must_respond_with :not_found
+      end
+    end
 
-      # Assert
+    it "will respond with 404 for an invalid customer_id" do
+      # Arrange  # Assert
+      invalid_customer_id = [nil, -1, "bogus"]
+      invalid_customer_id.each do |invalid_id|
+        rental_params[:customer_id] = invalid_id
+        expect {
+          post checkout_path, params: rental_params
+        }.wont_change "Rental.count"
+        body = JSON.parse(response.body)
+
+        expect(body.keys).must_include "errors"
+        expect(body["errors"]).must_include "Not Found"
+        must_respond_with :not_found
+      end
+    end
+
+    it "will respond with 400 for an invalid available_inventory" do
+      # Arrange  # Assert
+      video = videos(:wonder_woman)
+      video.available_inventory = 0
+      video.save
+
       expect {
         post checkout_path, params: rental_params
       }.wont_change "Rental.count"
       body = JSON.parse(response.body)
 
       expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include "Not Found"
-      must_respond_with :not_found
-
+      expect(body["errors"]).must_include "Bad Request"
+      must_respond_with :bad_request
     end
+
 
     it "increase customer's videos checkout count by one" do
       # arrange
@@ -47,8 +79,6 @@ describe RentalsController do
       count_diff = after_count - before_count
       # assert
       expect(count_diff).must_equal 1
-
-
     end
 
     it "decrease the video's available_inventory by one" do
@@ -58,6 +88,8 @@ describe RentalsController do
     it "creates proper due date" do
 
     end
+
+
 
 
   end

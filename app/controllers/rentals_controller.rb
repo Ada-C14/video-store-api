@@ -1,4 +1,4 @@
-, class RentalsController < ApplicationController
+class RentalsController < ApplicationController
 
   def checkout
 
