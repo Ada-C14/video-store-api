@@ -24,10 +24,4 @@ describe Rental do
       expect(rentals(:rental0).video).must_be_kind_of Video
     end
   end
-
-  describe "validations" do
-    it "has a valid due date field" do
-      
-    end
-  end
 end
