@@ -8,4 +8,9 @@ class Customer < ApplicationRecord
   validates :state, presence: true
   validates :postal_code, presence: true
   validates :phone, presence: true
+
+  def increment_rentals
+    self.videos_checked_out_count += 1
+    self.save
+  end
 end
