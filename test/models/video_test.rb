@@ -87,6 +87,8 @@ describe Video do
 
     describe "rentals" do
       it "can have many rentals" do
+        expect(@video_2).must_respond_to :rentals
+
         @video_2.rentals.each do |rental|
           expect(rental).must_be_instance_of Rental
         end
@@ -101,6 +103,8 @@ describe Video do
 
     describe "customers" do
       it "can have many customers through rentals" do
+        expect(@video_2).must_respond_to :customers
+
         @video_2.customers.each do |customer|
           expect(customer).must_be_instance_of Customer
         end
