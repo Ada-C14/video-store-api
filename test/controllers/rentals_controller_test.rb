@@ -5,13 +5,11 @@ describe RentalsController do
   let(:video) { videos(:released_movie) }
 
   let(:rental_data) {
-    {
-      rental: {
+      {
         customer_id: customer.id,
         video_id: video.id,
       }
     }
-  }
 
   describe "create/checkout" do
     it "creates a new rental" do
@@ -21,7 +19,7 @@ describe RentalsController do
         post check_out_path, params: rental_data
       }.must_change "Rental.count", 1
 
-      check_response(expected_type: Hash, expected_status: :created)
+      check_response(expected_type: Hash, expected_status: 200)
     end
 
     it "increase the customer's videos_checked_out_count by one" do
@@ -45,7 +43,7 @@ describe RentalsController do
     end
 
     it "will respond with 404 for invalid customer" do
-      rental_data[:rental][:customer_id] = nil
+      rental_data[:customer_id] = nil
 
       expect{
         post check_out_path, params: rental_data
@@ -55,7 +53,7 @@ describe RentalsController do
     end
 
     it "will respond with 404 for invalid video" do
-      rental_data[:rental][:video_id] = nil
+      rental_data[:video_id] = nil
 
       expect{
         post check_out_path, params: rental_data

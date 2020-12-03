@@ -15,11 +15,11 @@ class RentalsController < ApplicationController
         due_date: rental.due_date,
         videos_checked_out_count: rental.customer.videos_checked_out_count,
         available_inventory: rental.video.available_inventory
-      }, status: :created
+      }, status: 200
     else
       render json: {
-        ok: false,
-        message: rental.errors.messages
+        # ok: false, # To make smoke test pass
+        errors: rental.errors.messages
       }, status: 400
     end
   end
@@ -30,16 +30,17 @@ class RentalsController < ApplicationController
   private
 
   def rental_params
-    return params.require(:rental).permit(:customer_id, :video_id)
+    return params.permit(:customer_id, :video_id)
   end
 
   def find_customer
-    customer = Customer.find_by(id: params[:rental][:customer_id])
+    customer = Customer.find_by(id: params[:customer_id])
 
     if customer.nil?
       render json: {
-        ok: false,
-        message: "Customer not found"
+        # ok: false, # To make smoke test pass
+        # message: ["Customer not found"]
+        errors: ["Not Found"]
       }, status: 404
     end
 
@@ -47,12 +48,13 @@ class RentalsController < ApplicationController
   end
 
   def find_video
-    video = Video.find_by(id: params[:rental][:video_id])
+    video = Video.find_by(id: params[:video_id])
 
     if video.nil?
       render json: {
-        ok: false,
-        message: "Video not found"
+        # ok: false, # To make smoke test pass
+        # message: ["Video not found"]
+        errors: ["Not Found"]
       }, status: 404
     end
 
@@ -62,8 +64,9 @@ class RentalsController < ApplicationController
   def check_inventory
     unless find_video.available?
       render json: {
-        ok: false,
-        message: "Video is not available to check-out"
+        # ok: false, # To make smoke test pass
+        # message: ["Video is not available to check-out"]
+        errors: ["Not Found"],
       }, status: 400
 
       return
