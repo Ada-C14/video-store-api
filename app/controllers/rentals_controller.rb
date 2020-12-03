@@ -23,11 +23,11 @@ class RentalsController < ApplicationController
 
   private
 
-  # def find_customer
-  #   @customer = Customer.find_by(id: params[:id])
-  # end
-  #
-  # def find_video
-  #   @video = Video.find_by(id: params[:id])
-  # end
+  def find_customer
+    @customer = Customer.find_by(id: params[:id])
+  end
+
+  def find_video
+    @video = Video.find_by(id: params[:id])
+  end
 end
