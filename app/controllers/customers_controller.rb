@@ -10,7 +10,7 @@ class CustomersController < ApplicationController
     if customer.nil?
       render json: {
           ok: false,
-          message: 'Not found',
+          message: 'Not Found',
       }, status: :not_found
       return
     end
@@ -19,7 +19,6 @@ class CustomersController < ApplicationController
 
   def create
     customer = Customer.new(customer_params)
-    # render json: customer
     if customer.save
       render json: customer.as_json, status: :created
     else
