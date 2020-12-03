@@ -1,5 +1,9 @@
 class RentalsController < ApplicationController
 
+  def check_out_rental
+
+  end
+
   def check_in_rental
     if params[:video_id]
       video = Video.find_by(id: params[:video_id])
