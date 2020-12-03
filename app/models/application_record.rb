@@ -17,4 +17,19 @@ class ApplicationRecord < ActiveRecord::Base
 
     return self.available_inventory
   end
+
+  def toggle_down_video_count
+    self.videos_checked_out_count -= 1
+
+    self.save
+
+    return self.videos_checked_out_count
+  end
+
+  def toggle_up_inventory
+    self.available_inventory += 1
+    self.save
+
+    return self.available_inventory
+  end
 end
