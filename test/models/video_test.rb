@@ -33,6 +33,14 @@ describe Video do
       expect(@video.errors.messages).must_include :title
     end
 
+    it "must have an overview" do
+      @video.overview = nil
+      expect(@video.valid?).must_equal false
+      expect(@video.errors.messages).must_include :overview
+    end
+
+
+
   end
 
 end
