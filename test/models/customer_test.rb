@@ -15,4 +15,20 @@ describe Customer do
       expect(invalid_customer.errors.messages).must_include :name
     end
   end
+
+  describe "custom methods" do
+    it "can decrease the video_checked_out_count" do
+      customer = customers(:customer_one)
+      videos_checked_out = customer.videos_checked_out_count
+
+      expect(customer.decrease_video_checked_out_count).must_equal videos_checked_out - 1
+    end
+
+    it "can increase the video_checked_out_count" do
+      customer = customers(:customer_one)
+      videos_checked_out = customer.videos_checked_out_count
+
+      expect(customer.increase_video_checked_out_count).must_equal videos_checked_out + 1
+    end
+  end
 end
