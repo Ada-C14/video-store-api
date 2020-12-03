@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
   def index
-    customers = Customer.all.as_json(only: %i[id
+    customers = Customer.order(:id).as_json(only: %i[id
                                            name
                                            registered_at
                                            postal_code
