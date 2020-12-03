@@ -1,0 +1,6 @@
+rental1:
+  customer: customer_one
+  video: black_widow
+  due_date: "2021-12-12"
+  created_at: <%= 5.days.ago.to_s(:db) %>
+
