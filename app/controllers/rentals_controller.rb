@@ -34,7 +34,7 @@ class RentalsController < ApplicationController
       rental[:checked_out] = false
 
       if rental.video.save
-        return render json: rental.as_json(only: [:customer_id, :video_id, :due_date]).merge(
+        return render json: rental.as_json(only: [:customer_id, :video_id]).merge(
             videos_checked_out_count: rental.customer.videos_checked_out_count,
             available_inventory: rental.video.available_inventory
         )
