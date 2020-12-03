@@ -55,7 +55,44 @@ describe RentalsController do
   end
 
 
-  it "must get destroy" do
+  describe 'checkin/destroy' do
+    it 'can check in a video given valid information' do
+      post check_out_path, params: rental_data
+
+      expect {
+        post check_in_path, params: rental_data
+      }.must_change "Rental.count", -1
+
+      check_response(expected_type: Hash, expected_status: 200)
+    end
+
+    it "will respond with 404 for invalid customer" do
+      rental_data[:customer_id] = nil
+
+      expect{
+        post check_out_path, params: rental_data
+      }.wont_change "Rental.count"
+
+      check_response(expected_type: Hash, expected_status: 404)
+    end
+
+    it "will respond with 404 for invalid video" do
+      rental_data[:video_id] = nil
+
+      expect{
+        post check_out_path, params: rental_data
+      }.wont_change "Rental.count"
+
+      check_response(expected_type: Hash, expected_status: 404)
+    end
+
+    it 'must not check in a video that isn\'t checked out' do
+      expect {
+        post check_in_path, params: rental_data
+      }.wont_change "Rental.count"
+
+      check_response(expected_type: Hash, expected_status: 404)
+    end
   end
 
 end

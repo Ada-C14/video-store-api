@@ -23,4 +23,19 @@ class Rental < ApplicationRecord
 
     self.due_date = DateTime.now + 7.days
   end
+
+  def check_in
+    if self.customer.present? && self.video.present?
+      self.video.available_inventory += 1
+      self.video.save
+
+      self.customer.videos_checked_out_count -= 1
+      self.customer.save
+
+      return true
+    end
+
+    return false
+  end
+
 end

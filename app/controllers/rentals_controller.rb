@@ -25,6 +25,29 @@ class RentalsController < ApplicationController
   end
 
   def destroy
+    rental = Rental.find_by(rental_params)
+
+    if rental&.check_in
+      customer = rental.customer
+      video = rental.video
+      if rental.destroy
+        render json: {
+          customer_id: customer.id,
+          video_id: video.id,
+          videos_checked_out_count: customer.videos_checked_out_count,
+          available_inventory: video.available_inventory
+        }, status: 200
+      else
+        render json: {
+          errors: rental.errors.messages
+        }, status: 400
+      end
+    else
+      render json: {
+        errors: "Not Found"
+      }, status: 404
+    end
+    return
   end
 
   private
@@ -42,6 +65,7 @@ class RentalsController < ApplicationController
         # message: ["Customer not found"]
         errors: ["Not Found"]
       }, status: 404
+      return
     end
 
     return customer
@@ -56,6 +80,7 @@ class RentalsController < ApplicationController
         # message: ["Video not found"]
         errors: ["Not Found"]
       }, status: 404
+      return
     end
 
     return video
