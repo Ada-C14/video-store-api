@@ -36,7 +36,7 @@ describe Customer do
     end
 
     it "can have many videos through rentals" do
-      # TODO
+      expect(valid_customer.videos.first).must_be_instance_of Video
     end
   end
 end

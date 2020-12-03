@@ -5,18 +5,16 @@ class RentalsController < ApplicationController
     rental = Rental.new(rental_params)
     if !video.nil? && video.available_inventory == 0
       render json: {
-        error: "No copies of #{rental.video.title} available"
+        errors: "No copies of #{rental.video.title} available"
       }, status: :bad_request
       return
     else
       if rental.save
-        rental.video.available_inventory -= 1
-        rental.video.save
-        rental.customer.videos_checked_out_count += 1
-        rental.customer.save
-        rental.check_out = rental.created_at.to_date
-        rental.due_date = rental.check_out + 7
-
+        rental = Rental.find_by_id(rental.id)
+        rental.video.decrement!(:available_inventory)
+        rental.customer.increment!(:videos_checked_out_count)
+        co_date = rental.created_at.to_date
+        rental.update!(check_out: co_date, due_date: co_date + 7)
         rental_json = rental.as_json(only: [:customer_id, :video_id, :due_date])
         rental_json[:videos_checked_out_count] = rental.customer.videos_checked_out_count
         rental_json[:available_inventory] = rental.video.available_inventory
