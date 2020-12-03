@@ -66,7 +66,9 @@ describe Video do
       expect(video_copy.errors_messages).must_include :title
     end
 
-
+    it "must be valid when created with all the required fields" do
+      expect(@video.valid?).must_equal true
+    end
   end
 
 end
