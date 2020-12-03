@@ -38,6 +38,14 @@ describe Rental do
       expect(@rental.errors.messages).must_include :video_id
     end
 
+    it "must have a checkout_date" do
+      @rental.checkout_date = nil
+      expect(@rental.valid?).must_equal false
+      expect(@rental.errors.messages).must_include :checkout_date
+    end
+
+
+
   end
 
   end
