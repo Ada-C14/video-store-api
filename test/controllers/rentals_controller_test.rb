@@ -38,6 +38,9 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_include "customer"
     end
 
     it 'responds with not found if the video does not exist' do
@@ -48,6 +51,10 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"].keys).must_include "video"
     end
 
     it 'responds with bad request if the video does not have any available inventory' do
@@ -58,6 +65,10 @@ describe RentalsController do
       }.wont_change "Rental.count"
 
       must_respond_with :bad_request
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body["errors"]).must_equal ["Insufficient inventory"]
     end
 
   end
