@@ -26,7 +26,6 @@ class VideosController < ApplicationController
       return
     else
       render json: {
-          ok: false,
           errors: video.errors.messages
       }, status: :bad_request
     end
