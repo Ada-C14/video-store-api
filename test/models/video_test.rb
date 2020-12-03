@@ -1,7 +1,13 @@
 require "test_helper"
 
 describe Video do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  describe 'relationships' do
+    it 'has many rentals' do
+      video = videos(:black_widow)
+      expect(video).must_respond_to :rentals
+      video.rentals.each do |rental|
+        expect(rental).must_be_kind_of Rental
+      end
+    end
+  end
 end
