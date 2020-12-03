@@ -40,6 +40,12 @@ describe Customer do
       expect(@customer.error.messages).must_include :address
     end
 
+    it "must have a city" do
+      @customer.city = nil
+      exepct(@customer.valid?).must_equal false
+      expect(@customer.error.messages).must_include :city
+    end
+
 
 
   end
