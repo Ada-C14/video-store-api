@@ -60,6 +60,7 @@ describe RentalsController do
 
 
   describe 'check_in' do
+    
     let(:valid_customer) { customers(:customer_two) }
     let(:valid_video) { videos(:wonder_woman) }
     let(:valid_rental_hash) {
