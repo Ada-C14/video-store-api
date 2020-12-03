@@ -1,7 +1,16 @@
 require "test_helper"
 
 describe RentalsController do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  describe 'checkout' do
+    it 'can create a new rental' do
+      customer = customers(:customer_one)
+      video = videos(:wonder_woman)
+
+      expect{post checkout_path()}.must_change 'Rental.count', 1
+
+      # customer videos_checked_out should go + 1
+      # video inventory should go - 1
+    end
+  end
+
 end
