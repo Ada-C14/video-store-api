@@ -10,14 +10,15 @@ describe RentalsController do
 
     let(:rental_params) {
       {
-        rental: {
           video_id: @video.id,
           customer_id: @customer.id
-        }
       }
     }
 
     it "creates a new rental" do
+      print Rental.all.count
+      print @video
+      print @customer
       expect {
         post check_out_path, params: rental_params
       }.must_differ "Rental.count", 1
