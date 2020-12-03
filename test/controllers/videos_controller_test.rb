@@ -1,6 +1,6 @@
 require "test_helper"
 
-REQUIRED_VIDEO_FIELDS = ['id', 'title', 'release_date', 'available_inventory']
+REQUIRED_VIDEO_FIELDS = ['id', 'title', 'release_date', 'available_inventory'].sort
 
 describe VideosController do
   it "responds with JSON array and OK" do

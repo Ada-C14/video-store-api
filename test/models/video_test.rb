@@ -36,7 +36,7 @@ describe Video do
       end
 
       it "is invalid if release date is in the future" do
-        video.release_date = DateTime.now + 1
+        video.release_date = Date.today + 1
         check_invalid(model: video, attribute: :release_date)
       end
 
