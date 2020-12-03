@@ -39,6 +39,12 @@ describe Video do
       expect(@video.errors.messages).must_include :overview
     end
 
+    it "must have a release_date" do
+      @video.release_date = nil
+      expect(@video.valid?).must_equal false
+      expect(@video.errors.messages).must_include :release_date
+    end
+
 
 
   end
