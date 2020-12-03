@@ -18,22 +18,26 @@ describe RentalsController do
 
     let(:rental_info) {
       {
-        customer_id: customers(:customer_one).id,
-        video_id: videos(:wonder_woman).id
+          customer_id: customers(:customer_one).id,
+          video_id: videos(:wonder_woman).id
       }
     }
 
     it "returns success & appropriate response to valid params" do
       post check_out_path, params: rental_info
 
-      body = check_response(expected_type: Hash,)
+      body = check_response(expected_type: Hash)
 
       expect(body.keys.sort!).must_equal REQUIRED_FIELDS
       expect(body["customer_id"]).must_equal rental_info[:customer_id]
       expect(body["video_id"]).must_equal rental_info[:video_id]
-      expect(body["due_date"]).must_equal "2020-12-09"
+      expect(body["due_date"]).must_equal "2020-12-10"
       expect(body["videos_checked_out_count"]).must_equal 4
       expect(body["available_inventory"]).must_equal 99
+
+      expect {
+        post check_out_path, params: rental_info
+      }.must_change "customers(:customer_one).rentals.size", -1
     end
 
 
@@ -77,4 +81,75 @@ describe RentalsController do
 
 
   end
+
+  describe 'check-in' do
+    REQUIRED_CHECKIN_FIELDS = %w[customer_id video_id videos_checked_out_count available_inventory].sort
+    let(:rental) { rentals(:one)}
+
+    it 'can check-in a video' do
+      post check_out_path, params: rental, as: :json
+
+
+      body = check_response(expected_type: Hash)
+
+      expect(body["videos_checked_out_count"]).must_equal 4
+      expect(body["available_inventory"]).must_equal 99
+
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash)
+
+      expect(body.keys.sort!).must_equal REQUIRED_CHECKIN_FIELDS
+      expect(body["customer_id"]).must_equal rental[:customer_id]
+      expect(body["video_id"]).must_equal rental[:video_id]
+      # expect(body["checkin_date"]).must_equal rental[:checkin_date]
+      expect(body["videos_checked_out_count"]).must_equal 3
+      expect(body["available_inventory"]).must_equal 100
+
+    end
+
+    it "decreases the customer's checked out videos" do
+
+      count = customers(:customer_one).videos_checked_out_count - 1
+
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash)
+
+      expect(body["videos_checked_out_count"]).must_equal count
+
+    end
+    it "increases the video's available inventory" do
+      count = videos(:wonder_woman).available_inventory + 1
+
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash)
+
+      expect(body["available_inventory"]).must_equal count
+
+    end
+
+    it 'returns an error and 404 if customer does not exist' do
+
+      rental[:customer_id] = nil
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      expect(body["errors"]).must_equal ["Not Found"]
+    end
+
+    it 'returns an error and 404 if video does not exist' do
+
+      rental[:video_id] = nil
+      post check_in_path, params: rental, as: :json
+
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      expect(body["errors"]).must_equal ["Not Found"]
+    end
+  end
+
+
+
 end
+
