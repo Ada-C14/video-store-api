@@ -7,7 +7,6 @@ class Rental < ApplicationRecord
 
   def is_valid?
     video = Video.find_by(id: self.video_id)
-    
     return video.available_inventory.positive?
   end
 

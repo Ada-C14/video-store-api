@@ -5,7 +5,7 @@ class RentalsController < ApplicationController
 
     if rental.is_valid? && rental.save
       rental.initialize_rental
-      render json: rental.as_json(only: [:id]), status: :created
+      render json: rental.as_json(only: [:id]), status: :ok
       return
     end
 
