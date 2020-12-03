@@ -1,7 +1,19 @@
 class RentalsController < ApplicationController
 
   def check_out_rental
+    rental = Rental.new(rental_params)
 
+    if rental.save
+      Video.find_by(id: rental.video_id).check_out
+      Customer.find_by(id: rental.customer_id).check_out
+      render json: rental.as_json(only: [:id]), status: :created
+      return
+    else
+      render json: {
+        errors: rental.errors.messages
+      }, status: :bad_request
+      return
+    end
   end
 
   def check_in_rental
@@ -25,4 +37,16 @@ class RentalsController < ApplicationController
     end
   end
 
+  private
+
+  def rental_params
+    return params.permit(
+      :id,
+      :video_id,
+      :customer_id,
+      :due_date,
+      :check_out,
+      :checked_in
+    )
+  end
 end
