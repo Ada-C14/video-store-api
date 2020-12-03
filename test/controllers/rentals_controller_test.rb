@@ -16,7 +16,7 @@ describe RentalsController do
       video_avail_inventory = @video.available_inventory
 
       expect {
-        post rentals_checkout_path, params: @rental_hash
+        post rentals_check_out_path, params: @rental_hash
       }.must_change "Rental.count"
 
       rental = Rental.find_by(customer_id: @customer.id)
@@ -34,34 +34,34 @@ describe RentalsController do
       @rental_hash[:customer_id] = -1
 
       expect {
-        post rentals_checkout_path, params: @rental_hash
+        post rentals_check_out_path, params: @rental_hash
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-      expect(body["errors"].keys).must_include "customer"
+      expect(body["errors"]).must_equal ["Not Found"]
     end
 
     it 'responds with not found if the video does not exist' do
       @rental_hash[:video_id] = -1
 
       expect {
-        post rentals_checkout_path, params: @rental_hash
+        post rentals_check_out_path, params: @rental_hash
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
 
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-      expect(body["errors"].keys).must_include "video"
+      expect(body["errors"]).must_equal ["Not Found"]
     end
 
     it 'responds with bad request if the video does not have any available inventory' do
       @video.update(available_inventory: 0)
 
       expect {
-        post rentals_checkout_path, params: @rental_hash
+        post rentals_check_out_path, params: @rental_hash
       }.wont_change "Rental.count"
 
       must_respond_with :bad_request
@@ -87,7 +87,7 @@ describe RentalsController do
       available_inventory = @video.available_inventory
 
       expect {
-        post rentals_checkin_path, params: @check_in_info
+        post rentals_check_in_path, params: @check_in_info
       }.wont_change "Rental.count"
 
       must_respond_with :success
@@ -105,48 +105,28 @@ describe RentalsController do
       @check_in_info[:customer_id] = -1
 
       expect {
-        post rentals_checkin_path, params: @check_in_info
+        post rentals_check_in_path, params: @check_in_info
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
 
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-      expect(body["errors"]).must_equal ["customer not found"]
+      expect(body["errors"]).must_equal ["Not Found"]
     end
 
     it 'it responds with not found if the video does not exist' do
       @check_in_info[:video_id] = -1
 
       expect {
-        post rentals_checkin_path, params: @check_in_info
+        post rentals_check_in_path, params: @check_in_info
       }.wont_change "Rental.count"
 
       must_respond_with :not_found
 
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-      expect(body["errors"]).must_equal ["video not found"]
-    end
-
-    it 'responds with not found if a rental for a valid customer/video combo does not exist' do
-      customer = customers(:customer_two)
-      video = videos(:black_widow)
-
-      no_rental_hash = {
-          customer_id: customer.id,
-          video_id: video.id
-      }
-
-      expect {
-        post rentals_checkin_path, params: no_rental_hash
-      }.wont_change "Rental.count"
-
-      must_respond_with :not_found
-
-      expect(response.header['Content-Type']).must_include 'json'
-      body = JSON.parse(response.body)
-      expect(body["errors"]).must_equal ["rental not found"]
+      expect(body["errors"]).must_equal ["Not Found"]
     end
   end
 end
