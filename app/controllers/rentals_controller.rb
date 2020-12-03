@@ -11,7 +11,17 @@ class RentalsController < ApplicationController
       rental.decrease_available_inventory
       rental.increase_videos_checked_out
 
-      render json: rental.as_json(only: [:id, :due_date, :customer_id, :video_id, rental.customer.videos_checked_out_count, rental.video.available_inventory]), status: :created
+
+      # render json: rental.as_json(only: [:id, :due_date, :customer_id, :video_id, :available_inventory => @video.available_inventory,:videos_checked_out_count => @customer.videos_checked_out_count]), status: :created
+
+      render json: {
+          # rental: rental.as_json(only: [:id, :due_date, :customer_id, :video_id]),
+          id: rental.id,
+          customer_id: @customer.id,
+          video_id: @video.id,
+          videos_checked_out_count: @customer.videos_checked_out_count,
+          available_inventory: @video.available_inventory
+      }, status: :created
       return
     else # doesn't save, surface error messages
       render json: {ok: false, errors: rental.errors.messages}, status: :bad_request
