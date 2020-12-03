@@ -92,9 +92,6 @@ describe RentalsController do
 
       must_respond_with :success
 
-      # rental = rentals(:rental1)
-      # expect(rental.return_date).must_equal Date.today.to_s
-
       @customer.reload
       @video.reload
       expect(@customer.videos_checked_out_count).must_equal checked_out_count - 1
