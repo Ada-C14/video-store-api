@@ -8,13 +8,8 @@ class VideosController < ApplicationController
     video = Video.find_by(id: params[:id])
 
     if video.nil?
-      render json: {
-          ok: false,
-          message: "Not Found",
-          errors: [
-                  "Not Found",
-              ]
-      }, status: :not_found
+      # render json: { 'ok': false, 'errors': ['Not Found'] }, status: :not_found
+      render json: { 'errors': ['Not Found'] }, status: :not_found
       return
     end
 
@@ -28,10 +23,11 @@ class VideosController < ApplicationController
       render json: video.as_json(only: [:id]), status: :created
       return
     else
-      render json: {
-          ok: false,
-          errors: video.errors.messages
-      }, status: :bad_request
+      render json: { errors: video.errors.messages }, status: :bad_request
+      # render json: {
+      #     ok: false,
+      #     errors: video.errors.messages
+      # }, status: :bad_request
       return
     end
   end
