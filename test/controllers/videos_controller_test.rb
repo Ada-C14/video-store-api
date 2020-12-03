@@ -1,7 +1,6 @@
 require "test_helper"
 
-REQUIRED_VIDEOS_FIELDS = ['id', 'title', 'release_date', 'available_inventory'].sort
-REQUIRED_VIDEO_FIELDS = ['title', 'overview', 'release_date', 'total_inventory','available_inventory'].sort
+REQUIRED_VIDEO_FIELDS = ['id', 'title', 'overview', 'release_date', 'available_inventory', 'total_inventory'].sort
 
 describe VideosController do
   it "responds with JSON array and OK" do
@@ -17,7 +16,7 @@ describe VideosController do
 
     body.each do |video|
       expect(video).must_be_instance_of Hash
-      expect(video.keys.sort).must_equal REQUIRED_VIDEOS_FIELDS
+      expect(video.keys.sort).must_equal REQUIRED_VIDEO_FIELDS - ['overview', 'total_inventory']
     end
 
   end
@@ -48,6 +47,39 @@ describe VideosController do
       body = check_response(expected_type: Hash, expected_status: 404)
       expect(body['ok']).must_equal false
       expect(body['message']).must_equal "Not found"
+    end
+  end
+
+  describe "create" do
+    let(:video_data) {
+      {
+          video: {
+              title: "A Whisker Away",
+              overview: "A girl turns into a cat to get closer to the boy she likes",
+              release_date: Date.new(2020,6,18),
+              total_inventory: 9,
+              available_inventory: 3,
+          }
+      }
+    }
+
+    it "can create a new video" do
+      expect {
+        post videos_path, params: video_data
+      }.must_differ "Video.count", 1
+
+      check_response(expected_type: Hash, expected_status: :created)
+    end
+
+    it 'will respond with bad_request for invalid data' do
+      video_data[:video][:title] = nil
+
+      expect {
+        post videos_path, params: video_data
+      }.wont_change "Video.count"
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body["errors"].keys).must_include "title"
     end
   end
 end

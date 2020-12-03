@@ -9,7 +9,7 @@ class Video < ApplicationRecord
   validate :release_date_cannot_be_in_future
 
   def release_date_cannot_be_in_future
-    if release_date.present? && release_date > DateTime.now
+    if release_date.present? && release_date > Date.today
       errors.add(:release_date, "can't be in the future")
     end
   end
