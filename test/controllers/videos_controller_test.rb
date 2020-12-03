@@ -12,7 +12,7 @@ describe VideosController do
       expect(body.length).must_equal Video.count
 
       # Check that each customer has the proper keys
-      fields = ["available_inventory", "overview", "release_date", "title", "total_inventory"].sort
+      fields = ["available_inventory", "id", "release_date", "title"].sort
 
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
