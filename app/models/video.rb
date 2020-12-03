@@ -9,4 +9,5 @@ class Video < ApplicationRecord
   def available?
     return true if available_inventory > 0 && available_inventory.present?
   end
+
 end
