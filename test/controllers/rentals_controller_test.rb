@@ -6,28 +6,26 @@ describe RentalsController do
     @customer = customers(:customer_one)
   end
   describe "check out" do
-    # it "can create a valid rental when checking out" do
-    #   rental_hash = {
-    #       customer: @customer,
-    #       video: @video,
-    #       due_date: Time.now + 7.days
-    #   }
-    #
-    #   expect {
-    #     post check_out_path, params: rental_hash
-    #   }.must_differ "Rental.count", 1
-    #
-    #   must_respond_with :created
-    # end
-
-    it "will respond with bad request and errors for invalid params" do
+    it "can create a valid rental when checking out" do
       rental_hash = {
-          customer: @customer,
-          video: @video,
-          due_date: Time.now + 7.days
+          customer_id: @customer.id,
+          video_id: @video.id
       }
 
-      rental_hash[:customer] = nil
+      expect {
+        post check_out_path, params: rental_hash
+      }.must_differ "Rental.count", 1
+
+      must_respond_with :ok
+    end
+
+    it "will respond with bad request and errors for invalid customer" do
+      rental_hash = {
+          customer_id: -1,
+          video_id: @video.id
+      }
+
+      # rental_hash[:customer] = nil
 
       expect {
         post check_out_path, params: rental_hash

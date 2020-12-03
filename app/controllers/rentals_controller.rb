@@ -1,8 +1,9 @@
 class RentalsController < ApplicationController
 
+  before_action :find_customer
+  before_action :find_video
+
   def check_out
-    find_customer
-    find_video
 
     rental = Rental.new(video: @video, customer: @customer ,due_date: Time.now + 7.days )
 
@@ -21,7 +22,7 @@ class RentalsController < ApplicationController
           video_id: @video.id,
           videos_checked_out_count: @customer.videos_checked_out_count,
           available_inventory: @video.available_inventory
-      }, status: :created
+      }, status: :ok
       return
     else # doesn't save, surface error messages
       render json: {ok: false, errors: rental.errors.messages}, status: :bad_request
