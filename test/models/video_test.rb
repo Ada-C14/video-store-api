@@ -1,6 +1,7 @@
 require "test_helper"
 
 describe Video do
+
   describe "validations" do
     let(:video) {
       Video.new(
@@ -62,6 +63,15 @@ describe Video do
       expect(video.valid?).must_equal false
       expect(video.errors.messages).must_include :available_inventory
       expect(video.errors.messages[:available_inventory]).must_include "This video is out of stock"
+
+  describe 'relationships' do
+    it 'has many rentals' do
+      video = videos(:black_widow)
+      expect(video).must_respond_to :rentals
+      video.rentals.each do |rental|
+        expect(rental).must_be_kind_of Rental
+      end
+
     end
   end
 end
