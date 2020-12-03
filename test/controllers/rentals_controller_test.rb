@@ -12,7 +12,7 @@ describe RentalsController do
     before do
       @customer = customers(:customer_one)
       @video = videos(:wonder_woman)
-      @rental = Rental.create(customer_id: @customer.id, video_id: @video.id, due_date: calculate_due_date(Time.now, 7))
+      @rental = Rental.create(customer_id: @customer.id, video_id: @video.id, due_date: Time.now + (60*60*24*7))
       @rental_params = {
           customer_id: @customer.id,
           video_id: @video.id
