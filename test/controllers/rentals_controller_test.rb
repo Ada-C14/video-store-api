@@ -18,7 +18,7 @@ describe RentalsController do
       must_respond_with :ok
     end
 
-    it "will respond with bad request and errors for an invalid rental" do
+    it "will respond with 404 for an invalid rental" do
 
       # Arrange
       rental_params[:customer_id] = nil
@@ -30,9 +30,7 @@ describe RentalsController do
       body = JSON.parse(response.body)
 
       expect(body.keys).must_include "errors"
-      # expect(body["errors"].keys).must_include "customer_id"
-      # expect(body["errors"]["customer_id"]).must_include "can't be blank"
-
+      expect(body["errors"]).must_include "Not Found"
       must_respond_with :not_found
 
     end
