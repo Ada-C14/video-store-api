@@ -1,7 +1,5 @@
 require "test_helper"
 
-REQUIRED_VIDEO_FIELDS = ['id', 'title', 'release_date', 'available_inventory'].sort
-
 describe VideosController do
   it "responds with JSON array and OK" do
     get videos_path
@@ -33,6 +31,7 @@ describe VideosController do
 
 
   describe "show" do
+    REQUIRED_VIDEO_FIELDS = ['title', 'overview', 'release_date', 'total_inventory','available_inventory'].sort
     it "will return a hash with the proper fields for an existing video" do
       video = videos(:wonder_woman)
 
