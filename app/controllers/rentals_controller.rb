@@ -2,9 +2,16 @@ class RentalsController < ApplicationController
   def check_out
     rental = Rental.new(rental_params)
     rental.due_date = Date.today + 7.days
+
+    if rental.video && rental.video.available_inventory < 1
+      render json: {
+        ok: false,
+        errors: ["Not enough available inventory"]
+      }, status: :bad_request
+      return
+    end
     
     if rental.save
-
       rental.customer.increment_checkout_count
       rental.video.decrement_inventory
 

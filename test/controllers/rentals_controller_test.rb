@@ -46,7 +46,7 @@ describe RentalsController do
       expect(body['ok']).must_equal false
       expect(body['errors']).must_include "customer"
 
-      must_respond_with :bad_request
+      must_respond_with :not_found
 
     end
 
@@ -63,6 +63,23 @@ describe RentalsController do
       expect(body).must_be_instance_of Hash
       expect(body['ok']).must_equal false
       expect(body['errors']).must_include "video"
+
+      must_respond_with :not_found
+
+    end
+
+    it "will not check out if available video inventory is < 1" do
+      @rental_hash[:video_id] = videos(:out_of_stock).id
+
+      expect {
+        post rentals_check_out_path, params: @rental_hash
+      }.wont_change "Rental.count"
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body['errors']).must_include "Not enough available inventory"
 
       must_respond_with :bad_request
 
