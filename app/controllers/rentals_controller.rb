@@ -30,6 +30,10 @@ class RentalsController < ApplicationController
     end
   end
 
+  def checkin
+
+  end
+
 
   private
   def rental_params
