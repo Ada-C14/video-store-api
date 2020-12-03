@@ -72,13 +72,11 @@ describe VideosController do
   describe "create" do
     let(:video_params) {
       {
-          video: {
               title: "Alf the movie",
               overview: "The most early 90s movie of all time",
               release_date: "2020-12-25",
               total_inventory: 6,
               available_inventory: 6
-          }
       }
     }
     it "can create a valid video" do
@@ -92,7 +90,7 @@ describe VideosController do
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      video_params[:video][:title] = nil
+      video_params[:title] = nil
   
       # Assert
       expect {

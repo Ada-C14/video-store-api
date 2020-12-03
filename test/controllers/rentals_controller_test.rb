@@ -10,10 +10,8 @@ describe RentalsController do
 
     let(:rental_params) {
       {
-        rental: {
           video_id: @video.id,
           customer_id: @customer.id
-        }
       }
     }
 
@@ -22,7 +20,7 @@ describe RentalsController do
         post check_out_path, params: rental_params
       }.must_differ "Rental.count", 1
 
-      must_respond_with :created
+      must_respond_with :ok
     end
   end
 end
