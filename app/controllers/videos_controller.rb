@@ -13,8 +13,9 @@ class VideosController < ApplicationController
               status: :not_found
       return
     end
-    render json: video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory]),
-            status: :ok
+    response = video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory])
+    response['release_date'] = video.formatted_release_date
+    render json: response, status: :ok
   end
 
   def create
