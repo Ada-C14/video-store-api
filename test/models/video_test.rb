@@ -137,5 +137,24 @@ describe Video do
       end
     end
 
+    describe "checkout history" do
+      it "returns a list of customers to whom the video was previously checked out" do
+        rental_one = rentals(:rental_one)
+        rental_one.update!(due_date: Date.tomorrow, updated_at: Date.tomorrow)
+
+        customers = video_one.previously_checked_out_to
+        expect(customers).must_be_instance_of Array
+        expect(customers.length).must_equal 1
+        customers.each do |customer|
+          expect(customer).must_be_instance_of Customer
+        end
+      end
+      it "returns an empty array if the video is not currently checked out to anyone" do
+        Rental.delete_all
+        customers = video_one.previously_checked_out_to
+        expect(customers).must_be_instance_of Array
+        expect(customers.length).must_equal 0
+      end
+    end
   end
 end

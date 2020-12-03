@@ -39,6 +39,7 @@ class VideosController < ApplicationController
   end
 
   def checkout_history
+
   end
 
   private
