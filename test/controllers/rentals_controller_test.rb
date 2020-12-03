@@ -32,7 +32,6 @@ describe RentalsController do
       expect(rental.available_inventory == @video.reload.available_inventory).must_equal true
     end
 
-
     it 'it will respond with not found and errors for invalid customer' do
       # Arrange
       rental_hash = {

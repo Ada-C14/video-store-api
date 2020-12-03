@@ -1,11 +1,5 @@
 class RentalsController < ApplicationController
 
-  def index
-    rentals = Rental.all.order(:id)
-    render json: rentals.as_json(only: [:id, :customer_id, :video_id, :available_inventory, :videos_checked_out_count]),
-           status: :ok
-  end
-
   def checkout
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
@@ -54,17 +48,16 @@ class RentalsController < ApplicationController
     end
 
     customer.toggle_down_video_count
+    customer.save
     rental.assign_attributes(videos_checked_out_count: customer.videos_checked_out_count)
 
     video.toggle_up_inventory
+    video.save
     rental.assign_attributes(available_inventory: video.available_inventory)
     rental.due_date = nil
     rental.save
 
-    render json: {:customer_id => customer.id, :video_id => video.id, :videos_checked_out_count => customer.videos_checked_out_count, :available_inventory => video.available_inventory},
-    #        status: :ok
-
-           #return render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count, :available_inventory]),
+    render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count, :available_inventory]),
             status: :ok
   end
 end
