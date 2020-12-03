@@ -50,6 +50,11 @@ class VideosController < ApplicationController
       rental.due_date = Date.today + 7
     end
 
+    if rental.video.available_inventory < 1
+      render json: {errors: "There is no available inventory for this video."}, status: :bad_request
+      return
+    end
+
     if rental.save
       rental.customer.videos_checked_out_count += 1
       rental.video.available_inventory -= 1
@@ -70,7 +75,33 @@ class VideosController < ApplicationController
   end
 
   def checkin
+    customer = Customer.find_by(id: rental_params[:customer_id])
+    video = Video.find_by(id: rental_params[:video_id])
+    rental = Rental.find_by(customer_id: rental_params[:customer_id], video_id: rental_params[:video_id])
 
+    if customer.nil?
+      render json: {errors: "Can't find the customer."}, status: :not_found
+      return
+    elsif video.nil?
+      render json: {errors: "Can't find the video."}, status: :not_found
+      return
+    elsif rental.nil?
+      render json: {errors: "Can't find the rental order."}, status: :not_found
+      return
+    else
+
+      customer.videos_checked_out_count -= 1
+      customer.save
+      video.available_inventory += 1
+      video.save
+      render json: {
+          "customer_id": customer.id,
+          "video_id": video.id,
+          "videos_checked_out_count": customer.videos_checked_out_count,
+          "available_inventory": video.available_inventory
+      }
+    end
+    return
   end
 
 
