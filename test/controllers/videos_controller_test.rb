@@ -40,7 +40,7 @@ describe VideosController do
   describe "show" do
     it "can get a video" do
       # Arrange
-      wonder_woman = videos(:wonder_woman)
+      wonder_woman = videos(:video_one)
 
       # Act
       get video_path(wonder_woman.id)
@@ -64,21 +64,19 @@ describe VideosController do
       must_respond_with :not_found
       body = JSON.parse(response.body)
       expect(body).must_be_instance_of Hash
-      expect(body['ok']).must_equal false
-      expect(body['message']).must_equal 'Not found'
+      expect(body['errors']).must_equal ['Not Found']
     end
   end
 
   describe "create" do
     it "can create a valid video" do
       # Arrange
-      video_hash = { video:  {
+      video_hash = {
         title: "Alf the movie",
         overview: "The most early 90s movie of all time",
         release_date: "December 16th 2025",
         total_inventory: 6,
-        available_inventory: 6 }
-      }
+        available_inventory: 6,}
 
       # Assert
       expect {
