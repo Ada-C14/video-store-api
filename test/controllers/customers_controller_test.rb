@@ -117,5 +117,23 @@ describe CustomersController do
       expect(body["errors"].keys).must_include "phone"
       must_respond_with :bad_request
     end
+    it "will not create a customer with nil params" do
+      expect {
+        post customers_path, params: nil
+      }.wont_change "Customer.count"
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body["errors"].keys).must_include "name"
+      expect(body["errors"].keys).must_include "address"
+      expect(body["errors"].keys).must_include "registered_at"
+      expect(body["errors"].keys).must_include "city"
+      expect(body["errors"].keys).must_include "state"
+      expect(body["errors"].keys).must_include "postal_code"
+      expect(body["errors"].keys).must_include "phone"
+      expect(body["errors"].keys).must_include "videos_checked_out_count"
+      must_respond_with :bad_request
+    end
   end
 end

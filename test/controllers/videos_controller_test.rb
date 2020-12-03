@@ -79,6 +79,19 @@ describe VideosController do
 
       must_respond_with :bad_request
     end
+    it "will respond with bad request and errors for a nil movie" do
+      # Assert
+      expect {
+        post videos_path, params: nil
+      }.wont_change "Video.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "title"
+      expect(body["errors"]["title"]).must_include "can't be blank"
+
+      must_respond_with :bad_request
+    end
   end
 
 
