@@ -18,4 +18,11 @@ class Rental < ApplicationRecord
     self.customer.videos_checked_out_count += 1
     self.customer.save
   end
+
+  def checkin_update
+    self.video.available_inventory += 1
+    self.video.save
+    self.customer.videos_checked_out_count -= 1
+    self.customer.save
+  end
 end

@@ -3,7 +3,7 @@ require "test_helper"
 describe RentalsController do
   describe 'checkout' do
     before do
-      @customer = customers(:customer_one)
+      @customer = customers(:customer_two)
       @video = videos(:wonder_woman)
       @rental_hash = {
           customer_id: @customer.id,
@@ -74,15 +74,17 @@ describe RentalsController do
 
   describe 'checkin' do
     before do
-      customer = customers(:customer_one)
-      video = videos(:black_widow)
+      @customer = customers(:customer_one)
+      @video = videos(:black_widow)
 
       @check_in_info = {
-          customer_id: customer.id,
-          video_id: video.id
+          customer_id: @customer.id,
+          video_id: @video.id
       }
     end
     it 'checks in a returned video from a customer' do
+      checked_out_count = @customer.videos_checked_out_count
+      available_inventory = @video.available_inventory
 
       expect {
         post rentals_checkin_path, params: @check_in_info
@@ -90,9 +92,13 @@ describe RentalsController do
 
       must_respond_with :success
 
-      rental = rentals(:rental1)
-      expect(rental.return_date).must_equal Date.today.to_s
+      # rental = rentals(:rental1)
+      # expect(rental.return_date).must_equal Date.today.to_s
 
+      @customer.reload
+      @video.reload
+      expect(@customer.videos_checked_out_count).must_equal checked_out_count - 1
+      expect(@video.available_inventory).must_equal available_inventory + 1
     end
 
     it 'it responds with not found if the customer does not exist' do
