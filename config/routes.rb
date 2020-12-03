@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'videos/index'
+  get 'videos/show'
+  get 'videos/create'
   # resources
   get 'customers/index'
   get 'customers/show'
