@@ -18,41 +18,5 @@ describe Customer do
         customer_one.reload
       end
     end
-
-    it "requires a name" do
-      customer_one.name = nil
-
-      expect(customer_one.valid?).must_equal false
-    end
-
-    it "requires an address" do
-      customer_one.name = nil
-
-      expect(customer_one.valid?).must_equal false
-    end
-
-    it "requires a city" do
-      customer_one.name = nil
-
-      expect(customer_one.valid?).must_equal false
-    end
-
-    it "requires a state" do
-      customer_one.name = nil
-
-      expect(customer_one.valid?).must_equal false
-    end
-
-    it "requires a postal_code" do
-      customer_one.name = nil
-
-      expect(customer_one.valid?).must_equal false
-    end
-
-    it "requires a phone" do
-      customer_one.name = nil
-
-      expect(customer_one.valid?).must_equal false
-    end
   end
 end
