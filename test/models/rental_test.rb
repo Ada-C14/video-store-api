@@ -44,7 +44,11 @@ describe Rental do
       expect(@rental.errors.messages).must_include :checkout_date
     end
 
-
+    it "must have a due_date" do
+      @rental.due_date = nil
+      expect(@rental.valid?).must_equal false
+      expect(@rental.errors.messages).must_include :due_date
+    end
 
   end
 
