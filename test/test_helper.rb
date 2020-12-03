@@ -3,6 +3,15 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require "minitest/rails"
 require "minitest/reporters"  # for Colorized output
+require 'simplecov'
+
+SimpleCov.start 'rails' do
+  add_filter '/bin/'
+  add_filter '/db/'
+  add_filter '/spec/' # for rspec
+  add_filter '/test/' # for minitest
+end
+
 #  For colorful output!
 Minitest::Reporters.use!(
   Minitest::Reporters::SpecReporter.new,
