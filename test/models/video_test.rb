@@ -45,6 +45,12 @@ describe Video do
       expect(@video.errors.messages).must_include :release_date
     end
 
+    it "must have a total_inventory" do
+      @video.total_inventory = nil
+      expect(@video.valid?).must_equal false
+      expect(@video.errors.messages).must_include :total_inventory
+    end
+
 
 
   end
