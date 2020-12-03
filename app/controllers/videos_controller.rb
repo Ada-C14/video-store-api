@@ -13,9 +13,8 @@ class VideosController < ApplicationController
     if video.nil?
       render json: {
           ok: false,
-          errors: 'Not found',
-          status: :not_found
-      }
+          errors: 'Not Found'
+      }, status: :not_found
       return
     end
 
