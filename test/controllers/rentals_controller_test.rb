@@ -49,6 +49,7 @@ describe RentalsController do
 
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       expect(body["errors"]).must_include "available_inventory"
+      expect(Rental.all).must_be_empty
     end
 
     it "returns not_found if there is no valid customer_id" do
@@ -57,6 +58,7 @@ describe RentalsController do
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
       expect(body["errors"]).must_equal ["Not Found"]
+      expect(Rental.all).must_be_empty
     end
 
     it "returns not_found if there is no valid video_id" do
@@ -65,6 +67,7 @@ describe RentalsController do
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
       expect(body["errors"]).must_equal ["Not Found"]
+      expect(Rental.all).must_be_empty
     end
 
     it "returns not_found if there are no params" do
@@ -73,7 +76,10 @@ describe RentalsController do
 
       body = check_response(expected_type: Hash, expected_status: :not_found)
       expect(body["errors"]).must_equal ["Not Found"]
+      expect(Rental.all).must_be_empty
     end
+
+
   end
 
   describe 'check-in' do
