@@ -18,6 +18,21 @@ describe Rental do
         expect(customer).must_be_kind_of Customer
       end
     end
+
   end
 
+  describe "validations" do
+    before do
+      @rental = Rental.new(customer_id: 123, video_id: 456, checkout_date: "January 1st 2020", due_date: "January 7th, 2020")
+    end
+
+    it "must have a customer_id" do
+      @rental.customer_id = nil
+      expect(@rental.valid?).must_equal false
+      expect(@rental.errors.messages).must_include :customer_id
+    end
+
+  end
+
+  end
 end
