@@ -31,39 +31,47 @@ describe Customer do
     it "must have a name" do
       @customer.name = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.error.messages).must_include :name
+      expect(@customer.errors.messages).must_include :name
     end
 
     it "must have an address" do
       @customer.address = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.error.messages).must_include :address
+      expect(@customer.errors.messages).must_include :address
     end
 
     it "must have a city" do
       @customer.city = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.error.messages).must_include :city
+      expect(@customer.errors.messages).must_include :city
     end
 
     it "must have a state" do
       @customer.state = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.error_messages).must_include :state
+      expect(@customer.errors_messages).must_include :state
     end
 
     it "must have a postal code" do
       @customer.postal_code = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.error_messages).must_include :postal_code
+      expect(@customer.errors_messages).must_include :postal_code
     end
 
     it "must have a phone" do
       @customer.phone = nil
       expect(@customer.valid?).must_equal false
-      expect(@customer.error_messages).must_include :phone
+      expect(@customer.errors_messages).must_include :phone
     end
 
+    it "must have a unique name" do
+      @customer.save!
+      name = @customer.name
+      customer_copy = Customer.new(name: name)
+      result = customer_copy.save
+      expect(result).must_equal false
+      expect(customer_copy.errors_messages).must_include :name
+    end
 
   end
 
