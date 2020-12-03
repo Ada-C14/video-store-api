@@ -118,23 +118,64 @@ describe VideosController do
   end
 
   describe "checkout" do
+
+    before do
+      @video = videos(:wonder_woman)
+      @customer = customers(:customer_one)
+      @rental_hash = {
+          video_id: @video.id,
+          customer_id: @customer.id,
+          due_date: Date.today + 7
+      }
+    end
+
     it "will checkout a video to a customer with valid ids" do
 
-      customer = customers(:customer_one)
-      video = videos(:wonder_woman)
-      rental_hash = {
-          video_id: video.id,
-          customer_id: customer.id,
-          due_date: Date.today + 7,
-          videos_check_out_count: 4,
-          available_inventory: 99
-      }
-      expect {post checkout_path, params: rental_hash}.must_change "Rental.count", 1
+
+      expect{post checkout_path, params: @rental_hash}.must_change "Rental.count", 1
       must_respond_with :ok
 
       body = JSON.parse(response.body)
-      expect(body["customer_id"]).must_equal customer.id
-      expect(body["video_id"]).must_equal video.id
+      expect(body["customer_id"]).must_equal @customer.id
+      expect(body["video_id"]).must_equal @video.id
+
+    end
+
+    it "will respond with 404 with invalid ids" do
+      @rental_hash[:video_id] = -1
+
+      expect{post checkout_path, params: @rental_hash}.wont_change "Rental.count"
+      must_respond_with :not_found
+    end
+
+    it "will increase the customer's videos_checked_out_count by one" do
+      count = @customer.videos_checked_out_count
+
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+      body = JSON.parse(response.body)
+      expect(body["videos_checked_out_count"]).must_equal count + 1
+    end
+
+    it "will decrease the video's available_inventory by one" do
+      count = @video.available_inventory
+
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+      body = JSON.parse(response.body)
+      expect(body["available_inventory"]).must_equal count - 1
+    end
+
+    it "create a due date" do
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+      body = JSON.parse(response.body)
+      expect(body["due_date"]).wont_be_nil
+    end
+
+    it "will respond with 200 with valid ids" do
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
     end
   end
 
@@ -148,6 +189,8 @@ describe VideosController do
           due_date: Date.today + 7
       }
       post checkout_path, params: rental_hash
+      @customer.reload
+      @video.reload
 
       @checkin_hash = {
           video_id: @video.id,

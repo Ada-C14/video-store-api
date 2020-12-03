@@ -57,8 +57,11 @@ class VideosController < ApplicationController
     end
 
     if rental.save
-      rental.customer.videos_checked_out_count += 1
-      rental.video.available_inventory -= 1
+      customer.videos_checked_out_count += 1
+      customer.save
+      video.available_inventory -= 1
+      video.save
+      rental.reload
       render json: {
           "customer_id": rental.customer_id,
           "video_id": rental.video_id,
@@ -95,6 +98,8 @@ class VideosController < ApplicationController
       customer.save
       video.available_inventory += 1
       video.save
+      customer.reload
+      video.reload
       render json: {
           "customer_id": customer.id,
           "video_id": video.id,
