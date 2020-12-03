@@ -7,4 +7,8 @@ class Video < ApplicationRecord
   def checkout_update
     self.update(available_inventory: self.available_inventory - 1)
   end
+
+  def checkin_update
+    self.update(available_inventory: self.available_inventory + 1)
+  end
 end
