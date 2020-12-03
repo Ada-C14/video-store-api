@@ -74,13 +74,11 @@ describe VideosController do
     it "can create a valid video" do
       # Arrange
       video_hash = {
-          video: {
             title: "Alf the movie",
             overview: "The most early 90s movie of all time",
             release_date: "December 16th 2025",
             total_inventory: 6,
             available_inventory: 6
-          }
         }
 
       # Assert
@@ -91,19 +89,14 @@ describe VideosController do
       must_respond_with :created
     end
 
-    it "will respond with bad request and errors for an invalid movie" do
+    it "will respond with bad request and errors when the title of a movie is blank" do
       # Arrange
       video_hash = {
-          video: {
-            title: "Alf the movie",
-            overview: "The most early 90s movie of all time",
-            release_date: "December 16th 2025",
-            total_inventory: 6,
-            available_inventory: 6
-          }
-        }
-
-      video_hash[:video][:title] = nil
+              overview: "The most early 90s movie of all time",
+              release_date: "December 16th 2025",
+              total_inventory: 6,
+              available_inventory: 6
+      }
   
       # Assert
       expect {
@@ -115,6 +108,94 @@ describe VideosController do
       expect(body["errors"].keys).must_include "title"
       expect(body["errors"]["title"]).must_include "can't be blank"
   
+      must_respond_with :bad_request
+    end
+
+    it "will respond with bad request and errors when the overview of a movie is blank" do
+      # Arrange
+      video_hash = {
+              title: "Lights in the Eyes",
+              release_date: "December 16th 2025",
+              total_inventory: 6,
+              available_inventory: 6
+      }
+
+      # Assert
+      expect {
+        post videos_path, params: video_hash
+      }.wont_change "Video.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "overview"
+      expect(body["errors"]["overview"]).must_include "can't be blank"
+
+      must_respond_with :bad_request
+    end
+
+    it "will respond with bad request and errors when the release date of a movie is blank" do
+      # Arrange
+      video_hash = {
+              title: "Lights in the Eyes",
+              overview: "The most early 90s movie of all time",
+              total_inventory: 6,
+              available_inventory: 6
+      }
+
+      # Assert
+      expect {
+        post videos_path, params: video_hash
+      }.wont_change "Video.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "release_date"
+      expect(body["errors"]["release_date"]).must_include "can't be blank"
+
+      must_respond_with :bad_request
+    end
+
+    it "will respond with bad request and errors when the total inventory of a movie is blank" do
+      # Arrange
+      video_hash = {
+              title: "Lights in the Eyes",
+              overview: "The most early 90s movie of all time",
+              release_date: "December 16th 2025",
+              available_inventory: 6
+      }
+
+      # Assert
+      expect {
+        post videos_path, params: video_hash
+      }.wont_change "Video.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "total_inventory"
+      expect(body["errors"]["total_inventory"]).must_include "can't be blank"
+
+      must_respond_with :bad_request
+    end
+
+    it "will respond with bad request and errors when the available inventory of a movie is blank" do
+      # Arrange
+      video_hash = {
+              title: "Lights in the Eyes",
+              overview: "The most early 90s movie of all time",
+              release_date: "December 16th 2025",
+              total_inventory: 6,
+      }
+
+      # Assert
+      expect {
+        post videos_path, params: video_hash
+      }.wont_change "Video.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "available_inventory"
+      expect(body["errors"]["available_inventory"]).must_include "can't be blank"
+
       must_respond_with :bad_request
     end
   end
