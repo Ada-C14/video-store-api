@@ -14,8 +14,13 @@ class RentalsController < ApplicationController
       if rental.save
         rental.video.available_inventory -= 1
         rental.customer.videos_checked_out_count += 1
-        rental.due_date = rental.created_at.to_date + 7
-        render json: rental.as_json, status: :ok
+        rental.check_out = rental.created_at.to_date
+        rental.due_date = rental.check_out + 7
+
+        rental_json = rental.as_json(only: [:customer_id, :video_id, :due_date])
+        rental_json[:videos_checked_out_count] = rental.customer.videos_checked_out_count
+        rental_json[:available_inventory] = rental.video.available_inventory
+        render json: rental_json, status: :ok
       else
         render json: {
           errors: ['Not Found']
