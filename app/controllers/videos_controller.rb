@@ -30,6 +30,14 @@ class VideosController < ApplicationController
     end
   end
 
+  def currently_checked_out_to
+    rentals = self.rentals.filter { |rental| rental.updated_at < rental.due_date }
+    customers = rentals.map { |rental| rental.customer }
+    return customers.as_json(only: [:customer_id, :name, :postal_code, :checkout_date, :due_date]), status: :ok
+  end
+
+  def
+
   private
 
   def video_params

@@ -126,5 +126,15 @@ describe VideosController do
       must_respond_with :not_found
     end
   end
+
+
+  describe "currently_checked_out_to" do
+    it "returns a list of customers to whom the video is currently checked out" do
+
+    end
+    it "returns an empty array if the video is not currently checked out to anyone" do
+
+    end
+  end
 end
 
