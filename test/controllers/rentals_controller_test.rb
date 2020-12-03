@@ -5,6 +5,12 @@ describe RentalsController do
     @customer = customers(:customer_one)
     @video = videos(:wonder_woman)
   end
+
+  describe "index" do
+    it "can list all overdue books" do
+      get rentals_path
+    end
+  end
   describe 'checkout' do
     it 'can create a new rental with valid fields' do
       initial_customer_rentals = @customer.videos_checked_out_count

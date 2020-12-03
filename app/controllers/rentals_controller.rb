@@ -1,10 +1,26 @@
 class RentalsController < ApplicationController
 
-  def index
-    rentals = Rental.all.order(:id)
+  def overdue
+    overdue_rentals = Rental.where('due_date < ?', Date.today)
 
-    render json: rentals.as_json(only: [:customer_id, :video_id, :due_date, :videos_checked_out_count, :available_inventory]),
-           status: :ok
+    attribute = params["sort"]
+    if attribute.nil?
+      overdue_rentals.all.order(:id)
+    else
+      overdue_rentals.all.order(attribute)
+    end
+
+    #checkout_date
+    #
+    overdue_rentals.each do |rental|
+      customer = Customer.find_by(id: rental.customer_id)
+      video = Video.find_by(id: rental.video_id)
+
+
+      render json: { customer_id: customer.id, video_id: video.id, title: video.title, name: customer.name, postal_code: customer.postal_code, due_date: rental.due_date },
+             status: :ok
+    end
+
   end
 
   def checkout
