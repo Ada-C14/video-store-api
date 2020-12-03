@@ -71,33 +71,35 @@ describe VideosController do
   end
 
   describe "create" do
+    let(:video_hash) {
+      {
+      title: "Alf the movie",
+      overview: "The most early 90s movie of all time",
+      release_date: "2025-16-12",
+      total_inventory: 6,
+      available_inventory: 6
+      }
+  }
     it "can create a valid video" do
       # Arrange
-      video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
-      }
 
       # Assert
       expect {
         post videos_path, params: video_hash
-      }.must_change "Video.count", 1
+      }.must_differ "Video.count", 1
 
       must_respond_with :created
     end
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
-      }
+      # video_hash = {
+      #   title: "Alf the movie",
+      #   overview: "The most early 90s movie of all time",
+      #   release_date: "2025-16-12",
+      #   total_inventory: 6,
+      #   available_inventory: 6
+      # }
   
       video_hash[:title] = nil
   
@@ -115,3 +117,5 @@ describe VideosController do
     end
   end
 end
+
+# "December 16th 2025"
