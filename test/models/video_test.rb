@@ -2,7 +2,7 @@ require "test_helper"
 
 describe Video do
   before do
-  @video = videos(:wonder_woman) #from fixtures
+  @video = videos(:video_one) #from fixtures
 
   end
   describe 'validations' do
