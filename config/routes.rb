@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   resources :customers, only: [:index, :show]
 
   resources :videos, only:[:index, :show, :create]
+  post '/rentals/checkout', to: 'videos#checkout', as: "checkout"
+  post '/rentals/checkin', to: 'videos#checkin', as: "checkin"
 end
