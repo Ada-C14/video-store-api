@@ -3,17 +3,17 @@ require "test_helper"
 REQUIRED_VIDEO_FIELDS = ['id', 'title', 'release_date', 'available_inventory'].sort
 
 describe VideosController do
-  it "must get index" do
+  it "responds with JSON array and OK" do
     get videos_path
-    must_respond_with :success
+
+    check_response(expected_type: Array, expected_status: :ok)
   end
 
   it 'responds with an array of video hashes' do
     get videos_path
 
-    body = JSON.parse(response.body)
+    body = check_response(expected_type: Array, expected_status: :ok)
 
-    expect(body).must_be_instance_of Array
     body.each do |video|
       expect(video).must_be_instance_of Hash
       required_video_attrs = ['id', 'title', 'release_date', 'available_inventory']
@@ -26,9 +26,8 @@ describe VideosController do
     Video.destroy_all
 
     get videos_path
-    body = JSON.parse(response.body)
-
-    expect(body).must_be_instance_of Array
+    
+    body = check_response(expected_type: Array, expected_status: :ok)
     expect(body).must_equal []
   end
 
