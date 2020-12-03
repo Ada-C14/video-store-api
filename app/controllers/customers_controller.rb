@@ -24,7 +24,6 @@ class CustomersController < ApplicationController
     else
       render json: { errors: customer.errors.messages }, status: :bad_request
     end
-
   end
 
   private
