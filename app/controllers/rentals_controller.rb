@@ -31,18 +31,19 @@ class RentalsController < ApplicationController
   end
 
   def check_in
-    # rental = Rental.find_by(id: params[:id])
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
-
-    if video.nil? || customer.nil?
+    rental = Rental.find_by(video_id: video.id, customer_id: customer.id)
+    binding.pry
+    if video.nil? || customer.nil? || rental.nil?
       render json: { errors: ["Not Found"] }, status: :not_found
       return
     end
 
-    customer.toggle_down_video_count
+    rental.videos_checked_out_count = customer.toggle_down_video_count
+    rental.available_inventory = video.toggle_up_inventory
+    rental.due_date = nil
 
-    video.toggle_up_inventory
     render json: { customer_id: customer.id, video_id: video.id, videos_checked_out_count: customer.videos_checked_out_count, available_inventory: video.available_inventory },
            status: :ok
   end

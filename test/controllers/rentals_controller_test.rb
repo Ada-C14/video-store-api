@@ -71,6 +71,11 @@ describe RentalsController do
           customer_id: @customer.id,
           video_id: @video.id,
       }
+
+      expect{
+        post checkout_path, params: rental_hash
+      }.must_change "Rental.count", 1
+
       expect{
         post check_in_path, params: rental_hash
       }.wont_change 'Rental.count'

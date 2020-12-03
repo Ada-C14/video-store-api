@@ -1,7 +1,27 @@
 require "test_helper"
 
 describe Customer do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  describe "relationships" do
+    it "can have many rentals" do
+      customer = customers(:customer_two)
+      video2 = videos(:wonder_woman)
+      video = videos(:black_widow)
+      rental = Rental.create(due_date: Date.today + 7,
+                             customer_id: customer.id,
+                             video_id: video.id,
+                             videos_checked_out_count: customer.videos_checked_out_count,
+                             available_inventory: video.available_inventory)
+
+      rental2 = Rental.create(due_date: Date.today + 7,
+                              customer_id: customer.id,
+                              video_id: video2.id,
+                              videos_checked_out_count: customer.videos_checked_out_count,
+                              available_inventory: video2.available_inventory)
+
+      expect(customer.rentals.count).must_equal 2
+      customer.rentals.each do |rental|
+        expect(rental).must_be_instance_of Rental
+      end
+    end
+  end
 end
