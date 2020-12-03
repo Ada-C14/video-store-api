@@ -9,7 +9,6 @@
       render json: {
           errors: ['Not Found']
       }, status: :not_found
-
       return
     elsif existing_video.available_inventory <= 0
       render json: {
@@ -39,10 +38,6 @@
           available_inventory: video.available_inventory
       }, status: :ok
       return
-    # else
-      # # invalid request
-      # render json: { errors: rental.errors.messages }, status: :bad_request
-      # return
     end
 
 
