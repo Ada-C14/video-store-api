@@ -9,10 +9,12 @@ class VideosController < ApplicationController
   def show
     video = Video.find_by(id: params[:id])
     if video
+      formatted_release_date = video.release_date.strftime("%B #{video.release_date.day.ordinalize} %Y")
       video = video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory])
+      video["release_date"] = formatted_release_date
       render json: video, status: :ok
     else
-      render json: {ok: false, errors: "Not Found"}, status: :not_found
+      render json: { errors: ["Not Found"] }, status: :not_found
     end
   end
 
