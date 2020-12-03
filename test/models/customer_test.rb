@@ -5,12 +5,14 @@ describe Customer do
   describe "relations" do
 
     it "has rentals" do
-      customer_1 = customers(:customer_1)
-      expect(customer_1).must_respond_to :rentals
-      customer_1.rentals.each do |rental|
+      customer_one = customers(:customer_1)
+      expect(customer_one).must_respond_to :rentals
+      customer_one.rentals.each do |rental|
         expect(rental).must_be_kind_of Rental
       end
     end
+
+
 
 
 
