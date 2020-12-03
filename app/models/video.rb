@@ -5,4 +5,8 @@ class Video < ApplicationRecord
   def decrement_inventory
     self.available_inventory -= 1
   end
+
+  def increment_inventory
+    self.available_inventory += 1
+  end
 end

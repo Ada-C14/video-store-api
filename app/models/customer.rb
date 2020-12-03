@@ -7,4 +7,8 @@ class Customer < ApplicationRecord
     self.videos_checked_out_count += 1
   end
 
+  def decrement_checkout_count
+    self.videos_checked_out_count -= 1
+  end
+
 end
