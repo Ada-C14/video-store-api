@@ -82,15 +82,25 @@ describe RentalsController do
     end
 
     it "decrease the video's available_inventory by one" do
+      # arrange
+      video_before = videos(:wonder_woman)
+      before_count = video_before.available_inventory
+      # act
+      post checkout_path, params: rental_params
 
+      after_count = Video.find_by(id: video_before.id).available_inventory
+
+      count_change = after_count - before_count
+      # assert
+      expect(count_change).must_equal -1
     end
 
     it "creates proper due date" do
-
+      # arrange & # act
+      post checkout_path, params: rental_params
+      # assert
+      rental = Rental.find_by(customer_id: customers(:customer_one).id, video_id: videos(:wonder_woman).id)
+      expect(rental.due_date).must_equal Date.today + 7.days
     end
-
-
-
-
   end
 end
