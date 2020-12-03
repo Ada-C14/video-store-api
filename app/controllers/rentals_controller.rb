@@ -7,6 +7,8 @@ class RentalsController < ApplicationController
       rental.customer.save!
 
       rental.video.available_inventory -= 1
+      rental[:checked_out] = true
+
       if rental.video.save
         return render json: rental.as_json(only: [:customer_id, :video_id, :due_date]).merge(
             videos_checked_out_count: rental.customer.videos_checked_out_count,
@@ -23,16 +25,14 @@ class RentalsController < ApplicationController
   end
 
   def check_in
-    rental = Rental.find_by(video_id: params[:video_id], customer_id: params[:customer_id])
-    # if rental.nil?
-    #   return render json: {errors: rental.errors.messages}, status: :not_found
-    # end
-    if rental.save
-
+    if (rental = Rental.find_by(video_id: params[:video_id], customer_id: params[:customer_id], checked_out: true))
+      rental[:checked_out] = false
+      rental[:due_date] = nil
+      rental[:checkin_date] = Date.today
       rental.video.available_inventory += 1
-
-      if rental.video.save
-        return render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count]).merge(
+      rental.save
+      if rental.save
+        return render json: rental.as_json(only: [:customer_id, :video_id, :videos_checked_out_count, :checkin_date]).merge(
             available_inventory: rental.video.available_inventory)
       else
         return render json: {errors: rental.video.errors.messages}, status: :bad_request
@@ -52,9 +52,9 @@ class RentalsController < ApplicationController
 
 
   end
-  
 
-    private
+
+  private
 
   def rental_params
     params.permit(:customer_id, :video_id)

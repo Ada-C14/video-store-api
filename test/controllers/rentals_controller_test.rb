@@ -77,7 +77,7 @@ describe RentalsController do
   end
 
   describe 'check-in' do
-    REQUIRED_FIELDS = %w[customer_id video_id due_date videos_checked_out_count available_inventory].sort
+    REQUIRED_FIELDS = %w[customer_id video_id checkin_date videos_checked_out_count available_inventory].sort
 
     let(:rental_info) {
       {
@@ -88,18 +88,19 @@ describe RentalsController do
 
     it 'can check-in a video -- basic' do
       post check_in_path
+      body = check_response(expected_type: Hash)
 
     end
     it 'can check-in a video' do
-
+      rental = rentals(:one)
       post check_in_path, params: rental_info
 
-      body = check_response(expected_type: Hash,)
+      body = check_response(expected_type: Hash)
 
       expect(body.keys.sort!).must_equal REQUIRED_FIELDS
       expect(body["customer_id"]).must_equal rental[:customer_id]
       expect(body["video_id"]).must_equal rental[:video_id]
-      expect(body["due_date"]).must_equal ""
+      expect(body["checkin_date"]).must_equal rental[:checkin_date]
       expect(body["videos_checked_out_count"]).must_equal 3
       expect(body["available_inventory"]).must_equal 100
 
