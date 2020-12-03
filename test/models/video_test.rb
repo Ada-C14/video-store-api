@@ -57,6 +57,14 @@ describe Video do
       expect(@video.errors.messages).must_include :available_inventory
     end
 
+    it "must have a unique title" do
+      @video.save!
+      title = @video.title
+      video_copy = Video.new(title: title)
+      result = (video_copy.save)
+      expect(result).must_equal false
+      expect(video_copy.errors_messages).must_include :title
+    end
 
 
   end
