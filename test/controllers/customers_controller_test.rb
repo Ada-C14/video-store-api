@@ -50,6 +50,9 @@ describe CustomersController do
       {
         customer: {
           name: "Test Customer Name",
+          address: "Test Address",
+          city: "Test City",
+          state: "Test State",
           postal_code: "12345",
           phone: "(123)456-7890"
         }
