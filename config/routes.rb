@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   post '/rentals/check-out', to: 'rentals#checkout', as: 'checkout'
   post '/rentals/check-in', to: 'rentals#check_in', as: 'check_in'
 
+  resources :rentals, only: [:index]
+
 end
