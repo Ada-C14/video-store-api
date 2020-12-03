@@ -11,4 +11,11 @@ class Rental < ApplicationRecord
       errors.add(:return_date, "video cannot be returned before being rented")
     end
   end
+
+  def checkout_update
+    self.video.available_inventory -= 1
+    self.video.save
+    self.customer.videos_checked_out_count += 1
+    self.customer.save
+  end
 end

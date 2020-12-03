@@ -19,7 +19,7 @@ describe RentalsController do
         post rentals_checkout_path, params: @rental_hash
       }.must_change "Rental.count"
 
-      rental = Rental.find_by(customer_id: customer.id)
+      rental = Rental.find_by(customer_id: @customer.id)
       @customer.reload
       @video.reload
 
@@ -51,7 +51,7 @@ describe RentalsController do
     end
 
     it 'responds with bad request if the video does not have any available inventory' do
-      @video.available_inventory = 0
+      @video.update(available_inventory: 0)
 
       expect {
         post rentals_checkout_path, params: @rental_hash
