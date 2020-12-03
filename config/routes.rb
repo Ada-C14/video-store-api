@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :videos, only: [:index, :create]
-  resources :customers, only: [:index]
-  get "/zomg", to: "videos#zomg"
-
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :videos, only: [:index, :show, :create]
+  resources :customers, only: [:index, :show]
+
+  # get "/zomg", to: "videos#zomg"
+  
 end
