@@ -1,7 +1,7 @@
 class CustomersController < ApplicationController
   def index
     customers = Customer.all
-    render json: customers.as_json(only: [:name, :registered_at, :address, :city, :postal_code, :phone]), status: :ok
+    render json: customers.as_json(only: [:name, :registered_at, :address, :city,:state, :postal_code, :phone, :videos_checked_out_count]), status: :ok
   end
 
   def show
@@ -10,11 +10,11 @@ class CustomersController < ApplicationController
     if customer.nil?
       render json: {
           ok: false,
-          message: 'not found',
+          message: 'Not found',
       }, status: :not_found
       return
     end
-    render json:customer.as_json(only: [:name, :registered_at, :address, :city, :postal_code, :phone]), status: :ok
+    render json:customer.as_json(only: [:name, :registered_at, :address, :city, :state,  :postal_code, :phone, :videos_checked_out_count]), status: :ok
   end
 
   def create
@@ -29,5 +29,5 @@ end
 
 private
 def customer_params
-  return params.require(:customer).permit(:name, :registered_at, :address, :city, :postal_code, :phone)
+  return params.permit(:name, :registered_at, :address, :city, :state,  :postal_code, :phone, :videos_checked_out_count)
 end
