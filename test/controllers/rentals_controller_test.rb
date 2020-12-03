@@ -3,9 +3,7 @@ require "test_helper"
 describe RentalsController do
 
   def check_response(expected_type:, expected_status: :success)
-    # passed in status is expected
     must_respond_with expected_status
-    # checking that it is json
     expect(response.header['Content-Type']).must_include 'json'
 
     body = JSON.parse(response.body)
