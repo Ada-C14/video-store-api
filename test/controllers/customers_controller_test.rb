@@ -16,7 +16,7 @@ describe CustomersController do
       expect(body.length).must_equal Customer.count
 
       # Check that each customer has the proper keys
-      fields = ["id", "name", "registered_at", "address", "city", "state","postal_code", "phone", "videos_checked_out_count"].sort
+      fields = ["id", "name", "registered_at", "postal_code", "phone", "videos_checked_out_count"].sort
 
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
@@ -73,7 +73,6 @@ describe CustomersController do
   describe "create" do
     let (:customer_hash) do
       {
-        customer: {
           name: "Test Customer",
           registered_at: "2020-12-02 11:23:09 -0800",
           address: "123 Fake Street",
@@ -82,7 +81,6 @@ describe CustomersController do
           postal_code: "99999",
           phone: "(123)456-7890",
           videos_checked_out_count: 1
-        }
       }
     end
 
@@ -94,22 +92,23 @@ describe CustomersController do
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
       expect(body).must_be_instance_of Hash
-      expect(body["name"]).must_equal customer_hash[:customer][:name]
-      expect(Time.new(body["registered_at"])).must_equal Time.new(customer_hash[:customer][:registered_at])
-      expect(body["postal_code"]).must_equal customer_hash[:customer][:postal_code]
-      expect(body["phone"]).must_equal customer_hash[:customer][:phone]
-      expect(body["address"]).must_equal customer_hash[:customer][:address]
-      expect(body["city"]).must_equal customer_hash[:customer][:city]
-      expect(body["state"]).must_equal customer_hash[:customer][:state]
-      expect(body["videos_checked_out_count"]).must_equal customer_hash[:customer][:videos_checked_out_count]
+      expect(body["name"]).must_equal customer_hash[:name]
+      expect(Time.new(body["registered_at"])).must_equal Time.new(customer_hash[:registered_at])
+      expect(body["postal_code"]).must_equal customer_hash[:postal_code]
+      expect(body["phone"]).must_equal customer_hash[:phone]
+      expect(body["address"]).must_equal customer_hash[:address]
+      expect(body["city"]).must_equal customer_hash[:city]
+      expect(body["state"]).must_equal customer_hash[:state]
+      expect(body["videos_checked_out_count"]).must_equal customer_hash[:videos_checked_out_count]
 
       must_respond_with :created
     end
 
     it "will not create a customer with invalid params" do
+      customer_hash[:phone] = nil
 
       expect {
-        post customers_path, params: { customer: { name: "doggie" } }
+        post customers_path, params: customer_hash
       }.wont_change "Customer.count"
 
       expect(response.header['Content-Type']).must_include 'json'

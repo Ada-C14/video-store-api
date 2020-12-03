@@ -16,7 +16,7 @@ describe VideosController do
       expect(body.length).must_equal Video.count
 
       # Check that each customer has the proper keys
-      fields = %w[id title overview release_date total_inventory available_inventory].sort
+      fields = %w[id title release_date  available_inventory].sort
 
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
@@ -45,18 +45,16 @@ describe VideosController do
 
 
   describe "create" do
-    it "can create a valid video" do
-      # Arrange
-      video_hash = {
-          video: {
-              title: "Alf the movie",
-              overview: "The most early 90s movie of all time",
-              release_date: "December 16th 2025",
-              total_inventory: 6,
-              available_inventory: 6
-          }
+    let (:video_hash) do
+     {
+        title: "Alf the movie",
+        overview: "The most early 90s movie of all time",
+        release_date: "December 16th 2025",
+        total_inventory: 6,
+        available_inventory: 6
       }
-
+    end
+    it "can create a valid video" do
       # Assert
       expect {
         post videos_path, params: video_hash
@@ -67,15 +65,7 @@ describe VideosController do
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      video_hash = {
-          video: {
-              title: nil,
-              overview: "The most early 90s movie of all time",
-              release_date: "December 16th 2025",
-              total_inventory: 6,
-              available_inventory: 6
-          }
-      }
+      video_hash[:title] = nil
 
       # Assert
       expect {
@@ -100,7 +90,7 @@ describe VideosController do
       body = JSON.parse(response.body)
 
       # Assert
-      fields = %w[id title overview release_date total_inventory available_inventory].sort
+      fields = %w[title overview release_date total_inventory available_inventory].sort
       expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
       expect(body["release_date"]).must_equal "2020-12-25"
