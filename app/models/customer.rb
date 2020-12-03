@@ -11,5 +11,4 @@ class Customer < ApplicationRecord
   def decrement_checkout_count
     self.videos_checked_out_count -= 1
   end
-
 end

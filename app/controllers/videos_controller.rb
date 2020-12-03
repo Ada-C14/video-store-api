@@ -1,7 +1,7 @@
 class VideosController < ApplicationController
 
   def index
-    videos = Video.all
+    videos = Video.parameterized_list(params[:sort], params[:n], params[:p])
 
     render json: videos.as_json(only: [:id, :title, :release_date, :available_inventory]), status: :ok
   end
