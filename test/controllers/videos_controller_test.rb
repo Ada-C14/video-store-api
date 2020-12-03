@@ -12,7 +12,7 @@ describe VideosController do
       expect(body.length).must_equal Video.count
 
       # Check that each customer has the proper keys
-      fields = ["id", "title", "release_date", "available_inventory"].sort
+      fields = ["available_inventory", "id", "release_date", "title"].sort
 
       body.each do |customer|
         expect(customer.keys.sort).must_equal fields
@@ -71,6 +71,7 @@ describe VideosController do
   end
 
   describe "create" do
+
     it "can create a valid video" do
       # Arrange
       video_hash = {
@@ -87,7 +88,7 @@ describe VideosController do
       }.must_change "Video.count", 1
 
       must_respond_with :created
-    end
+      end
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
