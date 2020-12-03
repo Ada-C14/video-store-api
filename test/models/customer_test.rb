@@ -58,6 +58,12 @@ describe Customer do
       expect(@customer.error_messages).must_include :postal_code
     end
 
+    it "must have a phone" do
+      @customer.phone = nil
+      expect(@customer.valid?).must_equal false
+      expect(@customer.error_messages).must_include :phone
+    end
+
 
   end
 
