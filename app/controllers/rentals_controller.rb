@@ -65,14 +65,6 @@ class RentalsController < ApplicationController
 
     errors = []
 
-    unless params[:customer_id] && params[:video_id]
-      errors << "ID Required"
-      render json: {
-          errors: errors
-      }, status: :bad_request
-      return
-    end
-
     rental = Rental.find_by(video_id: params[:video_id], customer_id: params[:customer_id], return_date: nil)
 
     if rental.nil?
