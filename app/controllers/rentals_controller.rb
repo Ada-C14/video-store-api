@@ -13,8 +13,8 @@ class RentalsController < ApplicationController
         due_date: (Date.today + 7),
         customer_id: customer.id,
         video_id: video.id,
-        videos_checked_out_count: customer.videos_checked_out_count,
-        available_inventory: video.available_inventory
+        videos_checked_out_count: customer.videos_checked_out_count + 1,
+        available_inventory: video.available_inventory - 1
     )
 
     if rental.save
@@ -33,18 +33,28 @@ class RentalsController < ApplicationController
   def check_in
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
-    rental = Rental.find_by(video_id: video.id, customer_id: customer.id)
-    binding.pry
-    if video.nil? || customer.nil? || rental.nil?
+
+    if video.nil? || customer.nil?
       render json: { errors: ["Not Found"] }, status: :not_found
       return
     end
 
-    rental.videos_checked_out_count = customer.toggle_down_video_count
-    rental.available_inventory = video.toggle_up_inventory
-    rental.due_date = nil
+    rental = Rental.find_by(video_id: video.id, customer_id: customer.id)
 
-    render json: { customer_id: customer.id, video_id: video.id, videos_checked_out_count: customer.videos_checked_out_count, available_inventory: video.available_inventory },
+    if rental.nil?
+      render json: { errors: ["Not Found"] }, status: :not_found
+      return
+    end
+
+    rental.videos_checked_out_count = nil
+    customer.toggle_down_video_count
+    rental.available_inventory = nil
+    video.toggle_up_inventory
+
+    rental.due_date = nil
+    rental.save
+
+    render json: { :customer_id => customer.id, :video_id => video.id, :videos_checked_out_count => customer.videos_checked_out_count, :available_inventory => video.available_inventory },
            status: :ok
   end
 end
