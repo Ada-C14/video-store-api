@@ -17,18 +17,12 @@ class RentalsController < ApplicationController
     result = rental.save
 
     if result
-      rental.due_date = Date.current + 7
-      rental.save
-      customer.videos_checked_out_count += 1
-      customer.save
-      video.available_inventory -= 1
-      video.save
       render json: {
         customer_id: rental.customer_id,
         video_id: rental.video_id,
-        due_date: rental.due_date,
-        videos_checked_out_count: customer.videos_checked_out_count,
-        available_inventory: video.available_inventory
+        due_date: rental.due,
+        videos_checked_out_count: customer.checkout,
+        available_inventory: video.checkout
       }, status: :ok
     else
       render json: {
@@ -51,25 +45,16 @@ class RentalsController < ApplicationController
       }, status: :not_found
       return
     else
-      customer.videos_checked_out_count -= 1
-      customer.save
-      video.available_inventory += 1
-      video.save
+
       render json: {
         customer_id: customer.id,
         video_id: video.id,
-        videos_checked_out_count: customer.videos_checked_out_count,
-        available_inventory: video.available_inventory
+        videos_checked_out_count: customer.checkin,
+        available_inventory: video.checkin
       }, status: :ok
       return
     end
 
-      render json: {
-        errors: [
-          'Bad Request'
-        ]
-      }, status: :bad_request
-      return
   end
 
   private

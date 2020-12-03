@@ -8,4 +8,16 @@ class Customer < ApplicationRecord
   validates :phone, presence: true
   validates :videos_checked_out_count, presence: true # >= 0
 
+  def checkin
+    self.videos_checked_out_count -= 1
+    self.save
+    return self.videos_checked_out_count
+  end
+
+  def checkout
+    self.videos_checked_out_count += 1
+    self.save
+    return self.videos_checked_out_count
+  end
+
 end
