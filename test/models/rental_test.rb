@@ -43,4 +43,24 @@ describe Rental do
     check_invalid(model: rental, attribute: :due_date)
     expect(rental.errors.messages[:due_date]).must_include "can't rent unreleased movies"
   end
+
+  it "increase the customer's videos_checked_out_count by one" do
+    videos_checked_out_before = customer.videos_checked_out_count
+
+    rental.check_out
+
+    customer.reload
+
+    expect(customer.videos_checked_out_count).must_equal videos_checked_out_before + 1
+  end
+
+  it "decrease the video's available_inventory by one" do
+    inventory_before = video.available_inventory
+
+    rental.check_out
+
+    video.reload
+
+    expect(video.available_inventory).must_equal inventory_before - 1
+  end
 end

@@ -22,26 +22,6 @@ describe RentalsController do
       check_response(expected_type: Hash, expected_status: 200)
     end
 
-    it "increase the customer's videos_checked_out_count by one" do
-      videos_checked_out_before = customer.videos_checked_out_count
-
-      post check_out_path, params: rental_data
-
-      customer.reload
-
-      expect(customer.videos_checked_out_count).must_equal videos_checked_out_before + 1
-    end
-
-    it "decrease the video's available_inventory by one" do
-      inventory_before = video.available_inventory
-
-      post check_out_path, params: rental_data
-
-      video.reload
-
-      expect(video.available_inventory).must_equal inventory_before - 1
-    end
-
     it "will respond with 404 for invalid customer" do
       rental_data[:customer_id] = nil
 
