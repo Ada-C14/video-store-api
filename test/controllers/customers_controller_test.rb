@@ -11,7 +11,7 @@ describe CustomersController do
     expect(body.length).must_equal Customer.count
 
     # Check that each customer has the proper keys
-    fields = ["address", "city", "name", "phone", "postal_code", "registered_at", "state", "videos_checked_out_count"].sort
+    fields = ["id", "name", "phone", "postal_code", "registered_at", "videos_checked_out_count"].sort
 
     body.each do |customer|
       expect(customer.keys.sort).must_equal fields
