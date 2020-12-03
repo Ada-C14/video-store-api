@@ -4,3 +4,6 @@ rental_one:
 rental_two:
   video: wonder_woman
   customer: customer_two
+rental_three:
+  video: black_widow
+  customer: customer_one
