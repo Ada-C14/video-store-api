@@ -71,41 +71,32 @@ describe VideosController do
   end
 
   describe "create" do
-    let(:video_hash) {
+    let(:video_params) {
       {
       title: "Alf the movie",
       overview: "The most early 90s movie of all time",
-      release_date: "2025-16-12",
+      release_date: Date.new(2015-12-12),
       total_inventory: 6,
       available_inventory: 6
       }
   }
     it "can create a valid video" do
       # Arrange
-
       # Assert
       expect {
-        post videos_path, params: video_hash
-      }.must_differ "Video.count", 1
+        post videos_path, params: video_params
+      }.must_change "Video.count", 1
 
       must_respond_with :created
     end
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      # video_hash = {
-      #   title: "Alf the movie",
-      #   overview: "The most early 90s movie of all time",
-      #   release_date: "2025-16-12",
-      #   total_inventory: 6,
-      #   available_inventory: 6
-      # }
-  
-      video_hash[:title] = nil
+      video_params[:title] = nil
   
       # Assert
       expect {
-        post videos_path, params: video_hash
+        post videos_path, params: video_params
       }.wont_change "Video.count"
       body = JSON.parse(response.body)
 
@@ -118,4 +109,3 @@ describe VideosController do
   end
 end
 
-# "December 16th 2025"
