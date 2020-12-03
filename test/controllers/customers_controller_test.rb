@@ -22,7 +22,7 @@ describe CustomersController do
       expect(body.length).must_equal Customer.count
 
       # Check that each customer has the proper keys
-      fields = ["name", "address", "city", "state", "postal_code",
+      fields = ["id", "name", "postal_code",
         "phone", "registered_at", "videos_checked_out_count"].sort
 
       body.each do |customer|
@@ -94,7 +94,7 @@ describe CustomersController do
       get customer_path(existing_customer.id)
 
       body = check_response(expected_type: Hash)
-      expect(body.keys.sort).must_equal ["id", "name", "registered_at", "address", "city", "state", "postal_code", "phone", "videos_checked_out_count"].sort
+      expect(body.keys.sort).must_equal ["id", "name", "registered_at", "postal_code", "phone", "videos_checked_out_count"].sort
       expect(body["id"]).must_equal existing_customer.id
       expect(body["name"]).must_equal existing_customer.name
       expect(body["registered_at"]).must_equal existing_customer.registered_at
