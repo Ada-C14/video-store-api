@@ -14,8 +14,7 @@ class RentalsController < ApplicationController
 
     if rental.save
       rental.initialize_rental
-      # customer = Customer.find_by(id: rental.customer_id)
-      # video = Video.find_by(id: rental.video_id)
+
       render json: rental.as_json(
         only: [:customer_id, :video_id, :due_date],
         include: {
@@ -23,12 +22,14 @@ class RentalsController < ApplicationController
           video: { only: [:available_inventory] }
         }
       ), status: :ok
+
       return
     end
 
     render json: {
       errors: ['Not Found']
     }, status: :not_found
+
     return
   end
 

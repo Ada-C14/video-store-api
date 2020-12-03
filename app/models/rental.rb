@@ -11,10 +11,8 @@ class Rental < ApplicationRecord
   end
 
   def initialize_rental
-    video = Video.find_by(id: video_id)
-    video.check_out && video.save
-    customer = Customer.find_by(id: customer_id)
-    customer.check_out && customer.save
+    Video.find_by(id: video_id).check_out
+    Customer.find_by(id: customer_id).check_out
     self.checked_out = Date.today
     self.due_date = Date.today + 7
     save
