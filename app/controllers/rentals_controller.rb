@@ -1,6 +1,6 @@
 class RentalsController < ApplicationController
 
-  def check_in
+  def check_out
     customer = Customer.find_by(id: params[:customer_id])
     video = Video.find_by(id: params[:video_id])
 
