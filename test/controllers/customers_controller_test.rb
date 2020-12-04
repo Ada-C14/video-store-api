@@ -33,4 +33,41 @@ describe CustomersController do
     must_respond_with :ok
   end
 
+  it 'can order customers by name given query params' do
+    get '/customers?sort=name'
+    must_respond_with :ok
+
+    body = JSON.parse(response.body)
+
+    expect(body.first["name"] < body[1]["name"]).must_equal true
+  end
+
+  it 'can order customers by registered_at given query params' do
+    get '/customers?sort=registered_at'
+    must_respond_with :ok
+
+    body = JSON.parse(response.body)
+
+    expect(body.first["registered_at"] < body[1]["registered_at"]).must_equal true
+    # not a perfect test since it's only the first and second element
+    # could loop through the whole body and check as above.
+  end
+
+  it 'can order customers by postal_code given query params' do
+    get '/customers?sort=postal_code'
+    must_respond_with :ok
+
+    body = JSON.parse(response.body)
+
+    expect(body.first["postal_code"] < body[1]["postal_code"]).must_equal true
+  end
+
+  it 'will sort by id if query param is not valid' do
+    get '/customers?sort=invalid'
+    must_respond_with :ok
+
+    body = JSON.parse(response.body)
+
+    expect(body.first["id"] < body[1]["id"]).must_equal true
+  end
 end
