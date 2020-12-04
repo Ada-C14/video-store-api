@@ -35,11 +35,11 @@ describe RentalsController do
       expect(body["errors"]).must_include "Not Found"
     end
 
-    it "will respond with not_found if customer doesn't exist" do
-      video = videos(:wonder_woman)
+    it "will respond with not_found if video doesn't exist" do
+      customer = customers(:customer_one)
       rentals_hash = {
-          customer_id: nil,
-          video_id: video.id
+          customer_id: customer.id,
+          video_id: nil
       }
 
       expect {
