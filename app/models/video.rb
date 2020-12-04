@@ -6,13 +6,11 @@ class Video < ApplicationRecord
 
   def checkout_decrease_inventory
     self.available_inventory -= 1
+    self.save!
   end
 
   def checkin_increase_inventory
     self.available_inventory += 1
-  end
-
-  def available?
-    self.available_inventory < 1 ? false : true
+    self.save!
   end
 end

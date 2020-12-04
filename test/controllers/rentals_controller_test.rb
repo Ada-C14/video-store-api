@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe RentalsController do
-  describe "check in" do
+  describe "check out" do
     it "can check out if both the customer and video exist" do
       video = videos(:wonder_woman)
       customer = customers(:customer_one)
@@ -10,14 +10,18 @@ describe RentalsController do
           customer_id: customer.id,
       }
 
+      video_start = customer.videos_checked_out_count
+      inventory_start = video.available_inventory
       expect {
         post check_out_path, params: rentals_hash
       }.must_change "Rental.count", 1
 
+      video.reload
+      customer.reload
       must_respond_with :success
 
-      expect(video.available_inventory - video.reload.available_inventory).must_equal 1
-      expect(customer.reload.videos_checked_out_count - customer.videos_checked_out_count).must_equal 1 # TODO why isn't this changing?
+      expect(inventory_start - video.available_inventory).must_equal 1
+      expect(video_start - customer.videos_checked_out_count).must_equal -1 # TODO why isn't this changing?
     end
 
     it "cannot check out if the customer does not exist" do
@@ -82,17 +86,23 @@ describe RentalsController do
     it "can check in if both the customer and video exist" do
       video = videos(:wonder_woman)
       customer = customers(:customer_one)
+      # Rental.new(video: video, customer: customer)
+
       rentals_hash = {
           video_id: video.id,
           customer_id: customer.id,
       }
 
-      post check_in_path, params: rentals_hash
+      video_start = customer.videos_checked_out_count
+      inventory_start = video.available_inventory
 
+      post check_in_path, params: rentals_hash
+      video.reload
+      customer.reload
       must_respond_with :success
 
-      expect(video.reload.available_inventory - video.available_inventory).must_equal 1
-      expect(customer.videos_checked_out_count - customer.reload.videos_checked_out_count).must_equal 1
+      expect(inventory_start - video.available_inventory).must_equal -1 #TODO similar issue here
+      expect(video_start - customer.videos_checked_out_count).must_equal 1
     end
 
     it "cannot check in if the customer does not exist" do

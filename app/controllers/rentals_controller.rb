@@ -58,26 +58,22 @@ class RentalsController < ApplicationController
       return
     end
 
-    rental = Rental.new(rental_params)
+    rental = Rental.checkout(customer, video)
 
-    if rental.save
-      rental.customer.update_checked_out
-      rental.video.checkout_decrease_inventory
-      if rental.video.save && rental.customer.save
-        render json: {
-            "customer_id": rental.customer_id,
-            "video_id": rental.video_id,
-            "due_date": rental.due_date,
-            "videos_checked_out_count": rental.customer.videos_checked_out_count,
-            "available_inventory": rental.video.available_inventory
-        }, status: :ok
-      else
-        render json: {
-            ok: false,
-            errors: rental.errors.messages
-        }, status: :not_found
-        return
-      end
+    if rental.errors.empty?
+      render json: {
+          "customer_id": rental.customer_id,
+          "video_id": rental.video_id,
+          "due_date": rental.due_date,
+          "videos_checked_out_count": rental.customer.videos_checked_out_count,
+          "available_inventory": rental.video.available_inventory
+      }, status: :ok
+    else
+      render json: {
+          ok: false,
+          errors: rental.errors.messages
+      }, status: :not_found
+      return
     end
   end
 
