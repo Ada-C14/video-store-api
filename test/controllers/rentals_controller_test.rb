@@ -12,7 +12,9 @@ describe RentalsController do
     it "can check_out a rental - increments rental count" do
       expect {post check_out_path, params: @rental_hash}.must_change "Rental.count", 1
     end
-
+    it "can check_out a rental - decrement video available inventory" do
+      expect {post check_out_path, params: @rental_hash}.must_change "@rental_hash.video.available_inventory", -1
+    end
 
 
   end
