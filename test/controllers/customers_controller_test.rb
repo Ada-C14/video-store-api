@@ -112,5 +112,3 @@ describe CustomersController do
     end
   end
 end
-
-# end
