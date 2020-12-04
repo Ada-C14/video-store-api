@@ -60,9 +60,9 @@ describe VideosController do
       expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
       expect(body["release_date"]).must_equal "December 25th 2020"
-      expect(body["available_inventory"]).must_equal 100
+      expect(body["available_inventory"]).must_equal 99
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
-      #expect(body["total_inventory"]).must_equal 100
+      expect(body["total_inventory"]).must_equal 100
       
       must_respond_with :ok
     end

@@ -1,10 +1,6 @@
 require "test_helper"
 
 describe RentalsController do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
-
   describe "check out" do
     let(:rental){
       {video_id: videos(:black_widow).id,
@@ -52,18 +48,16 @@ describe RentalsController do
 
   describe "check in" do
     let(:rental){
-      {video_id: videos(:black_widow).id,
+      {video_id: videos(:wonder_woman).id,
        customer_id: customers(:customer_one).id,
        returned: false}
     }
 
-    before do
-      post check_in_path, params: rental
-    end
-
     it "can create a rental check in" do
-      inventory = videos(:black_widow).available_inventory
+      inventory = videos(:wonder_woman).available_inventory
       customer_check_out = customers(:customer_one).videos_checked_out_count
+
+      post check_in_path, params: rental
 
       must_respond_with :success
 
