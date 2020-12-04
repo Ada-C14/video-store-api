@@ -5,17 +5,14 @@ class Rental < ApplicationRecord
   validates :customer_id, presence: true
   validates :video_id, presence: true
 
-  def is_valid?
-    video = Video.find_by(id: self.video_id)
-    if video.nil?
-      render json: {
-        status: 'error',
-        code: 404,
-        message: ['Not Found']
-      }
-      return
-    end
-    return video.available_inventory.positive?
+  def valid_video?
+    video = Video.find_by(id: video_id)
+    return video.nil?
+  end
+
+  def valid_customer?
+    customer = Customer.find_by(id: customer_id)
+    return customer.nil?
   end
 
   def initialize_rental

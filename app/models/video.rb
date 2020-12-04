@@ -13,4 +13,8 @@ class Video < ApplicationRecord
             numericality: { greater_than_or_equal_to: 0 }
 
   has_many :customers, through: :rentals
+
+  def in_stock?
+    return available_inventory.positive?
+  end
 end

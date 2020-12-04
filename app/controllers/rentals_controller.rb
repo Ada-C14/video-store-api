@@ -3,7 +3,16 @@ class RentalsController < ApplicationController
   def check_out_rental
     rental = Rental.new(rental_params)
 
-    unless rental.is_valid?
+    unless rental.valid_video? && rental.valid_customer?
+      render json: {
+        errors: ['Not Found']
+      }
+      return
+    end
+
+    rental_video = Video.find_by(id: rental.video_id)
+
+    unless rental_video.in_stock?
       render json: {
         status: 'error',
         code: 3000,
@@ -72,13 +81,5 @@ class RentalsController < ApplicationController
       :checked_out,
       :checked_in
     )
-  end
-
-  def find_video
-    Video.find_by(id: params[:video_id])
-  end
-
-  def find_customer
-    Customer.find_by(id: params[:customer_id])
   end
 end
