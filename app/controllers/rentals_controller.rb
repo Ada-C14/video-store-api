@@ -11,7 +11,7 @@ class RentalsController < ApplicationController
     end
 
     #checkout_date
-    #
+
     overdue_rentals.each do |rental|
       customer = Customer.find_by(id: rental.customer_id)
       video = Video.find_by(id: rental.video_id)

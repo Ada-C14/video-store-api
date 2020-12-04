@@ -10,3 +10,9 @@ JSON.parse(File.read('db/seeds/videos.json')).each do |video|
 end
 
 puts "The database now has #{Video.count} videos"
+
+JSON.parse(File.read('db/seeds/rentals.json')).each do |rental|
+  Rental.create!(rental)
+end
+
+puts "The database now has #{Rental.count} rentals"
