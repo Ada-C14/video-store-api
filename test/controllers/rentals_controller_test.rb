@@ -125,8 +125,9 @@ describe RentalsController do
     end
 
     it "will respond with not found and errors for an invalid rental" do
-      @customer.id = nil
-      @video.id = nil
+      @customer.id = -3
+      @video.id = -3
+      # @rental.id = nil
 
       post check_in_path, params: rental_params
 
@@ -137,7 +138,7 @@ describe RentalsController do
     end
 
     it "will respond with not found and errors for an invalid customer" do
-      @customer.id = nil
+      @customer.id = -3
 
       expect {
         post check_in_path, params: rental_params
@@ -150,7 +151,7 @@ describe RentalsController do
     end
 
     it "will respond with not found and errors for an invalid video" do
-      @video.id = nil
+      @video.id = -3
 
       expect {
         post check_in_path, params: rental_params
@@ -160,6 +161,26 @@ describe RentalsController do
       body = JSON.parse(response.body)
       expect(body).must_be_instance_of Hash
       expect(body['errors']).must_include 'Not Found'
+    end
+
+    it "will respond with bad request and errors for an invalid rental" do
+      # Arrange
+      video = Video.find_by(id: rental_params[:video_id])
+      video.available_inventory = 0
+      video.save
+
+      # Assert
+      expect {
+        post check_out_path, params: rental_params
+      }.wont_change "Rental.count"
+
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "video"
+      expect(body["errors"]["video"].keys).must_include "available_inventory"
+      expect(body["errors"]["video"]["available_inventory"]).must_include "must be greater than or equal to 0"
+
+      must_respond_with :bad_request
     end
 
 
