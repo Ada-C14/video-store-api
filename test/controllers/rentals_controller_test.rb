@@ -48,6 +48,27 @@ describe RentalsController do
       expect(body["errors"]).must_include "Not Found"
       must_respond_with :not_found
     end
+
+    it "return bad request if video does not have available inventory" do
+      video = videos(:inception)
+      video.available_inventory = 0
+      video.save!
+
+      rental_hash = {
+          customer_id: @customer.id,
+          video_id: video.id
+      }
+
+      expect {
+        post check_out_path, params: rental_hash
+      }.wont_differ "Rental.count"
+      body = JSON.parse(response.body)
+
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include "No available copies for this title"
+      must_respond_with :bad_request
+
+    end
   end
 
   describe "check in" do

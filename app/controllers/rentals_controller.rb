@@ -4,20 +4,23 @@ class RentalsController < ApplicationController
   before_action :find_video
 
   def check_out
-
     rental = Rental.new(video: @video, customer: @customer ,due_date: Time.now + 7.days )
 
+    if !@video.nil? && @video.available_inventory == 0
+      render json: {
+          errors: "No available copies for this title"
+      }, status: :bad_request
+      return
+    end
+
     if rental.save
-      # do something
-      rental.decrease_available_inventory
-      rental.increase_videos_checked_out
+      # rental.decrease_available_inventory
+      # rental.increase_videos_checked_out
 
-
-      # render json: rental.as_json(only: [:id, :due_date, :customer_id, :video_id, :available_inventory => @video.available_inventory,:videos_checked_out_count => @customer.videos_checked_out_count]), status: :created
+      rental.video.decrement!(:available_inventory)
+      rental.customer.increment!(:videos_checked_out_count)
 
       render json: {
-          # rental: rental.as_json(only: [:id, :due_date, :customer_id, :video_id]),
-          # id: rental.id,
           customer_id: @customer.id,
           video_id: @video.id,
           due_date: rental.due_date,
@@ -25,18 +28,11 @@ class RentalsController < ApplicationController
           available_inventory: @video.available_inventory
       }, status: :ok
       return
-    else # doesn't save, surface error messages
-      if @customer.nil?
-        render json: { errors: ['Not Found'] }, status: :not_found
-        return
-      elsif @video.nil?
-        render json: { errors: ['Not Found'] }, status: :not_found
-        return
-      else
-        render json: { errors: rental.errors.messages}, status: :not_found
-        return
-      end
+    else
+      render json: { errors: ['Not Found'] }, status: :not_found
+      return
     end
+
   end
 
   def check_in
