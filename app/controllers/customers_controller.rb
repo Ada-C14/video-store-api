@@ -1,6 +1,8 @@
 class CustomersController < ApplicationController
   def index
-    customers = Customer.all.as_json(only: [:id, :name, :registered_at, :postal_code, :phone, :videos_checked_out_count])
+    customers = Customer.all.order(:id).as_json(
+      only: [:id, :name, :registered_at, :postal_code, :phone, :videos_checked_out_count]
+    )
 
     render json: customers, status: :ok
   end
@@ -13,7 +15,9 @@ class CustomersController < ApplicationController
       return
     end
 
-    render json: customer.as_json(only: [:id, :name, :registered_at, :postal_code, :phone, :videos_checked_out_count]), status: :ok
+    render json: customer.as_json(
+      only: [:id, :name, :registered_at, :postal_code, :phone, :videos_checked_out_count]
+    ), status: :ok
   end
 
   def create
@@ -29,6 +33,8 @@ class CustomersController < ApplicationController
   private
 
   def customer_params
-    return params.require(:customer).permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone, :videos_checked_out_count)
+    return params.require(:customer).permit(
+      :name, :registered_at, :address, :city, :state, :postal_code, :phone, :videos_checked_out_count
+    )
   end
 end

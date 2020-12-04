@@ -50,6 +50,7 @@ class RentalsController < ApplicationController
 
     if rental.nil?
       render json: { errors: ['Not Found'] }, status: :not_found
+      return
     end
 
     unless rental.valid_video? && rental.valid_customer?
@@ -64,7 +65,6 @@ class RentalsController < ApplicationController
     render json: {
       customer_id: rental.customer_id,
       video_id: rental.video_id,
-      due_date: rental.due_date,
       available_inventory: rental.video.available_inventory,
       videos_checked_out_count: rental.customer.videos_checked_out_count
     }, status: :ok
