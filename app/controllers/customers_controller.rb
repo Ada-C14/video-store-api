@@ -1,5 +1,6 @@
 class CustomersController < ApplicationController
   before_action :sort_column
+  before_action :valid_pagination?
 
   def index
     customers = Customer.all
@@ -14,5 +15,10 @@ class CustomersController < ApplicationController
   
   def sort_column
     Customer.column_names.include?(params[:sort]) ? params[:sort] : (params[:sort] = "id")
+  end
+
+  def valid_pagination?
+    params[:p].to_i > 0 ? params[:p] : (params[:p] = nil)
+    params[:n].to_i > 0 ? params[:n] : (params[:n] = nil)
   end
 end
