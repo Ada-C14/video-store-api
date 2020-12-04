@@ -82,18 +82,15 @@ describe RentalsController do
     end
 
     it "will respond with correct values for checked in rental" do
-
-      p @customer.videos_checked_out_count
-      p @video.available_inventory
+      @customer.reload
+      @video.reload
 
       post check_in_path, params: @rental_hash
 
-      p @customer.videos_checked_out_count
-      p @video.available_inventory
+      @customer.reload
+      @video.reload
 
       body = JSON.parse(response.body)
-
-      p body
 
       fields = ["customer_id", "video_id", "videos_checked_out_count", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields

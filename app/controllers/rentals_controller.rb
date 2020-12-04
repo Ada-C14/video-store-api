@@ -37,11 +37,9 @@ class RentalsController < ApplicationController
 
   def check_in
 
-    rental = Rental.find_by(video: @video, customer: @customer)
-    # , check_in_date: nil
+    rental = Rental.find_by(video: @video, customer: @customer, check_in_date: nil)
 
     if rental
-
 
       rental.check_in_date = Date.today
       rental.video.increment!(:available_inventory)
@@ -50,8 +48,8 @@ class RentalsController < ApplicationController
       render json: {
           customer_id: @customer.id,
           video_id: @video.id,
-          videos_checked_out_count: @customer.videos_checked_out_count,
-          available_inventory: @video.available_inventory
+          videos_checked_out_count: rental.customer.videos_checked_out_count,
+          available_inventory: rental.video.available_inventory
       }, status: :ok
       return
     else
