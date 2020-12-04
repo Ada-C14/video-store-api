@@ -8,4 +8,8 @@ class Video < ApplicationRecord
     self.save
   end
 
+  def checkin
+    self.available_inventory += 1
+    self.save
+  end
 end

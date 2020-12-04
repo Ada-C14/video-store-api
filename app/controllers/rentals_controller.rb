@@ -20,6 +20,32 @@ class RentalsController < ApplicationController
     end
   end
 
+  def checkin
+
+    rental = Rental.find_by(rental_params)
+
+    video  = Video.find_by(id: params[:video_id])
+
+    customer = Customer.find_by(id: params[:customer_id])
+
+    render json: {errors: ['Not Found']}, status: :not_found and return if customer.nil? || video.nil? || rental.nil?
+
+    render json: {ok: false, errors: customer.errors.messages}, status: :bad_request and return unless customer.decrease_video_count
+
+    render json: {ok: false, errors: video.errors.messages}, status: :bad_request  and return unless video.checkin
+
+    rental_info = {
+        customer_id: customer.id,
+        video_id: video.id,
+        videos_checked_out_count: customer.videos_checked_out_count,
+        available_inventory: video.available_inventory
+    }
+
+    rental.destroy
+
+    render json: rental_info, status: :ok
+  end
+
   private
 
   def rental_params
