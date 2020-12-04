@@ -10,4 +10,10 @@ class Customer < ApplicationRecord
   validates :postal_code, presence: true
   validates :phone, presence: true
 
+
+
+  def checked_out_count(amount)
+    self.update(videos_checked_out_count: (self.videos_checked_out_count) + amount)
+  end
+
 end

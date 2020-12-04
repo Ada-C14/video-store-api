@@ -8,4 +8,8 @@ class Video < ApplicationRecord
   validates :total_inventory, numericality: { only_integer: true, greater_than: -1}
   validates :available_inventory, numericality: { only_integer: true, greater_than: -1}
 
+  def available_inventory_update(amount)
+    self.update(available_inventory: (self.available_inventory) + amount)
+  end
+
 end
