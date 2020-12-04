@@ -37,6 +37,7 @@ class RentalsController < ApplicationController
 
   def check_in
 
+    rental = Rental.where(video: @video, customer: @customer)
   end
 
   private

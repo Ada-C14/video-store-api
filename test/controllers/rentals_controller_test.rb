@@ -63,7 +63,7 @@ describe RentalsController do
         post check_out_path, params: rental_hash
       }.wont_differ "Rental.count"
       body = JSON.parse(response.body)
-
+      p body
       expect(body.keys).must_include "errors"
       expect(body["errors"]).must_include "No available copies for this title"
       must_respond_with :bad_request
