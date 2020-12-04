@@ -42,7 +42,7 @@ class RentalsController < ApplicationController
     if rental.save
       # call method to increment customer videos checked out
       customer.toggle_up_video_count
-      # # call method to decrease available inventory
+      # call method to decrease available inventory
       video.toggle_down_inventory
 
       render json: rental.as_json(only: [:customer_id, :video_id, :due_date]).merge(
@@ -77,8 +77,8 @@ class RentalsController < ApplicationController
     rental.save
 
     render json: rental.as_json(only: [:customer_id, :video_id]).merge(
-        videos_checked_out_count: customer.videos_checked_out_count,
-        available_inventory: video.available_inventory
+        videos_checked_out_count: rental.customer.videos_checked_out_count,
+        available_inventory: rental.video.available_inventory
     ), status: :ok
 
   end

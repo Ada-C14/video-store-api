@@ -8,15 +8,11 @@ describe Customer do
       video = videos(:black_widow)
       rental = Rental.create(due_date: Date.today + 7,
                              customer_id: customer.id,
-                             video_id: video.id,
-                             videos_checked_out_count: customer.videos_checked_out_count,
-                             available_inventory: video.available_inventory)
+                             video_id: video.id,)
 
       rental2 = Rental.create(due_date: Date.today + 7,
                               customer_id: customer.id,
-                              video_id: video2.id,
-                              videos_checked_out_count: customer.videos_checked_out_count,
-                              available_inventory: video2.available_inventory)
+                              video_id: video2.id,)
 
       expect(customer.rentals.count).must_equal 2
       customer.rentals.each do |rental|
