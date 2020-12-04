@@ -9,8 +9,7 @@ class CustomersController < ApplicationController
 
     if customer.nil?
       render json: {
-          ok: false,
-          message: 'Not Found',
+          errors: ['Not Found'],
       }, status: :not_found
       return
     end

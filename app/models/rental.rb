@@ -30,4 +30,17 @@ class Rental < ApplicationRecord
     return new_rental
   end
 
+  def checkin
+    return false if checked_in_date
+
+    video.available_inventory += 1
+    video.save
+    customer.videos_checked_out_count -= 1
+    customer.save
+    self.checked_in_date = DateTime.now
+    self.save
+
+    return self.save
+  end
+
 end
