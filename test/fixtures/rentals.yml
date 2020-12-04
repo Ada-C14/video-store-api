@@ -1,0 +1,8 @@
+rental1:
+  due_date: Time.now
+  customer_id: 1
+  video_id: 1
+rental2:
+  due_date: Time.now
+  customer_id: 2
+  video_id: 1
