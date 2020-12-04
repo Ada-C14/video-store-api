@@ -16,3 +16,12 @@ customer_two:
   address: 1414 Seasame Street
   city: Seattle
   state: WA
+customer_three:
+  name: Chris
+  registered_at: "Mon, 11 Mar 2020 07:54:14 -0700"
+  postal_code: 98087
+  phone: (206) 123-4567
+  videos_checked_out_count: 0
+  address: 4545 Hello Boulevard
+  city: Lywnnwood
+  state: WA

@@ -1,10 +1,10 @@
-wonder_woman:
+video_one:
   title: Wonder Woman 2
   release_date: "December 25th 2020"
   available_inventory: 100
   overview: Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility.
   total_inventory: 100
-black_widow:
+video_two:
   title: Black Widow
   release_date: "May 7th 2021"
   available_inventory: 6
