@@ -1,11 +1,12 @@
 class VideosController < ApplicationController
 
   def index
-    attribute = params["sort"]
-    if attribute.nil?
-      videos = Video.all.order(:id)
+
+    attribute = ["title", "release_date"]
+    if attribute.include?(params["sort"])
+      videos = Video.all.order(params["sort"])
     else
-      videos = Video.all.order(attribute)
+      videos = Video.all.order(:id)
     end
 
     render json: videos.as_json(only: [:id, :title, :release_date, :available_inventory]),

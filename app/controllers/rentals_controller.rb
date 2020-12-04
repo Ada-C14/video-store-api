@@ -3,11 +3,11 @@ class RentalsController < ApplicationController
   def overdue
     overdue_rentals = Rental.where('due_date < ?', Date.today)
 
-    attribute = params["sort"]
-    if attribute.nil?
-      overdue_rentals.all.order(:id)
+    attribute = ["title", "name", "due_date"]
+    if attribute.include?(params["sort"])
+      overdue_rentals.all.order(params["sort"])
     else
-      overdue_rentals.all.order(attribute)
+      overdue_rentals.all.order(:id)
     end
 
     #checkout_date
