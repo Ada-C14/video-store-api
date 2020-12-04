@@ -8,23 +8,27 @@ class RentalsController < ApplicationController
       render json: {
           errors: ["Not Found"]
       }, status: :not_found
-    end
-
-    rental = Rental.new(rental_params)
-
-    if rental.save
-      customer.increase_videos_checked_out
-      video.decrease_available_inventory
+    elsif video.available_inventory < 1
       render json: {
-          customer_id: customer.id,
-          video_id: video.id,
-          videos_checked_out_count: customer.videos_checked_out_count,
-          available_inventory: video.available_inventory
-      },
-             status: :ok
-      return
-    end
+          errors: ["Bad Request"]
+      }, status: :bad_request
+    else
+      rental = Rental.new(rental_params)
 
+      if rental.save
+        customer.increase_videos_checked_out
+        video.decrease_available_inventory
+        render json: {
+            customer_id: customer.id,
+            video_id: video.id,
+            due_date: Date.today + 1.week,
+            videos_checked_out_count: customer.videos_checked_out_count,
+            available_inventory: video.available_inventory
+        },
+               status: :ok
+        return
+      end
+    end
   end
 
   def rental_params
