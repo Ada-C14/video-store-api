@@ -64,7 +64,7 @@ describe VideosController do
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
       #expect(body["total_inventory"]).must_equal 100
       
-      must_respond_with :created
+      must_respond_with :created #TODO im thinking this should respond with :ok ?
     end
 
     it "responds with a 404 for non-existant videos" do
@@ -73,8 +73,9 @@ describe VideosController do
       body = JSON.parse(response.body)
 
       # Assert
-      expect(body["errors"]).must_include  "Not Found"
-      must_respond_with :not_found      
+      expect(body["ok"]).must_equal false
+      expect(body["errors"]).must_include "Not Found"
+      must_respond_with :not_found
     end
   end
 
