@@ -22,8 +22,4 @@ class CustomersController < ApplicationController
            status: :ok
   end
 
-  def create
-    
-  end
-
 end
