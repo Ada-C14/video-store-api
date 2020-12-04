@@ -38,6 +38,7 @@ class VideosController < ApplicationController
     else
       render json: customers.as_json(only: [:customer_id, :name, :postal_code, :checkout_date, :due_date]), status: :ok
     end
+    return
   end
 
   def checkout_history
@@ -53,6 +54,7 @@ class VideosController < ApplicationController
     else
       render json: customers.as_json(only: [:customer_id, :name, :postal_code, :checkout_date, :due_date]), status: :ok
     end
+    return
   end
 
   private
