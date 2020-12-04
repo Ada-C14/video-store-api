@@ -16,3 +16,57 @@ customer_two:
   address: 1414 Seasame Street
   city: Seattle
   state: WA
+customer_three:
+  name: Ada
+  registered_at: "Wed, 13 Mar 2020 07:54:14 -0700"
+  postal_code: 98177
+  phone: (469) 734-9222
+  videos_checked_out_count: 1
+  address: 1414 Seasame Street
+  city: Seattle
+  state: WA
+customer_four:
+  name: Grace
+  registered_at: "Wed, 13 Mar 2020 07:54:14 -0700"
+  postal_code: 98177
+  phone: (469) 734-9222
+  videos_checked_out_count: 1
+  address: 1414 Seasame Street
+  city: Seattle
+  state: WA
+customer_five:
+  name: Wonderful
+  registered_at: "Wed, 13 Mar 2020 07:54:14 -0700"
+  postal_code: 98177
+  phone: (469) 734-9222
+  videos_checked_out_count: 1
+  address: 1414 Seasame Street
+  city: Seattle
+  state: WA
+customer_six:
+  name: Happy
+  registered_at: "Wed, 13 Mar 2020 07:54:14 -0700"
+  postal_code: 98177
+  phone: (469) 734-9222
+  videos_checked_out_count: 1
+  address: 1414 Seasame Street
+  city: Seattle
+  state: WA
+customer_seven:
+  name: Spider Man
+  registered_at: "Wed, 13 Mar 2020 07:54:14 -0700"
+  postal_code: 98177
+  phone: (469) 734-9222
+  videos_checked_out_count: 1
+  address: 1414 Seasame Street
+  city: Seattle
+  state: WA
+customer_eight:
+  name: Luke Skywalker
+  registered_at: "Wed, 13 Mar 2020 07:54:14 -0700"
+  postal_code: 98177
+  phone: (469) 734-9222
+  videos_checked_out_count: 1
+  address: 1414 Seasame Street
+  city: Seattle
+  state: WA
