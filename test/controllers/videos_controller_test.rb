@@ -129,7 +129,7 @@ describe VideosController do
 
 
   describe "currently_checked_out_to" do
-    it "can get route for existing, responds with :ok" do
+    it "can get route for existing video with curren rentals, responds with :ok" do
       rentals(:rental_one)
       rentals(:rental_two)
       rentals(:rental_three)
@@ -141,24 +141,23 @@ describe VideosController do
       expect(body.length).must_equal 2
       must_respond_with :ok
     end
-    it "gets a descriptive error if video is not checked out to anyone, responds with :no_content" do
-      get video_current_customers_path(videos(:out_of_stock).id)
+    it "gets a descriptive error if video is not checked out to anyone, responds with :ok" do
+      video = videos(:out_of_stock)
+      get video_current_customers_path(video.id)
 
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
       expect(body).must_be_instance_of Hash
       expect(body['ok']).must_equal true
       expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include "This video is not currently checked out to any customer"
+      expect(body["errors"]).must_include "#{video.title} is not currently checked out to any customer"
 
       must_respond_with :ok
     end
     it "responds with a 404 for nonexistent videos" do
-      # Act
-      get video_path(-1)
+      get video_current_customers_path(-1)
       body = JSON.parse(response.body)
 
-      # Assert
       expect(body).must_be_instance_of Hash
       expect(body['ok']).must_equal false
       expect(body["message"]).must_equal  "Video not found"
@@ -167,10 +166,36 @@ describe VideosController do
   end
 
   describe "checkout_history" do
-    it "can get route, responds with :ok" do
-      get video_checkout_history_path
+    it "can get route for existing video with a rental history, responds with :ok" do
+      video = videos(:wonder_woman)
+      get video_checkout_history_path(video.id)
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+      expect(body.length).must_equal 2
+      must_respond_with :ok
+    end
+    it "responds with a descriptive json for existing video with no previous rentals, responds with :ok" do
+      video = videos(:out_of_stock)
+      get video_checkout_history_path(video.id)
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal true
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include "#{video.title} has not been previously checked out to any customer"
 
       must_respond_with :ok
+    end
+    it "responds with a 404 for nonexistent videos" do
+      get video_checkout_history_path(-1)
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body["message"]).must_equal  "Video not found"
+      must_respond_with :not_found
     end
   end
 end

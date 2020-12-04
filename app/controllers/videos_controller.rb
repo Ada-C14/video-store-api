@@ -26,12 +26,13 @@ class VideosController < ApplicationController
   end
 
   def currently_checked_out_to
+    message = "#{@video.title} is not currently checked out to any customer"
     customers = @video.currently_checked_out_to
     if customers.empty?
       render json: {
         ok: true,
-        message: "This video is not currently checked out to any customer",
-        errors: ["This video is not currently checked out to any customer"]
+        message: message,
+        errors: [message]
       }, status: :ok
     else
       render json: customers.as_json(only: [:customer_id, :name, :postal_code, :checkout_date, :due_date]), status: :ok
@@ -39,7 +40,17 @@ class VideosController < ApplicationController
   end
 
   def checkout_history
-
+    message = "#{@video.title} has not been previously checked out to any customer"
+    customers = @video.currently_checked_out_to
+    if customers.empty?
+      render json: {
+        ok: true,
+        message: message,
+        errors: [message]
+      }, status: :ok
+    else
+      render json: customers.as_json(only: [:customer_id, :name, :postal_code, :checkout_date, :due_date]), status: :ok
+    end
   end
 
   private
