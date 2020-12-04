@@ -21,7 +21,7 @@ describe RentalsController do
       must_respond_with :success
 
       expect(inventory_start - video.available_inventory).must_equal 1
-      expect(video_start - customer.videos_checked_out_count).must_equal -1 # TODO why isn't this changing?
+      expect(video_start - customer.videos_checked_out_count).must_equal -1
     end
 
     it "cannot check out if the customer does not exist" do
@@ -86,7 +86,7 @@ describe RentalsController do
     it "can check in if both the customer and video exist" do
       video = videos(:wonder_woman)
       customer = customers(:customer_one)
-      # Rental.new(video: video, customer: customer)
+      Rental.create!(video: video, customer: customer)
 
       rentals_hash = {
           video_id: video.id,
@@ -101,7 +101,7 @@ describe RentalsController do
       customer.reload
       must_respond_with :success
 
-      expect(inventory_start - video.available_inventory).must_equal -1 #TODO similar issue here
+      expect(inventory_start - video.available_inventory).must_equal -1
       expect(video_start - customer.videos_checked_out_count).must_equal 1
     end
 

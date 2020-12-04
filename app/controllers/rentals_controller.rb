@@ -16,6 +16,12 @@ class RentalsController < ApplicationController
     end
 
     rental = Rental.checkin(customer, video)
+    if rental.nil?
+      render json: {
+          errors: ["Not Found"]
+      }, status: :not_found
+      return
+    end
 
     if rental.errors.empty?
         render json: {

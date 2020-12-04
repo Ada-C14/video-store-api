@@ -14,11 +14,16 @@ class Rental < ApplicationRecord
     # increase the video's available_inventory by one
     # decrease the customer's videos_checked_out_count by one
     # update the checked_in date
-    rental = Rental.new(customer: customer, video: video, checked_in_date: Rental.checked_in_date)
+    rental = Rental.find_by(customer: customer, video: video, checked_in_date: nil)
+
+    if rental.nil?
+      return nil
+    end
+
     begin
       Rental.transaction do
 
-        rental.save!
+        rental.update!(checked_in_date: Rental.checked_in_date)
         rental.customer.update_checked_in
         rental.video.checkin_increase_inventory
       end
