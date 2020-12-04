@@ -1,36 +1,38 @@
 require "test_helper"
 
 describe CustomersController do
-  it "must get index" do
-    # Act
-    get customers_path
-    body = JSON.parse(response.body)
+  CUSTOMER_FIELDS = %w[id name registered_at postal_code phone videos_checked_out_count]
 
-    # Assert
-    expect(body).must_be_instance_of Array
-    expect(body.length).must_equal Customer.count
+  describe "index" do
 
-    # Check that each customer has the proper keys
-    fields = ["id", "name", "registered_at", "postal_code", 
-      "phone", "videos_checked_out_count"].sort
+    it "responds with success" do
+      get customers_path
 
-    body.each do |customer|
-      expect(customer.keys.sort).must_equal fields
+      expect(response.header['Content-Type']).must_include 'json'
+      must_respond_with :ok
     end
 
-    must_respond_with :ok
+    it "will return all the proper fields for a list of customer" do
+      get customers_path
+
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+
+      body.each do |customer|
+        expect(customer).must_be_instance_of Hash
+        expect(customer.keys).must_equal CUSTOMER_FIELDS
+      end
+    end
+
+    it "return an empty arr if no pets" do
+      Customer.destroy_all
+
+      get customers_path
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Array
+      expect(body.length).must_equal 0
+      expect(body).must_equal []
+    end
   end
-
-  it "works even with no customers" do
-    Customer.destroy_all
-
-    get customers_path
-    body = JSON.parse(response.body)
-
-    expect(body).must_be_instance_of Array
-    expect(body.length).must_equal 0
-
-    must_respond_with :ok
-  end
-
 end
