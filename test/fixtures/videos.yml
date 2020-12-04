@@ -10,3 +10,9 @@ black_widow:
   available_inventory: 6
   overview: At birth the Black Widow (aka Natasha Romanova) is given to the KGB, which grooms her to become its ultimate operative. When the U.S.S.R. breaks up, the government tries to kill her as the action moves to present-day New York, where she is a freelance operative.
   total_inventory: 7
+out_of_stock:
+  title: Black Widow
+  release_date: "May 7th 2021"
+  available_inventory: 0
+  overview: Womp womp
+  total_inventory: 7
