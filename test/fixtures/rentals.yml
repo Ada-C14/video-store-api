@@ -1,13 +1,13 @@
 rental_one:
-  customer_id: customer_one
-  video_id: wonder_woman
+  customer: customer_one
+  video: wonder_woman
 #  checkout_date:
 #  due_date:
 #  status:
 
 rental_two:
-  customer_id: customer_two
-  video_id: black_widow
+  customer: customer_two
+  video: black_widow
 #  checkout_date:
 #  due_date:
 #  status:
