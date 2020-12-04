@@ -91,7 +91,7 @@ describe VideosController do
       check_response(expected_type: Hash, expected_status: :created)
     end
 
-    it "will respond with bad request and errors for an invalid movie" do
+    it "will respond with bad request and errors if missing title" do
       @video_hash[:title] = nil
 
       # Assert
@@ -105,7 +105,47 @@ describe VideosController do
       expect(body["errors"]["title"]).must_include "can't be blank"
     end
 
-    
+    it "will respond with bad request and errors if missing overview" do
+      @video_hash[:overview] = nil
+
+      # Assert
+      expect {
+        post videos_path, params: @video_hash
+      }.wont_change "Video.count"
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "overview"
+      expect(body["errors"]["overview"]).must_include "can't be blank"
+    end
+
+    it "will respond with bad request and errors if missing total_inventory" do
+      @video_hash[:total_inventory] = nil
+
+      # Assert
+      expect {
+        post videos_path, params: @video_hash
+      }.wont_change "Video.count"
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "total_inventory"
+      expect(body["errors"]["total_inventory"]).must_include "can't be blank"
+    end
+
+    it "will respond with bad request and errors if missing available_inventory" do
+      @video_hash[:available_inventory] = nil
+
+      # Assert
+      expect {
+        post videos_path, params: @video_hash
+      }.wont_change "Video.count"
+
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "available_inventory"
+      expect(body["errors"]["available_inventory"]).must_include "can't be blank"
+    end
 
   end
 end
