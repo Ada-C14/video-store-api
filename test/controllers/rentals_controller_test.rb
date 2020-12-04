@@ -6,9 +6,9 @@ describe RentalsController do
     @video = videos(:wonder_woman)
   end
 
-  describe "index" do
+  describe "overdue" do
     it "can list all overdue books" do
-      get rentals_path
+      get overdue_path
     end
   end
   describe 'checkout' do
@@ -29,13 +29,9 @@ describe RentalsController do
 
       # customer videos_checked_out should go + 1
       expect((initial_customer_rentals + 1) == @customer.reload.videos_checked_out_count).must_equal true
-      # customer & rental videos checked out count should be the same
-      expect(rental.videos_checked_out_count == @customer.videos_checked_out_count).must_equal true
 
       # video inventory should go - 1
       expect((initial_video_inventory - 1) == @video.reload.available_inventory).must_equal true
-      # rental & video inventory should be the same
-      expect(rental.available_inventory == @video.available_inventory).must_equal true
     end
 
     it 'it will respond with not found and errors for invalid customer' do
@@ -97,10 +93,8 @@ describe RentalsController do
       rental = Rental.find_by(video_id: @video.id, customer_id: @customer.id)
 
       expect((initial_customer_rentals - 1) == @customer.reload.videos_checked_out_count).must_equal true
-      expect(rental.videos_checked_out_count == @customer.videos_checked_out_count).must_equal true
 
       expect((initial_video_inventory + 1) == @video.reload.available_inventory).must_equal true
-      expect(rental.available_inventory == @video.available_inventory).must_equal true
 
       body = JSON.parse(response.body)
       expect(body.keys).must_include "customer_id", "video_id"

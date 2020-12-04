@@ -5,12 +5,11 @@ describe Rental do
     it "can have one customer and one video" do
       customer = customers(:customer_two)
       video = videos(:black_widow)
-      rental = Rental.new(due_date: Date.today + 7,
+      rental = Rental.create(due_date: Date.today + 7,
                           customer_id: customer.id,
-                          video_id: video.id,
-                          videos_checked_out_count: customer.videos_checked_out_count,
-                          available_inventory: video.available_inventory)
+                          video_id: video.id,)
 
+      expect(rental).must_be_instance_of Rental
       expect(rental.video).must_be_instance_of Video
       expect(rental.customer).must_be_instance_of Customer
     end
