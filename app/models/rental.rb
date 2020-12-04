@@ -4,9 +4,11 @@ class Rental < ApplicationRecord
 
 
   def check_out(customer, video)
-    customer.videos_checked_out_count += 1
     if video.available_inventory > 0
       video.available_inventory -= 1
+      video.save
+      customer.videos_checked_out_count += 1
+      customer.save
       return true
     end
   end

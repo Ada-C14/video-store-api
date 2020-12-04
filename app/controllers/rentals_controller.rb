@@ -31,18 +31,21 @@ class RentalsController < ApplicationController
     video = find_video
     date = render_date(DateTime.now + 1.week)
 
-    if customer.nil?
+    if find_customer.nil?
       render json: {errors: ["Not Found"]}, status: :not_found
+      return
     end
 
-    if video.nil?
+    if find_video.nil?
       render json: {errors: ["Not Found"]}, status: :not_found
+      return
     end
 
     rental = Rental.new(customer_id: customer.id, video_id: video.id, due_date: date)
     #if rental.available_inventory != 0
 
-    if rental.check_out(customer, video) && rental.save
+    if rental.check_out(customer, video)
+      rental.save
       # render json: rental.as_json(only: [:customer_id, :video_id, :due_date], include: {videos_checked_out_count: customer.videos_checked_out_count, available_inventory: video.available_inventory}), status: :ok
       #
       # render json: rental.as_json(only: [:customer_id, :video_id, :due_date],
