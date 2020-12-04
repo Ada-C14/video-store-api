@@ -5,11 +5,6 @@ class RentalsController < ApplicationController
     if rental.invalid?
       return render json: {errors: ["Not Found"]}, status: :not_found
     end
-    # if rental.save
-    #   rental.customer.videos_checked_out_count += 1
-    #   rental.customer.save!
-    #
-    #   rental.video.available_inventory -= 1
 
       if rental.checkout
         return render json: rental.as_json(only: [:customer_id, :video_id, :due_date]).merge(
