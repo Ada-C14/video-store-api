@@ -32,6 +32,15 @@ describe RentalsController do
       must_respond_with :ok
     end
 
+    it "responds with a 404 when checking out a rental with non valid video" do
+
+    end
+    it "responds with a 404 when checking out a rental with non valid customer" do
+
+    end
+    it "responds with a 404 when checking out a rental with available inventory less than 1" do
+
+    end
 
 
 
