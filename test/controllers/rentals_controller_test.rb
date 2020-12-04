@@ -4,8 +4,8 @@ describe RentalsController do
   describe "check_out" do
     before do
       @rental_hash = {
-          videos: videos(:wonder_woman),
-          customers: customer(:customer_one)
+          video: videos(:wonder_woman),
+          customer: customers(:customer_one)
       }
     end
 
