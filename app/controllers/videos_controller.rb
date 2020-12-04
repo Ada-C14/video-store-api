@@ -27,7 +27,8 @@ class VideosController < ApplicationController
 
   def currently_checked_out_to
     message = "#{@video.title} is not currently checked out to any customer"
-    customers = @video.currently_checked_out_to
+    # customers = @video.currently_checked_out_to
+    customers = Customer.parameterized_list(params[:sort], params[:n], params[:p]).filter { |customer| customer.rentals.any? {|rental| rental.video == @video && rental.created_at == rental.updated_at} }
     if customers.empty?
       render json: {
         ok: true,
@@ -41,7 +42,8 @@ class VideosController < ApplicationController
 
   def checkout_history
     message = "#{@video.title} has not been previously checked out to any customer"
-    customers = @video.currently_checked_out_to
+    # customers = @video.previously_checked_out_to
+    customers = Customer.parameterized_list(params[:sort], params[:n], params[:p]).filter { |customer| customer.rentals.any? {|rental| rental.video == @video && rental.updated_at > rental.created_at} }
     if customers.empty?
       render json: {
         ok: true,

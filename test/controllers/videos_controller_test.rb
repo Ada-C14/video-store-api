@@ -167,12 +167,14 @@ describe VideosController do
 
   describe "checkout_history" do
     it "can get route for existing video with a rental history, responds with :ok" do
+      rental_one = rentals(:rental_one)
+      rental_one.update!(due_date: Date.tomorrow, updated_at: Date.tomorrow)
       video = videos(:wonder_woman)
       get video_checkout_history_path(video.id)
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
       expect(body).must_be_instance_of Array
-      expect(body.length).must_equal 2
+      expect(body.length).must_equal 1
       must_respond_with :ok
     end
     it "responds with a descriptive json for existing video with no previous rentals, responds with :ok" do
