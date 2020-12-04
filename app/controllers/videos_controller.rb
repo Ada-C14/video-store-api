@@ -1,7 +1,7 @@
 class VideosController < ApplicationController
   def index
     @videos = Video.all
-    videos = Video.all.as_json(only: [:id, :title, :overview, :release_date, :total_inventory])
+    videos = Video.all.as_json(only: [:id, :title, :release_date, :available_inventory])
     render json: videos, status: :ok
   end
 
@@ -9,11 +9,11 @@ class VideosController < ApplicationController
     video = Video.find_by(id: params[:id])
 
     if video
-      render json: video.as_json(only: [:id, :title, :overview, :release_date, :available_inventory]), status: :created
+      render json: video.as_json(only: [:title, :overview, :release_date, :total_inventory, :available_inventory]), status: :ok
       return
     else
 
-      render json: { ok: false, errors: ["Not Found"] }, status: :not_found
+      render json: { errors: ["Not Found"] }, status: :not_found
       # render json: {errors: video.errors}, status: :bad_request
       return
     end
