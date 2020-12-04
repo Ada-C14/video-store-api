@@ -7,6 +7,14 @@ class Rental < ApplicationRecord
 
   def is_valid?
     video = Video.find_by(id: self.video_id)
+    if video.nil?
+      render json: {
+        status: 'error',
+        code: 404,
+        message: ['Not Found']
+      }
+      return
+    end
     return video.available_inventory.positive?
   end
 

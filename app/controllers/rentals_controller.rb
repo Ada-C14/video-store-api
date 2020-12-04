@@ -73,4 +73,12 @@ class RentalsController < ApplicationController
       :checked_in
     )
   end
+
+  def find_video
+    Video.find_by(id: params[:video_id])
+  end
+
+  def find_customer
+    Customer.find_by(id: params[:customer_id])
+  end
 end
