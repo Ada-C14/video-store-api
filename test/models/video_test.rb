@@ -47,4 +47,14 @@ describe Video do
       end
     end
   end
+
+  describe "decrease available inventory" do
+    it "decreases available inventory count" do
+
+    end
+  end
+
+  describe "increase available inventory" do
+    
+  end
 end
