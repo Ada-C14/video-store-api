@@ -51,6 +51,11 @@ class RentalsController < ApplicationController
           errors: ["Not Found"]
       }, status: :not_found
       return
+    elsif !video.available?
+      render json: {
+          errors: ["No Available Inventory"]
+      }, status: :bad_request
+      return
     end
 
     rental = Rental.new(rental_params)
