@@ -77,6 +77,35 @@ describe Video do
       expect(video.errors.messages).must_include :available_inventory
       expect(video.errors.messages[:available_inventory]).must_include "must be greater than or equal to 0"
     end
+
+    it "must have an overview" do
+      video = Video.first
+      video.overview = nil
+
+      expect(video.valid?).must_equal false
+      expect(video.errors.messages).must_include :overview
+      expect(video.errors.messages[:overview]).must_include "can't be blank"
+
+    end
+
+    it "must have a total inventory" do
+      video = Video.first
+      video.total_inventory = nil
+
+      expect(video.valid?).must_equal false
+      expect(video.errors.messages).must_include :total_inventory
+      expect(video.errors.messages[:total_inventory]).must_include "can't be blank"
+
+    end
+
+    it "must have a total inventory of more than 0 " do
+      video = Video.first
+      video.total_inventory = 0
+
+      expect(video.valid?).must_equal false
+      expect(video.errors.messages).must_include :total_inventory
+      expect(video.errors.messages[:total_inventory]).must_include "must be greater than 0"
+    end
   end
 
   describe "relations" do
