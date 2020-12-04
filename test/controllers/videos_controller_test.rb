@@ -104,5 +104,8 @@ describe VideosController do
       expect(body["errors"].keys).must_include "title"
       expect(body["errors"]["title"]).must_include "can't be blank"
     end
+
+    
+
   end
 end
