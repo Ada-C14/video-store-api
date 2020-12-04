@@ -1,0 +1,5 @@
+rental_1:
+  customer: customer_one
+  video: wonder_woman
+  checkout_date: "January 1st 2021"
+  due_date: "January 7th 2021"
