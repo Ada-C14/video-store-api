@@ -57,4 +57,4 @@ group :test do
 end
 
 gem 'validates_timeliness', '~> 5.0.0.beta'
-gem 'will_paginate' # , '~> 3.1.0'
+gem 'will_paginate', '~> 3.1.0'
