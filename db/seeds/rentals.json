@@ -4,5 +4,50 @@
     "customer_id": 1,
     "due_date": "2020-11-14",
     "checkout_date": "2020-11-07"
+  },
+  {
+    "video_id": 3,
+    "customer_id": 5,
+    "due_date": "2020-11-18",
+    "checkout_date": "2020-11-11"
+  },
+  {
+    "video_id": 8,
+    "customer_id": 57,
+    "checkout_date": "2020-11-07"
+  },
+  {
+    "video_id": 77,
+    "customer_id": 91,
+    "due_date": "2020-12-09",
+    "checkout_date": "2020-11-02"
+  },
+  {
+    "video_id": 81,
+    "customer_id": 152,
+    "due_date": "2020-10-09",
+    "checkout_date": "2020-10-02"
+  },
+  {
+    "video_id": 55,
+    "customer_id": 111,
+    "checkout_date": "2020-10-02"
+  },
+  {
+    "video_id": 32,
+    "customer_id": 100,
+    "checkout_date": "2020-11-02"
+  },
+  {
+    "video_id": 39,
+    "customer_id": 77,
+    "due_date": "2020-12-08",
+    "checkout_date": "2020-12-01"
+  },
+  {
+    "video_id": 81,
+    "customer_id": 152,
+    "due_date": "2020-12-10",
+    "checkout_date": "2020-12-03"
   }
 ]

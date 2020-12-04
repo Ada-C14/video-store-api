@@ -10,17 +10,15 @@ class RentalsController < ApplicationController
       overdue_rentals.all.order(:id)
     end
 
-    #checkout_date
-
+    overdue = []
     overdue_rentals.each do |rental|
       customer = Customer.find_by(id: rental.customer_id)
       video = Video.find_by(id: rental.video_id)
-
-
-      render json: { customer_id: customer.id, video_id: video.id, title: video.title, name: customer.name, postal_code: customer.postal_code, due_date: rental.due_date, checkout_date: rental.checkout_date },
-             status: :ok
+      hash = {customer_id: customer.id, video_id: video.id, title: video.title, name: customer.name, postal_code: customer.postal_code, due_date: rental.due_date, checkout_date: rental.checkout_date }
+      overdue << hash
     end
 
+    render json: overdue.as_json, status: :ok
   end
 
   def checkout
