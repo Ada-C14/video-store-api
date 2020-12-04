@@ -72,12 +72,14 @@ describe Customer do
       expect(customer2.errors.messages[:phone]).must_equal ["has already been taken"]
     end
 
-    # it "fails validation if videos_checked_out_count is blank" do
-    #
-    # end
+    it "must have a video_check_out_counter greater than or equal to 0" do
+      customer = customers(:customer_one)
+      customer.videos_checked_out_count = -1
+
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :videos_checked_out_count
+      expect(customer.errors.messages[:videos_checked_out_count]).must_equal ["must be greater than or equal to 0"]
+    end
   end
 
-  # describe "relationships" do
-  #
-  # end
 end

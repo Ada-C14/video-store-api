@@ -37,14 +37,24 @@ class RentalsController < ApplicationController
     rental = Rental.where(video_id: params[:video_id]).find_by(customer_id: params[:customer_id])
 
     if rental.nil?
-      render json: { errors: "Not Found" }, status: :not_found
+      render json: { errors: ["Not Found"] }, status: :not_found
+    elsif rental.customer_valid?.nil?
+      render json: { errors: ["Not Found"] }, status: :not_found
+    elsif rental.video_valid?.nil?
+      render json: { errors: ["Not Found"] }, status: :not_found
     else
       rental.rental_checkin
-      render json: rental.as_json(only: [:customer_id, :video_id], include: {
-          customer: { only: [:videos_checked_out_count] },
-          video: { only: [:available_inventory] }
-      }), status: :ok
+
+      render json: rental.as_json(
+          only: [:customer_id, :video_id, :checked_in],
+          include: {
+            customer: { only: [:videos_checked_out_count] },
+            video: { only: [:available_inventory] }
+          }
+        ), status: :ok
+
     end
+    return
   end
 
   private
