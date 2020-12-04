@@ -7,12 +7,12 @@ class Rental < ApplicationRecord
 
   def valid_video?
     video = Video.find_by(id: video_id)
-    return video.nil?
+    return video.present?
   end
 
   def valid_customer?
     customer = Customer.find_by(id: customer_id)
-    return customer.nil?
+    return customer.present?
   end
 
   def initialize_rental
