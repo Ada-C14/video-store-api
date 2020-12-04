@@ -24,7 +24,6 @@ class Rental < ApplicationRecord
   end
 
 
-
   def videos_checked_out_count
     return customer.videos_checked_out_count
   end

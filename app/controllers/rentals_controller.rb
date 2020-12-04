@@ -75,7 +75,7 @@ class RentalsController < ApplicationController
     elsif rental
       if rental.check_in(customer, video)
         rental.save
-        render json: rental.as_json(only: [:customer_id, :video_id, :due_date], methods: [:videos_checked_out_count, :available_inventory]), status: :ok
+        render json: rental.as_json(only: [:customer_id, :video_id], methods: [:videos_checked_out_count, :available_inventory]), status: :ok
         return
       else
         render json: {errors: ["Bad Request"]}, status: :bad_request
