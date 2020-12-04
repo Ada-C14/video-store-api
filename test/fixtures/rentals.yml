@@ -1,9 +1,9 @@
-#rental_1:
-#  customer: customer_one
-#  video: black_widow
-#  returned: true
-#  checkout_date: 2019-10-03
-#  due_date: 2019-10-10
+rental_1:
+  customer: customer_one
+  video: black_widow
+  returned: true
+  check_out_date: 2019-10-03
+  due_date: 2019-10-10
 #
 #rental_2:
 #  customer: customer_one
