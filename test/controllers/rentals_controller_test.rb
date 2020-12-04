@@ -40,19 +40,21 @@ describe RentalsController do
     end
 
     it "it decreases the video's available_inventory by 1" do
+      available_inventory = @video.available_inventory
       post check_out_path, params: rental_params
 
       video = Video.find_by(id: @video.id)
 
-      expect(video.available_inventory).must_equal 97
+      expect(video.available_inventory).must_equal available_inventory - 1
     end
 
     it "it increases the customer's videos_checked_out_count by 1" do
+      checked_out_count = @customer.videos_checked_out_count
       post check_out_path, params: rental_params
 
       customer = Customer.find_by(id: @customer.id)
 
-      expect(customer.videos_checked_out_count).must_equal 4
+      expect(customer.videos_checked_out_count).must_equal checked_out_count + 1
     end
 
     it "responds with 'Not Found' if customer is nil" do
@@ -96,8 +98,6 @@ describe RentalsController do
     }
 
     it "has the required fields" do
-      post check_out_path, params: rental_params
-
       post check_in_path, params: rental_params
       body = JSON.parse(response.body)
 
@@ -114,27 +114,29 @@ describe RentalsController do
     end
 
     it "it responds with 200 status (:ok)" do
-      post check_out_path, params: rental_params
-
       post check_in_path, params: rental_params
 
       must_respond_with :ok
     end
 
     it "it increases the video's available_inventory by 1" do
+      available_inventory = @video.available_inventory
+
       post check_in_path, params: rental_params
 
       video = Video.find_by(id: @video.id)
 
-      expect(video.available_inventory).must_equal 98
+      expect(video.available_inventory).must_equal available_inventory + 1
     end
 
     it "it decreases the customer's videos_checked_out_count by 1" do
+      checked_out_count = @customer.videos_checked_out_count
+
       post check_in_path, params: rental_params
 
       customer = Customer.find_by(id: @customer.id)
 
-      expect(customer.videos_checked_out_count).must_equal 3
+      expect(customer.videos_checked_out_count).must_equal checked_out_count - 1
     end
 
     it "if rental is nil responds with 'Not Found'" do
