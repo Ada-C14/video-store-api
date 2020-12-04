@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :rentals
 
   post '/rentals/check-out', to: "rentals#check_out", as: "checkout"
+  post '/rentals/check-in', to: "rentals#check_in", as: "checkin"
+
   # get "/zomg", to: "videos#zomg"
   
 end
