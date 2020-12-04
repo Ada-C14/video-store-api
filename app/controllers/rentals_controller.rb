@@ -42,16 +42,9 @@ class RentalsController < ApplicationController
     end
 
     rental = Rental.new(customer_id: customer.id, video_id: video.id, due_date: date)
-    #if rental.available_inventory != 0
 
     if rental.check_out(customer, video)
       rental.save
-      # render json: rental.as_json(only: [:customer_id, :video_id, :due_date], include: {videos_checked_out_count: customer.videos_checked_out_count, available_inventory: video.available_inventory}), status: :ok
-      #
-      # render json: rental.as_json(only: [:customer_id, :video_id, :due_date],
-      #                             include: {customer.as_json(only: [:videos_checked_out_count],
-      #                            video.as_json(only: [:available_inventory])},
-      #                             status: :ok
       render json: rental.as_json(only: [:customer_id, :video_id, :due_date], methods: [:videos_checked_out_count, :available_inventory]), status: :ok
       return
     elsif rental.available_inventory == 0
@@ -60,8 +53,38 @@ class RentalsController < ApplicationController
       render json: {errors: ["Bad Request"]}, status: :bad_request
       return
     end
-
   end
+
+  def check_in
+    customer = find_customer
+    video = find_video
+
+    if find_customer.nil?
+      render json: {errors: ["Not Found"]}, status: :not_found
+      return
+    end
+
+    if find_video.nil?
+      render json: {errors: ["Not Found"]}, status: :not_found
+      return
+    end
+    rental = Rental.find_by(customer_id: customer.id, video_id: video.id)
+    if rental.nil?
+      render json: {errors: ["Not Found"]}, status: :not_found
+      return
+    elsif rental
+      if rental.check_in(customer, video)
+        rental.save
+        render json: rental.as_json(only: [:customer_id, :video_id, :due_date], methods: [:videos_checked_out_count, :available_inventory]), status: :ok
+        return
+      else
+        render json: {errors: ["Bad Request"]}, status: :bad_request
+        return
+      end
+    end
+  end
+
+
 
   private
 
