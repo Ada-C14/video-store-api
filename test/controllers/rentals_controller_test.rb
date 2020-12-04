@@ -14,6 +14,13 @@ describe RentalsController do
     }
   }
 
+  let(:checkin_params) {
+    {
+        video_id: @video.id,
+        customer_id: @customer.id,
+    }
+  }
+
   REQUIRED_FIELDS = ["customer_id", "video_id", "due_date", "videos_checked_out_count", "available_inventory"].sort
 
   def check_response(expected_type:, expected_status: :success)
@@ -97,7 +104,50 @@ describe RentalsController do
 
   end
 
+  describe "check_in" do
 
+    it "responds with JSON and success" do
 
+      post checkin_path, params: checkin_params
+
+      check_response(expected_type: Hash)
+    end
+
+    it "responds with a hash with the required rental info" do
+      # Act
+      post checkin_path, params: checkin_params
+
+      customer = Customer.find_by(id: @customer.id)
+      video = Video.find_by(id: @video.id)
+      # Assert
+      body = check_response(expected_type: Hash)
+      expect(body).must_be_instance_of Hash
+      expect(body["customer_id"]).must_equal customer.id
+      expect(body["video_id"]).must_equal video.id
+    end
+
+    it "this rental persists and does not create a new rental, responds with 200 status (:ok)" do
+      expect {
+        post checkin_path, params: checkin_params
+      }.wont_differ "Rental.count"
+
+      must_respond_with :ok
+    end
+
+    it "it increases the video's available_inventory by 1" do
+      post checkin_path, params: checkin_params
+
+      video = Video.find_by(id: @video.id)
+      expect(video.available_inventory).must_equal 101
+    end
+
+    it "it decreases the customer's videos_checked_out_count by 1" do
+      post checkin_path, params: checkin_params
+
+      customer = Customer.find_by(id: @customer.id)
+
+      expect(customer.videos_checked_out_count).must_equal 2
+    end
+  end
 
 end

@@ -37,7 +37,6 @@ class RentalsController < ApplicationController
           errors: ['Not Found']
       }, status: :not_found
     else
-      # rental = Rental.find_by(id: params[:rental_id])
       customer.decrease_checkedout_videos
       video.increase_available_inventory
       render json: {customer_id: customer.id,
