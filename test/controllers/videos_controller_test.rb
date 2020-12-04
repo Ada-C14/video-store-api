@@ -50,67 +50,57 @@ describe VideosController do
       fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
-      expect(body["release_date"]).must_equal "December 25th 2020"
-      expect(body["available_inventory"]).must_equal 100
+      expect(body["release_date"]).must_equal "2020-12-25"
+      expect(body["available_inventory"]).must_equal 98
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
       expect(body["total_inventory"]).must_equal 100
       
       must_respond_with :ok
     end
 
-    it "responds with a 404 for non-existant videos" do
-      # Act
+    it 'will return a 404 request with json for a non-existent video' do
       get video_path(-1)
-      body = JSON.parse(response.body)
 
-      # Assert
-      expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include  "Not Found"
-      must_respond_with :not_found      
+      must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['errors']).must_include 'Not Found'
     end
   end
 
   describe "create" do
-    it "can create a valid video" do
-      # Arrange
-      video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
+    let(:video_params) {
+      {
+              title: "Alf the movie",
+              overview: "The most early 90s movie of all time",
+              release_date: "2020-12-25",
+              total_inventory: 6,
+              available_inventory: 6
       }
-
+    }
+    it "can create a valid video" do
       # Assert
       expect {
-        post videos_path, params: video_hash
-      }.must_change "Video.count", 1
+        post videos_path, params: video_params
+      }.must_differ "Video.count", 1
 
       must_respond_with :created
     end
 
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
-      video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
-      }
-  
-      video_hash[:title] = nil
+      video_params[:title] = nil
   
       # Assert
       expect {
-        post videos_path, params: video_hash
+        post videos_path, params: video_params
       }.wont_change "Video.count"
       body = JSON.parse(response.body)
 
       expect(body.keys).must_include "errors"
       expect(body["errors"].keys).must_include "title"
       expect(body["errors"]["title"]).must_include "can't be blank"
-  
+
       must_respond_with :bad_request
     end
   end
