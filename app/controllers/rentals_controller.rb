@@ -9,11 +9,11 @@ class RentalsController < ApplicationController
   def check_out
     video = Video.find_by(id: params[:video_id])
     customer = Customer.find_by(id: params[:customer_id])
-    rental = Rental.new(customer: customer, video: video, due_date: (Date.today + 7))
+    rental = Rental.new(customer: customer, video: video, checkout_date: Date.today, due_date: (Date.today + 7), status: "unavailable")
 
     if !video.nil? && video.available_inventory <= 0
       render json: {
-          errors: ['Not Found']
+          errors: ['No copies left']
       }, status: :not_found
       return
     elsif rental.save
@@ -37,7 +37,7 @@ class RentalsController < ApplicationController
   end
 
   def check_in
-    rental =  Rental.find_by(customer_id: params[:customer_id], video_id: params[:video_id])
+    rental = Rental.find_by(customer_id: params[:customer_id], video_id: params[:video_id])
 
     if rental.nil?
       render json: {
@@ -48,7 +48,7 @@ class RentalsController < ApplicationController
       rental.customer.save
       rental.video.available_inventory += 1
       rental.video.save
-      rental.returned = true
+      rental.status = "available"
       rental.save
 
       render json: { customer_id: rental.customer_id,
@@ -57,6 +57,5 @@ class RentalsController < ApplicationController
                      available_inventory: rental.video.available_inventory }, status: :ok
     end
   end
-
 end
 
