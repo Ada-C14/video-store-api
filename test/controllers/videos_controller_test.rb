@@ -11,11 +11,10 @@ describe VideosController do
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Video.count
 
-      # Check that each customer has the proper keys
       fields = ["title", "release_date", "id", "available_inventory"].sort
 
-      body.each do |customer|
-        expect(customer.keys.sort).must_equal fields
+      body.each do |video|
+        expect(video.keys.sort).must_equal fields
       end
 
       must_respond_with :ok

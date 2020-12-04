@@ -1,19 +1,24 @@
 require "test_helper"
 
 describe RentalsController do
-  it "must get index" do
-    # get rentals_index_url
-    # must_respond_with :success
+  describe "check_out" do
+    before do
+      @rental_hash = {
+          videos: videos(:wonder_woman),
+          customers: customer(:customer_one)
+      }
+    end
+
+    it "can check_out a rental - increments rental count" do
+      expect {post check_out_path, params: @rental_hash}.must_change "Rental.count", 1
+    end
+
+
+
   end
 
-  it "must get show" do
-    # get rentals_show_url
-    # must_respond_with :success
-  end
-
-  it "must get create" do
-    # get rentals_create_url
-    # must_respond_with :success
-  end
+  # describe "check_in" do
+  #
+  # end
 
 end
