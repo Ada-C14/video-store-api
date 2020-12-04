@@ -1,0 +1,14 @@
+rental_one:
+  customer: customer_one
+  video: wonder_woman
+#  checkout_date:
+#  due_date:
+#  status:
+
+rental_two:
+  customer: customer_two
+  video: black_widow
+#  checkout_date:
+#  due_date:
+#  status:
+
