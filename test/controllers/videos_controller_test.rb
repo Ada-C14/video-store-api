@@ -34,6 +34,33 @@ describe VideosController do
 
       must_respond_with :ok
     end
+
+    it "can sort by title" do
+      get '/videos?sort=title'
+      must_respond_with :ok
+
+      body = JSON.parse(response.body)
+
+      expect(body.first["title"] < body[1]["title"]).must_equal true
+    end
+
+    it "can sort by release_date" do
+      get '/videos?sort=release_date'
+      must_respond_with :ok
+
+      body = JSON.parse(response.body)
+
+      expect(body.first["release_date"] < body[1]["release_date"]).must_equal true
+    end
+
+    it "will sort by index if given an invalid sort param" do
+      get '/videos?sort=invalid'
+      must_respond_with :ok
+
+      body = JSON.parse(response.body)
+
+      expect(body.first["id"] < body[1]["id"]).must_equal true
+    end
   end
 
   describe "show" do
