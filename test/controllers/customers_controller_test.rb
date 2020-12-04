@@ -1,7 +1,6 @@
 require "test_helper"
 
 describe CustomersController do
-
   def check_response(expected_type:, expected_status: :success)
     must_respond_with expected_status
     expect(response.header["Content-Type"]).must_include "json"
@@ -13,8 +12,8 @@ describe CustomersController do
 
   it "must get index" do
     # Check that each customer has the proper keys
-    CUSTOMER_FIELDS = ["id", "name", "registered_at", "postal_code", 
-      "phone", "videos_checked_out_count"].sort
+    CUSTOMER_FIELDS = ["id", "name", "registered_at", "postal_code",
+                       "phone", "videos_checked_out_count"].sort
 
     # Act
     get customers_path
@@ -37,5 +36,4 @@ describe CustomersController do
     body = check_response(expected_type: Array)
     expect(body.length).must_equal 0
   end
-
 end
