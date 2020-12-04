@@ -31,8 +31,8 @@ class RentalsController < ApplicationController
   def check_in
     customer = Customer.find_by(id: rental_params[:customer_id])
     video = Video.find_by(id: rental_params[:video_id])
-    rental = Rental.find_by(rental_params).first
-
+    rental = Rental.find_by(video: video, customer: customer)
+    p "RENTAL IS #{rental}"
     if customer.nil? || video.nil?
       render json: {
         errors: ['Not Found']

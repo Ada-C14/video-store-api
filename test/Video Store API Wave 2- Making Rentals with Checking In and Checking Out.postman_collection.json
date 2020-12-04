@@ -420,6 +420,40 @@
 					]
 				},
 				"url": {
+					"raw": "{{base_url}}/rentals/check-out",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"rentals",
+						"check-in"
+					]
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "customer_id",
+							"value": "{{valid_customer_id}}",
+							"type": "text"
+						},
+						{
+							"key": "video_id",
+							"value": "{{valid_video_id}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
 					"raw": "{{base_url}}/rentals/check-in",
 					"host": [
 						"{{base_url}}"
