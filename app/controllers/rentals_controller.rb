@@ -18,7 +18,7 @@ class RentalsController < ApplicationController
 
     if rental.nil?
       render json: {
-          errors: ['Not found'] },
+          errors: ['Not Found'] },
              status: :not_found
       return
     else
