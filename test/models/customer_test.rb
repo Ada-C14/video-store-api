@@ -47,7 +47,7 @@ describe Customer do
 
       expect(@customer.valid?).must_equal false
       expect(@customer.errors.messages).must_include :videos_checked_out_count
-      expect(@customer.errors.messages[:videos_checked_out_count]).must_equal ["must be greater than 0"]
+      expect(@customer.errors.messages[:videos_checked_out_count]).must_equal ["must be greater than or equal to 0"]
     end
     
   end

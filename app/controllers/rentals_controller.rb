@@ -28,8 +28,10 @@ class RentalsController < ApplicationController
     else # doesn't save, surface error messages
       if @customer.nil?
         render json: { errors: ['Not Found'] }, status: :not_found
+        return
       elsif @video.nil?
         render json: { errors: ['Not Found'] }, status: :not_found
+        return
       else
         render json: { errors: rental.errors.messages}, status: :not_found
         return
