@@ -31,12 +31,12 @@ class RentalsController < ApplicationController
   def check_in
     customer = Customer.find_by(id: rental_params[:customer_id])
     video = Video.find_by(id: rental_params[:video_id])
-    rental = Rental.find_by(rental_params)
+    rental = Rental.find_by(rental_params).first
 
-    if customer.nil? && video.nil?
+    if customer.nil? || video.nil?
       render json: {
         errors: ['Not Found']
-      }, status: :bad_request
+      }, status: :not_found
       return
     end
 
@@ -51,12 +51,13 @@ class RentalsController < ApplicationController
       rental_json[:videos_checked_out_count] = rental.customer.videos_checked_out_count
       rental_json[:available_inventory] = rental.video.available_inventory
       render json: rental_json, status: :ok
-    elsif rental
+    else
       render json: {
         errors: ['Not Found']
       }, status: :not_found
-      return
     end
+
+    return
   end
 
   private
