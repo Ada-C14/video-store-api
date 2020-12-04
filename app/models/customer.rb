@@ -4,9 +4,11 @@ class Customer < ApplicationRecord
 
   def increase_checkedout_videos
     self.videos_checked_out_count += 1
+    self.save
   end
 
   def decrease_checkedout_videos
     self.videos_checked_out_count -= 1
+    self.save
   end
 end
