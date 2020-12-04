@@ -136,4 +136,75 @@ describe CustomersController do
       must_respond_with :bad_request
     end
   end
+  describe "currently_checked_out" do
+    it "can get route for existing customer with curren rentals, responds with :ok" do
+      rentals(:rental_one)
+      rentals(:rental_two)
+      rentals(:rental_three)
+      get customer_current_videos_path(customer1.id)
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+      expect(body.length).must_equal 2
+      must_respond_with :ok
+    end
+    it "gets a descriptive error if customer is not checked out to anyone, responds with :ok" do
+      customer = customers(:no_rentals)
+      get customer_current_videos_path(customer.id)
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal true
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include "#{customer.name} does not currently have any checked out videos"
+
+      must_respond_with :ok
+    end
+    it "responds with a 404 for nonexistent customer" do
+      get customer_current_videos_path(-1)
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body["message"]).must_equal  "Customer not found"
+      must_respond_with :not_found
+    end
+  end
+
+  describe "checkout_history" do
+    it "can get route for existing customer with a rental history, responds with :ok" do
+      rental_one = rentals(:rental_one)
+      rental_one.update!(due_date: Date.tomorrow, updated_at: Date.tomorrow)
+      get customer_checkout_history_path(customer1.id)
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+      expect(body.length).must_equal 1
+      must_respond_with :ok
+    end
+    it "responds with a descriptive json for existing customer with no previous rentals, responds with :ok" do
+      Rental.delete_all
+      get customer_checkout_history_path(customer1.id)
+
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal true
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include "#{customer1.name} has not previously checked out any videos"
+
+      must_respond_with :ok
+    end
+    it "responds with a 404 for nonexistent customer" do
+      get customer_checkout_history_path(-1)
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal false
+      expect(body["message"]).must_equal  "Customer not found"
+      must_respond_with :not_found
+    end
+  end
 end

@@ -1,4 +1,5 @@
 class CustomersController < ApplicationController
+  before_action :find_customer, only: [:show, :currently_checked_out, :checkout_history]
 
   def index
     customers = Customer.parameterized_list(params[:sort], params[:n], params[:p])
@@ -7,13 +8,7 @@ class CustomersController < ApplicationController
   end
 
   def show
-    customer = Customer.find_by(id: params[:id])
-
-    if customer.nil?
-      return render json: {ok: false, message: "Customer not found", errors: ['Not Found']}, status: :not_found
-    end
-
-    render json: customer.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :phone, :postal_code, :videos_checked_out_count]), status: :ok
+    render json: @customer.as_json(only: [:id, :name, :registered_at, :address, :city, :state, :phone, :postal_code, :videos_checked_out_count]), status: :ok
   end
 
 
@@ -31,10 +26,45 @@ class CustomersController < ApplicationController
     end
   end
 
+  def currently_checked_out
+    message = "#{@customer.name} does not currently have any checked out videos"
+    videos = Video.parameterized_list(params[:sort], params[:n], params[:p]).filter { |video| video.rentals.any? {|rental| rental.customer == @customer && rental.created_at == rental.updated_at} }
+    if videos.empty?
+      render json: {
+        ok: true,
+        message: message,
+        errors: [message]
+      }, status: :ok
+    else
+      render json: videos.as_json(only: [:title, :checkout_date, :due_date]), status: :ok
+    end
+  end
+
+  def checkout_history
+    message = "#{@customer.name} has not previously checked out any videos"
+    videos = Video.parameterized_list(params[:sort], params[:n], params[:p]).filter { |video| video.rentals.any? {|rental| rental.customer == @customer && rental.created_at < rental.updated_at} }
+    if videos.empty?
+      render json: {
+        ok: true,
+        message: message,
+        errors: [message]
+      }, status: :ok
+    else
+      render json: videos.as_json(only: [:title, :checkout_date, :due_date]), status: :ok
+    end
+  end
+
   private
 
   def customer_params
     params.permit(:name, :registered_at, :address, :city, :state, :postal_code, :phone, :videos_checked_out_count)
   end
 
+  def find_customer
+    @customer = Customer.find_by(id: params[:id])
+
+    if @customer.nil?
+      return render json: {ok: false, message: "Customer not found", errors: ['Not Found']}, status: :not_found
+    end
+  end
 end
