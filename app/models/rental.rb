@@ -9,11 +9,6 @@ class Rental < ApplicationRecord
 
     video.available_inventory -= 1
     video.save!
-
-    #   rental[:checked_out] = true
-    #   rental[:due_date] = Date.today + 7
-    #   rental[:checkin_date] = nil
-
     save
   end
 
@@ -24,11 +19,6 @@ class Rental < ApplicationRecord
 
     video.available_inventory += 1
     video.save!
-
-    #   rental[:checked_out] = false
-    #   rental[:due_date] = nil
-    #   rental[:checkin_date] = Date.today
-
     save
   end
 
