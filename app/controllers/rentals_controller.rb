@@ -54,7 +54,7 @@ class RentalsController < ApplicationController
   end
 
   def overdue
-    rentals = Rental.parameterized_list(params[:sort], params[:n], params[:p]).filter { |rental| rental.due_date && (rental.due_date < Date.today) }
+    rentals = Rental.parameterized_list(params[:sort], params[:n], params[:p]).filter { |rental| rental.due_date && (rental.due_date < Date.today) && rental.created_at == rental.updated_at }
 
     if rentals.nil? || rentals.empty?
       message = "There are no overdue rentals"
