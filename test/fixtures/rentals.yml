@@ -1,8 +1,6 @@
 rental1:
-  due_date: Time.now
-  customer_id: 1
-  video_id: 1
+  customer: customer_one
+  video: wonder_woman
 rental2:
-  due_date: Time.now
-  customer_id: 2
-  video_id: 1
+  customer: customer_two
+  video: wonder_woman
