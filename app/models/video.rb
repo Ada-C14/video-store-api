@@ -13,4 +13,9 @@ class Video < ApplicationRecord
     self.available_inventory += 1
     self.save!
   end
+
+
+  def available?
+    self.available_inventory < 1 ? false : true
+  end
 end
