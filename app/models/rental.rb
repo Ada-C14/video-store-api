@@ -3,6 +3,6 @@ class Rental < ApplicationRecord
   belongs_to :customer
 
   def due_date
-    return Time.now + 7
+    return Date.today + 7
   end
 end
