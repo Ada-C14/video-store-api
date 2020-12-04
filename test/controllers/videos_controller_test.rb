@@ -110,7 +110,7 @@ describe VideosController do
       expect(body.keys).must_include "errors"
       expect(body["errors"].keys).must_include "title"
       expect(body["errors"]["title"]).must_include "can't be blank"
-  
+
       must_respond_with :bad_request
     end
   end
