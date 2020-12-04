@@ -138,7 +138,7 @@ describe VideosController do
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
       expect(body).must_be_instance_of Array
-      expect(body.length).must_equal 2
+      expect(body.length).must_equal 3
       must_respond_with :ok
     end
     it "gets a descriptive error if video is not checked out to anyone, responds with :ok" do

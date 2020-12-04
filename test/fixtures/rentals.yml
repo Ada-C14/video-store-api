@@ -7,3 +7,11 @@ rental_two:
 rental_three:
   video: black_widow
   customer: customer_one
+overdue_one:
+  video: wonder_woman
+  customer: overdue
+  due_date: "2015-04-29"
+overdue_two:
+  video: black_widow
+  customer: overdue
+  due_date: "2019-10-31"

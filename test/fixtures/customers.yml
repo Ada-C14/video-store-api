@@ -25,3 +25,12 @@ no_rentals:
   address: 123 Fake Street
   city: Seattle
   state: WA
+overdue:
+  name: Test Person
+  registered_at: "Wed, 13 Nov 2020 07:54:14 -0700"
+  postal_code: 98111
+  phone: (206) 734-9000
+  videos_checked_out_count: 0
+  address: 123 Fake Street
+  city: Seattle
+  state: WA

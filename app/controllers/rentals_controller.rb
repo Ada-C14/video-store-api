@@ -54,7 +54,7 @@ class RentalsController < ApplicationController
   end
 
   def overdue
-    rentals = Rental.parameterized_list(params[:sort], params[:n], params[:p]).filter { |rental| rental.due_date < Date.today }
+    rentals = Rental.parameterized_list(params[:sort], params[:n], params[:p]).filter { |rental| rental.due_date && (rental.due_date < Date.today) }
 
     if rentals.nil? || rentals.empty?
       message = "There are no overdue rentals"
@@ -64,7 +64,21 @@ class RentalsController < ApplicationController
         errors: [message]
       }, status: :ok
     else
-      render json: rentals.as_json(only: [:video_id, :title, :customer_id, :name, :postal_code, :checkout_date, :due_date]), status: :ok
+      rentals_json = []
+
+      rentals.each do |rental|
+        rental_hash = Hash.new
+        rental_hash[:video_id] = rental.video.id
+        rental_hash[:title] = rental.video.title
+        rental_hash[:customer_id] = rental.customer.id
+        rental_hash[:name] = rental.customer.name
+        rental_hash[:postal_code] = rental.customer.postal_code
+        rental_hash[:checkout_date] = rental.created_at
+
+        rentals_json << rental_hash
+      end
+
+      render json: rentals_json.as_json, status: :ok
     end
 
     return

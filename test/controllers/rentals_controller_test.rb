@@ -189,10 +189,35 @@ describe RentalsController do
 
   describe "overdue" do
     it "returns a list of overdue rentals and responds with :ok" do
+      get overdue_rentals_path
 
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+      expect(body.length).must_equal 2
+      body.each do |rental|
+        expect(rental).must_be_instance_of Hash
+        expect(rental.keys).must_include "video_id"
+        expect(rental.keys).must_include "title"
+        expect(rental.keys).must_include "customer_id"
+        expect(rental.keys).must_include "name"
+        expect(rental.keys).must_include "postal_code"
+        expect(rental.keys).must_include "checkout_date"
+      end
+
+      must_respond_with :ok
     end
     it "returns an empty array if there are no overdue rentals and responds with :ok" do
+      Rental.delete_all
+      get overdue_rentals_path
 
+      expect(response.header['Content-Type']).must_include 'json'
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body['ok']).must_equal true
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include "There are no overdue rentals"
+      must_respond_with :ok
     end
   end
 end

@@ -6,7 +6,7 @@ describe Video do
   describe "relationships" do
     it "has many rentals" do
       rentals = video_one.rentals
-      expect(rentals.length).must_equal 2
+      expect(rentals.length).must_equal 3
       rentals.each do |rental|
         expect(rental).must_be_instance_of Rental
       end
