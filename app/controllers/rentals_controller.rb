@@ -13,7 +13,7 @@ class RentalsController < ApplicationController
 
     if !video.nil? && video.available_inventory <= 0
       render json: {
-          errors: ['Not Found']
+          errors: ['No copies left']
       }, status: :not_found
       return
     elsif rental.save
