@@ -37,7 +37,27 @@ class RentalsController < ApplicationController
 
   def check_in
 
-    rental = Rental.where(video: @video, customer: @customer)
+    rental = Rental.find_by(video: @video, customer: @customer)
+    # , check_in_date: nil
+
+    if rental
+
+
+      rental.check_in_date = Date.today
+      rental.video.increment!(:available_inventory)
+      rental.customer.decrement!(:videos_checked_out_count)
+
+      render json: {
+          customer_id: @customer.id,
+          video_id: @video.id,
+          videos_checked_out_count: @customer.videos_checked_out_count,
+          available_inventory: @video.available_inventory
+      }, status: :ok
+      return
+    else
+      render json: { errors: ['Not Found'] }, status: :not_found
+      return
+    end
   end
 
   private
