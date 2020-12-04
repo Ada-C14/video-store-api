@@ -7,10 +7,36 @@ describe RentalsController do
   end
 
   describe "overdue" do
-    it "can list all overdue books" do
+    it "can list all overdue rentals" do
+      fields = ["customer_id", "video_id", "title", "name", "postal_code", "due_date", "checkout_date"]
+
       get overdue_path
+
+      body = JSON.parse(response.body)
+
+      expect(body).must_be_instance_of Array
+
+      body.each do |rental|
+        expect(rental.keys.sort).must_equal fields
+      end
+
+      must_respond_with :ok
+    end
+
+    it "works even with no overdue rental" do
+      overdue_rentals = Rental.where('due_date < ?', Date.today)
+
+      overdue_rentals.destroy_all
+
+      get overdue_path
+
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Array
+
+      must_respond_with :ok
     end
   end
+
   describe 'checkout' do
     it 'can create a new rental with valid fields' do
       initial_customer_rentals = @customer.videos_checked_out_count

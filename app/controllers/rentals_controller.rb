@@ -3,22 +3,15 @@ class RentalsController < ApplicationController
   def overdue
     overdue_rentals = Rental.where('due_date < ?', Date.today)
 
-    attribute = ["title", "name", "due_date"]
-    if attribute.include?(params["sort"])
-      overdue_rentals.all.order(params["sort"])
-    else
-      overdue_rentals.all.order(:id)
-    end
-
     overdue = []
     overdue_rentals.each do |rental|
       customer = Customer.find_by(id: rental.customer_id)
       video = Video.find_by(id: rental.video_id)
-      hash = {customer_id: customer.id, video_id: video.id, title: video.title, name: customer.name, postal_code: customer.postal_code, due_date: rental.due_date, checkout_date: rental.checkout_date }
+      hash = {id: rental.id, customer_id: customer.id, video_id: video.id, title: video.title, name: customer.name, postal_code: customer.postal_code, due_date: rental.due_date, checkout_date: rental.checkout_date }
       overdue << hash
     end
 
-    render json: overdue.as_json, status: :ok
+    render json: overdue.as_json(except: [:id]), status: :ok
   end
 
   def checkout
@@ -78,6 +71,5 @@ class RentalsController < ApplicationController
         videos_checked_out_count: rental.customer.videos_checked_out_count,
         available_inventory: rental.video.available_inventory
     ), status: :ok
-
   end
 end
