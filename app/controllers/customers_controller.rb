@@ -21,4 +21,9 @@ class CustomersController < ApplicationController
                                          :phone, :videos_checked_out_count]),
            status: :ok
   end
+
+  def create
+    
+  end
+
 end

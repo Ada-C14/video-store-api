@@ -8,8 +8,6 @@ class CreateCustomers < ActiveRecord::Migration[6.0]
       t.string :state
       t.string :postal_code
       t.string :phone
-      
-
 
       t.timestamps
     end
