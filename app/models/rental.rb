@@ -20,12 +20,12 @@ class Rental < ApplicationRecord
     new_rental = Rental.create(customer_id: customer.id, video_id: video.id, checkout_date: time, due_date: due_date)
 
     # decrement the available_inventory of video
-    video.available_inventory -= 1
-    video.save
+    new_rental.video.available_inventory -= 1
+    new_rental.video.save
 
     # increment the video_checkout_count of customer
-    customer.videos_checked_out_count += 1
-    customer.save
+    new_rental.customer.videos_checked_out_count += 1
+    new_rental.customer.save
 
     return new_rental
   end
@@ -38,9 +38,11 @@ class Rental < ApplicationRecord
     customer.videos_checked_out_count -= 1
     customer.save
     self.checked_in_date = DateTime.now
-    self.save
-
     return self.save
+  end
+
+  def self.find_rental(video,customer)
+    rental = Rental.find_by(video: video, customer: customer, checked_in_date: nil )
   end
 
 end
