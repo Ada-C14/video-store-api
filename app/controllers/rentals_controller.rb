@@ -18,6 +18,7 @@ class RentalsController < ApplicationController
       render json: {
           customer_id: customer.id,
           video_id: video.id,
+          due_date: Date.today + 1.week,
           videos_checked_out_count: customer.videos_checked_out_count,
           available_inventory: video.available_inventory
       },
