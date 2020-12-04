@@ -8,6 +8,7 @@ class VideosController < ApplicationController
     video = Video.find_by(id: params[:id])
 
     if video.nil?
+      # had to comment the following line out in order for postman smoke test to pass
       # render json: { 'ok': false, 'errors': ['Not Found'] }, status: :not_found
       render json: { 'errors': ['Not Found'] }, status: :not_found
       return
@@ -24,6 +25,7 @@ class VideosController < ApplicationController
       return
     else
       render json: { errors: video.errors.messages }, status: :bad_request
+      # had to comment the following line out in order for postman smoke test to pass
       # render json: {
       #     ok: false,
       #     errors: video.errors.messages
