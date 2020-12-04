@@ -11,7 +11,7 @@ class RentalsController < ApplicationController
       return
     end
 
-    rental = Rental.checkout(video, customer)
+    rental = Rental.check_out(video, customer)
 
     if rental
       response ={

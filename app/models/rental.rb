@@ -8,7 +8,7 @@ class Rental < ApplicationRecord
   validates :due_date, presence: true
 
 
-  def self.checkout(video, customer)
+  def self.check_out(video, customer)
     # is available_inventory > 0?
     return nil unless video.available_inventory >= 1
 
@@ -30,7 +30,7 @@ class Rental < ApplicationRecord
     return new_rental
   end
 
-  def checkin
+  def check_in
     return false if checked_in_date
 
     video.available_inventory += 1
