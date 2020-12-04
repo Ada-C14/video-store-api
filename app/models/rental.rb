@@ -8,7 +8,7 @@ class Rental < ApplicationRecord
     customer.save!
 
     video.available_inventory -= 1
-    video.save!
+    return false unless video.save
     save
   end
 
