@@ -5,4 +5,6 @@ Rails.application.routes.draw do
 
   # get '/videos', to: "videos#index", as: "videos"
   resources :videos, only: [:index, :show, :create]
+
+  post '/rentals/check-out', to: "rentals#check_out", as: "check_out"
 end
