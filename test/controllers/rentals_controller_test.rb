@@ -33,13 +33,31 @@ describe RentalsController do
     end
 
     it "responds with a 404 when checking out a rental with non valid video" do
-
+      @rental_hash[:video] = nil
+      post check_out_path, params: @rental_hash
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include  "Not Found"
+      must_respond_with :not_found
     end
     it "responds with a 404 when checking out a rental with non valid customer" do
-
+      @rental_hash[:customer] = nil
+      post check_out_path, params: @rental_hash
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include  "Not Found"
+      must_respond_with :not_found
     end
     it "responds with a 404 when checking out a rental with available inventory less than 1" do
-
+      video = Video.create
+      video.available_inventory = 0
+      video.save
+      @rental_hash[:video] = video
+      post check_out_path, params: @rental_hash
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_include  "Not Found"
+      must_respond_with :not_found
     end
 
 
