@@ -6,7 +6,7 @@ class RentalsController < ApplicationController
     unless rental.valid_video? && rental.valid_customer?
       render json: {
         errors: ['Not Found']
-      }
+      }, status: :not_found
       return
     end
 
@@ -24,17 +24,13 @@ class RentalsController < ApplicationController
     if rental.save
       rental.initialize_rental
 
-      render json: rental.as_json(
-        only: [:customer_id,
-               :video_id,
-               :due_date,
-               available_inventory: rental.video.available_inventory,
-               videos_checked_out_count: rental.customer.videos_checked_out_count]
-        # include: {
-        #   customer: { only: [:videos_checked_out_count] },
-        #   video: { only: [:available_inventory] }
-        # }
-      ), status: :ok
+      render json: {
+        customer_id: rental.customer_id,
+        video_id: rental.video_id,
+        due_date: rental.due_date,
+        available_inventory: rental.video.available_inventory,
+        videos_checked_out_count: rental.customer.videos_checked_out_count
+      }, status: :ok
 
       return
     end
