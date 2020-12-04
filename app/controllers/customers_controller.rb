@@ -2,9 +2,10 @@ class CustomersController < ApplicationController
 
   def index
 
-    customers = Customer.all.order(:name).as_json(only: [:id, :name, :registered_at, :postal_code, :phone, :videos_checked_out_count])
+    customers = Customer.all.order(:name)
 
-    render json: customers, status: :ok
+    render json: customers.as_json(only: [:id, :name, :registered_at, :postal_code, :phone,
+                                          :videos_checked_out_count]), status: :ok
 
   end
 
