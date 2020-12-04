@@ -14,5 +14,5 @@ What would be the Big-O time complexity of your `/customers` & `/videos` endpoin
 What is the Big-O time complexity of the `POST /rentals/check-in` endpoint? What does the time complexity depend on? Explain your reasoning.  | 
 Describe a specific set of positive and negative test cases you implemented for a model. | 
 Describe a specific set of positive and negative test cases you implemented for a controller. | 
-Broadly, describe how an API should respond when it handles a request with invalid/erroneous parameters. | 
-Describe one of your custom model methods and why you chose to wrap that functionality into a method. | 
+Broadly, describe how an API should respond when it handles a request with invalid/erroneous parameters. |
+Describe one of your custom model methods and why you chose to wrap that functionality into a method. |
