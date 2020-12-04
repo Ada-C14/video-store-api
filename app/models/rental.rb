@@ -10,6 +10,8 @@ class Rental < ApplicationRecord
       customer.videos_checked_out_count += 1
       customer.save
       return true
+    else
+      return false
     end
   end
 
@@ -20,6 +22,8 @@ class Rental < ApplicationRecord
       customer.videos_checked_out_count -= 1
       customer.save
       return true
+    else
+      return false
     end
   end
 
