@@ -29,6 +29,7 @@ describe RentalsController do
       expect(Date.parse(body["due_date"]) - Date.today).must_equal 7
       expect(body["videos_checked_out_count"]).must_equal before_videos_count + 1
       expect(body["available_inventory"]).must_equal before_inventory - 1
+      expect(body["available_inventory"]).must_be :>=, 0
     end
 
     it "will respond with not found and errors for an invalid customer" do
@@ -61,6 +62,26 @@ describe RentalsController do
       expect(body["errors"]).must_include "Not Found"
   
       must_respond_with :not_found
+    end
+
+    it "will respond with bad request and errors for an invalid rental" do
+      # Arrange
+      video = Video.find_by(id: rental_hash[:video_id])
+      video.available_inventory = 0
+      video.save
+  
+      # Assert
+      expect {
+        post check_out_path, params: rental_hash
+      }.wont_change "Rental.count"
+
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"].keys).must_include "video"
+      expect(body["errors"]["video"].keys).must_include "available_inventory"
+      expect(body["errors"]["video"]["available_inventory"]).must_include "must be greater than or equal to 0"
+  
+      must_respond_with :bad_request
     end
   end
 
