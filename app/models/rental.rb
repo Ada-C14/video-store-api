@@ -13,6 +13,17 @@ class Rental < ApplicationRecord
     end
   end
 
+  def check_in(customer, video)
+    if customer.videos_checked_out_count > 0
+      video.available_inventory += 1
+      video.save
+      customer.videos_checked_out_count -= 1
+      customer.save
+      return true
+    end
+  end
+
+
   def videos_checked_out_count
     return customer.videos_checked_out_count
   end
