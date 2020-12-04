@@ -50,11 +50,17 @@ describe Video do
 
   describe "decrease available inventory" do
     it "decreases available inventory count" do
-
+      video = videos(:black_widow)
+      video.decrease_available_inventory
+      expect(video.available_inventory).must_equal 5
     end
   end
 
   describe "increase available inventory" do
-    
+    it "increases available inventory count" do
+      video = videos(:black_widow)
+      video.increase_available_inventory
+      expect(video.available_inventory).must_equal 7
+    end
   end
 end
