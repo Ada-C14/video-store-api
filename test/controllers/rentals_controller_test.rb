@@ -15,10 +15,23 @@ describe RentalsController do
       }
     end
 
-    it "can create a valid rental when checking out" do
+    it "can create a valid rental when checking out and return the correct fields " do
       expect {
         post check_out_path, params: @rental_hash
       }.must_differ "Rental.count", 1
+
+      body = JSON.parse(response.body)
+      rental = Rental.first
+      due_date = (rental.created_at + 7.days).strftime("%Y-%m-%d")
+
+
+      fields = ["customer_id", "video_id", "due_date", "videos_checked_out_count", "available_inventory"].sort
+      expect(body.keys.sort).must_equal fields
+      expect(body["customer_id"]).must_equal @customer.id
+      expect(body["video_id"]).must_equal @video.id
+      expect(body["due_date"]).must_equal due_date
+      expect(body["videos_checked_out_count"]).must_equal @customer.videos_checked_out_count + 1
+      expect(body["available_inventory"]).must_equal @video.available_inventory - 1
 
       must_respond_with :ok
     end
@@ -82,7 +95,6 @@ describe RentalsController do
     end
 
     it "will respond with correct values for checked in rental" do
-
       p @customer.videos_checked_out_count
       p @video.available_inventory
 
