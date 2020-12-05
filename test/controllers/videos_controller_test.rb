@@ -69,7 +69,7 @@ describe VideosController do
       must_respond_with :ok
     end
 
-    it 'responds with a 404 for non-existant videos' do
+    it 'responds with a 404 for non-existent videos' do
       # Act
       get video_path(-1)
       body = JSON.parse(response.body)

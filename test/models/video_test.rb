@@ -16,6 +16,16 @@ describe Video do
     Video.create!(video_hash)
   }
 
+  let (:oos_video) {
+    Video.create!(
+      title: 'test',
+      overview: 'test',
+      release_date: 'test',
+      total_inventory: 1,
+      available_inventory: 0
+    )
+  }
+
   it 'can be instantiated' do
     expect(video.valid?).must_equal true
 
@@ -69,6 +79,30 @@ describe Video do
       expect(video.valid?).must_equal false
       expect(video.errors.messages).must_include :available_inventory
       expect(video.errors.messages[:available_inventory]).must_include 'must be greater than or equal to 0'
+    end
+  end
+
+  describe 'relationships' do
+
+  end
+
+  describe 'custom methods' do
+    describe 'in_stock?' do
+      it 'returns true if video is in-stock' do
+        expect(video.in_stock?).must_equal true
+      end
+
+      it 'returns false if video is out-of-stock' do
+        expect(oos_video.in_stock?).must_equal false
+      end
+    end
+
+    describe 'check_in' do
+
+    end
+
+    describe 'check_out' do
+
     end
   end
 end
