@@ -11,11 +11,10 @@ describe VideosController do
       expect(body).must_be_instance_of Array
       expect(body.length).must_equal Video.count
 
-      # Check that each customer has the proper keys
-      fields = ["id", "title", "release_date", "available_inventory"].sort
+      fields = ["title", "release_date", "id", "available_inventory"].sort
 
-      body.each do |customer|
-        expect(customer.keys.sort).must_equal fields
+      body.each do |video|
+        expect(video.keys.sort).must_equal fields
       end
 
       must_respond_with :ok
@@ -50,7 +49,7 @@ describe VideosController do
       fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
-      expect(body["release_date"]).must_equal "December 25th 2020"
+      expect(body["release_date"]).must_equal "2020-12-25"
       expect(body["available_inventory"]).must_equal 100
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
       expect(body["total_inventory"]).must_equal 100
