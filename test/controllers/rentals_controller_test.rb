@@ -23,7 +23,7 @@ describe RentalsController do
 
       body = JSON.parse(response.body)
 
-      # expect(body["due_date"]).must_equal "#{render_date(DateTime.now + 1.week)}" #TODO make this work
+      # expect(body["due_date"]).must_equal "#{render_date(DateTime.now + 1.week)}" #how make rails test recognize render_date method?
       expect(body["videos_checked_out_count"]).must_equal customer_video_count + 1
       expect(body["available_inventory"]).must_equal video_inventory_count - 1
     end
@@ -92,6 +92,8 @@ describe RentalsController do
       video_inventory_count = @video.available_inventory
 
       post check_in_path, params: @params_hash
+
+      must_respond_with :ok
 
       body = JSON.parse(response.body)
 
