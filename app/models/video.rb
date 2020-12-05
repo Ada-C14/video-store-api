@@ -17,4 +17,14 @@ class Video < ApplicationRecord
   def in_stock?
     return available_inventory.positive?
   end
+
+  def check_out
+    self.available_inventory -= 1
+    save
+  end
+
+  def check_in
+    self.available_inventory += 1
+    save
+  end
 end
