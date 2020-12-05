@@ -11,7 +11,7 @@ class CustomersController < ApplicationController
     customer = Customer.find_by(id: params[:id])
 
     if customer.nil?
-      render json: { ok: false, message: "Not Found"}, status: :not_found
+      render json: { ok: false, message: 'Not Found'}, status: :not_found
       return
     end
 
@@ -34,7 +34,14 @@ class CustomersController < ApplicationController
 
   def customer_params
     return params.require(:customer).permit(
-      :name, :registered_at, :address, :city, :state, :postal_code, :phone, :videos_checked_out_count
+      :name,
+      :registered_at,
+      :address,
+      :city,
+      :state,
+      :postal_code,
+      :phone,
+      :videos_checked_out_count
     )
   end
 end

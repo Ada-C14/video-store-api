@@ -14,8 +14,8 @@ class Rental < ApplicationRecord
   end
 
   def rental_checkin
-    Video.find_by(id: video_id).check_in
-    Customer.find_by(id: customer_id).check_in
+    video.check_in
+    customer.check_in
     self.checked_in = Date.today
     save
   end
