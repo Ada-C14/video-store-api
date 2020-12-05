@@ -23,6 +23,16 @@ describe RentalsController do
     }
   }
 
+  let (:rental_checked_out) {
+    Rental.create!(
+      customer_id: Customer.first.id,
+      video_id: Video.first.id,
+      checked_out: Date.today - 3,
+      due_date: Date.today + 4,
+      checked_in: nil
+    )
+  }
+
   let (:rental_checked_in) {
     Rental.create!(
       customer_id: Customer.first.id,
@@ -32,16 +42,6 @@ describe RentalsController do
       checked_in: Date.today - 3
     )
   }
-
-  # let (:oos_video) {
-  #   Video.create!(
-  #     title: 'Alf the movie',
-  #     overview: 'The most early 90s movie of all time',
-  #     release_date: 'December 16th 2025',
-  #     total_inventory: 6,
-  #     available_inventory: 0
-  #   )
-  # }
 
   describe 'check_out_rental' do
     it 'responds with a 404 when passed an id for a non-existent video' do
@@ -103,6 +103,24 @@ describe RentalsController do
       expect(body.keys).must_include 'errors'
       expect(body['errors']).must_include 'Not Found'
       must_respond_with :not_found
+    end
+
+    it 'can successfully check in a rental and populates checked_in date' do
+      rental_checked_out
+      post '/rentals/check-in', params: rental_hash
+      body = JSON.parse(response.body)
+
+      %w[customer_id video_id available_inventory videos_checked_out_count].each do |key|
+        expect(body.keys).must_include key
+      end
+
+      rental = Rental.order(:updated_at).last
+      expect(body['customer_id']).must_equal rental.customer_id
+      expect(body['video_id']).must_equal rental.video_id
+      expect(body['available_inventory']).must_equal rental.video.available_inventory
+      expect(body['videos_checked_out_count']).must_equal rental.customer.videos_checked_out_count
+      must_respond_with :ok
+      expect(rental.due_date).wont_be_nil
     end
   end
 end
