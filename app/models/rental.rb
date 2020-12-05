@@ -5,16 +5,6 @@ class Rental < ApplicationRecord
   validates :customer_id, presence: true
   validates :video_id, presence: true
 
-  def valid_video?
-    video = Video.find_by(id: video_id)
-    return video.present?
-  end
-
-  def valid_customer?
-    customer = Customer.find_by(id: customer_id)
-    return customer.present?
-  end
-
   def initialize_rental
     self.video.check_out
     self.customer.check_out

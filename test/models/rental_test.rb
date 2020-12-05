@@ -55,4 +55,18 @@ describe Rental do
       end
     end
   end
+
+  describe 'custom methods' do
+    describe 'initialize_rental' do
+      it 'will update associations and set a due date and check out date' do
+
+      end
+    end
+
+    describe 'rental_checkin' do
+      it 'will update associations and set a check in date' do
+
+      end
+    end
+  end
 end

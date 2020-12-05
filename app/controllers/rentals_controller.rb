@@ -3,7 +3,7 @@ class RentalsController < ApplicationController
   def check_out_rental
     rental = Rental.new(rental_params)
 
-    unless rental.valid_video? && rental.valid_customer?
+    unless rental.valid?
       render json: {
         errors: ['Not Found']
       }, status: :not_found
