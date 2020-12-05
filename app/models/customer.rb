@@ -10,6 +10,4 @@ class Customer < ApplicationRecord
   validates :postal_code, presence: true
   validates :phone, presence: true, uniqueness: true
   validates :videos_checked_out_count, numericality: true, numericality: { greater_than_or_equal_to: 0 }
-
-
 end

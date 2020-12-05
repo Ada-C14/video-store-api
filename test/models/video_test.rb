@@ -98,11 +98,15 @@ describe Video do
     end
 
     describe 'check_in' do
-
+      it 'will increase available_inventory by 1' do
+        expect{ video.check_in }.must_change 'video.available_inventory', 1
+      end
     end
 
     describe 'check_out' do
-
+      it 'will decrease available_inventory by 1' do
+        expect{ video.check_out }.must_change 'video.available_inventory', -1
+      end
     end
   end
 end
