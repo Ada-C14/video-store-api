@@ -53,13 +53,6 @@ class RentalsController < ApplicationController
       return
     end
 
-    unless rental.valid_video? && rental.valid_customer?
-      render json: {
-        errors: ['Not Found']
-      }, status: :not_found
-      return
-    end
-
     rental.rental_checkin
 
     render json: {

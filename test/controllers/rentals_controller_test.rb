@@ -1,33 +1,67 @@
-require "test_helper"
+require 'test_helper'
 
 describe RentalsController do
-  # describe "checking in" do
-  #   let(:rental_hash) {
-  #     {
-  #         rental: {
-  #             customer_id: 1000,
-  #             video_id: 563782,
-  #             checked_out: "Wed, 29 Apr 2015 07:54:14 -0700",
-  #             due_date: "Wed, 06 May 2015 07:54:14 -0700",
-  #             checked_in: "Wed, 03 May 2015 08:36:10 -0700"
-  #         },
-  #     }
-  #   }
-  #
-  #   it "responds with a not_found if customer_id or video_id doesn't exist" do
-  #
-  #     rental_hash[:rental][:customer_id] = nil
-  #     rental_hash[:rental][:video_id] = nil
-  #
-  #     expect {
-  #       post check_in_path, params: rental_hash
-  #     }.wont_change "Rental.count"
-  #
-  #     body = JSON.parse(response.body)
-  #
-  #     must_respond_with :not_found
-  #     expect(body['errors'].keys).must_include "customer_id"
-  #     expect(body['errors'].keys).must_include "video_id"
-  #   end
-  # end
+
+  let (:rental_hash) {
+    {
+      customer_id: Customer.first.id,
+      video_id: Video.first.id
+    }
+  }
+
+  let (:inv_cust_rental_hash) {
+    {
+      customer_id: -1,
+      video_id: Video.first.id
+    }
+  }
+
+  let (:inv_vid_rental_hash) {
+    {
+      customer_id: Customer.first.id,
+      video_id: -1
+    }
+  }
+
+  let (:rental_checked_in) {
+    Rental.create!(
+      customer_id: Customer.first.id,
+      video_id: Video.first.id,
+      checked_out: Date.today - 7,
+      due_date: Date.today,
+      checked_in: Date.today - 3
+    )
+  }
+
+  describe 'check_out_rental' do
+    it 'responds with a 404 when passed an id for a non-existent video' do
+      post '/rentals/check-out', params: inv_vid_rental_hash
+
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include 'errors'
+      expect(body['errors']).must_include 'Not Found'
+      must_respond_with :not_found
+    end
+
+    it 'responds with a 404 when passed an id for a non-existent customer' do
+      post '/rentals/check-out', params: inv_cust_rental_hash
+
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include 'errors'
+      expect(body['errors']).must_include 'Not Found'
+      must_respond_with :not_found
+    end
+  end
+
+  describe 'check_in_rental' do
+    it 'responds with a 404 when rental does not exist' do
+      rental_checked_in
+      post '/rentals/check-in', params: inv_cust_rental_hash
+
+      body = JSON.parse(response.body)
+      expect(body.keys).must_include 'errors'
+      expect(body['errors']).must_include 'Not Found'
+      must_respond_with :not_found
+    end
+  end
 end
