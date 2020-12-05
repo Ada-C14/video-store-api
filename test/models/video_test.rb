@@ -26,6 +26,14 @@ describe Video do
     )
   }
 
+  let (:rental1) {
+    Rental.create!(customer_id: Customer.first.id, video_id: video.id)
+  }
+
+  let (:rental2) {
+    Rental.create!(customer_id: Customer.last.id, video_id: video.id)
+  }
+
   it 'can be instantiated' do
     expect(video.valid?).must_equal true
 
@@ -83,7 +91,27 @@ describe Video do
   end
 
   describe 'relationships' do
+    it 'has many rentals' do
+      rental1
+      rental2
 
+      expect(video.rentals.count).must_equal 2
+
+      video.rentals.each do |rental|
+        expect(rental).must_be_instance_of Rental
+      end
+    end
+
+    it 'has many customers through rentals' do
+      rental1
+      rental2
+
+      expect(video.customers.count).must_equal 2
+
+      video.customers.each do |customer|
+        expect(customer).must_be_instance_of Customer
+      end
+    end
   end
 
   describe 'custom methods' do
