@@ -6,8 +6,8 @@ class Rental < ApplicationRecord
   validates :video_id, presence: true
 
   def initialize_rental
-    self.video.check_out
-    self.customer.check_out
+    video.check_out
+    customer.check_out
     self.checked_out = Date.today
     self.due_date = Date.today + 7
     save
