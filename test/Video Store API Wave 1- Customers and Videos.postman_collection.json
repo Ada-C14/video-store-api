@@ -21,7 +21,7 @@
 							"",
 							"pm.test(\"customer objects in response should have id, name, registered_at, postal_code, phone, videos_checked_out_count\", () => {",
 							"    const res = pm.response.json();",
-							"    pm.expect(Object.keys(res[0])).to.have.members(['id', 'name', 'city', 'state', 'address', 'registered_at', 'postal_code', 'phone', 'videos_checked_out_count']);",
+							"    pm.expect(Object.keys(res[0])).to.have.members(['id', 'name', 'registered_at', 'postal_code', 'phone', 'videos_checked_out_count']);",
 							"});",
 							""
 						],

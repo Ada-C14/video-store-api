@@ -2,7 +2,7 @@ require "test_helper"
 
 describe CustomersController do
   # Check that each customer has the proper keys
-  FIELDS = ["id", "name", "address", "city", "state",  "postal_code","phone", "registered_at", "videos_checked_out_count"].sort
+  FIELDS = ["id", "name", "postal_code","phone", "registered_at", "videos_checked_out_count"].sort
 
   describe 'index' do
     it "must get index" do
@@ -57,7 +57,7 @@ describe CustomersController do
       expect(response.header['Content-Type']).must_include 'json'
 
       expect(body).must_be_instance_of Hash
-      expect(body.keys.sort).must_equal FIELDS.sort
+      expect(body.keys.sort).must_equal (FIELDS + ["address", "city", "state"]).sort
 
     end
 
