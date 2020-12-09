@@ -13,8 +13,7 @@ class VideosController < ApplicationController
 
     if video.nil?
       render json: {
-          ok: false,
-          message: "Not found"
+          errors: ["Not Found"]
       }, status: :not_found
 
       return
@@ -40,10 +39,10 @@ class VideosController < ApplicationController
     video = Video.find_by(id: rental_params[:video_id])
 
     if customer.nil?
-      render json: {errors: "Can't find the customer."}, status: :not_found
+      render json: {errors: ["Not Found"]}, status: :not_found
       return
     elsif video.nil?
-      render json: {errors: "Can't find the video."}, status: :not_found
+      render json: {errors: ["Not Found"]}, status: :not_found
       return
     else
       rental = Rental.new(rental_params)
@@ -84,10 +83,10 @@ class VideosController < ApplicationController
     rental = Rental.find_by(customer_id: rental_params[:customer_id], video_id: rental_params[:video_id])
 
     if customer.nil?
-      render json: {errors: "Can't find the customer."}, status: :not_found
+      render json: {errors: ["Not Found"]}, status: :not_found
       return
     elsif video.nil?
-      render json: {errors: "Can't find the video."}, status: :not_found
+      render json: {errors: ["Not Found"]}, status: :not_found
       return
     elsif rental.nil?
       render json: {errors: "Can't find the rental order."}, status: :not_found
