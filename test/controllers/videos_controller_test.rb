@@ -1,4 +1,5 @@
 require "test_helper"
+require 'date'
 
 describe VideosController do
   describe "index" do
@@ -50,7 +51,7 @@ describe VideosController do
       fields = ["title", "overview", "release_date", "total_inventory", "available_inventory"].sort
       expect(body.keys.sort).must_equal fields
       expect(body["title"]).must_equal "Wonder Woman 2"
-      expect(body["release_date"]).must_equal "December 25th 2020"
+      expect(body["release_date"]).must_equal "2020-12-25"
       expect(body["available_inventory"]).must_equal 100
       expect(body["overview"]).must_equal "Wonder Woman squares off against Maxwell Lord and the Cheetah, a villainess who possesses superhuman strength and agility."
       expect(body["total_inventory"]).must_equal 100
@@ -61,12 +62,13 @@ describe VideosController do
     it "responds with a 404 for non-existant videos" do
       # Act
       get video_path(-1)
-      body = JSON.parse(response.body)
 
       # Assert
-      expect(body.keys).must_include "errors"
-      expect(body["errors"]).must_include  "Not Found"
-      must_respond_with :not_found      
+      must_respond_with :not_found
+      body = JSON.parse(response.body)
+      expect(body).must_be_instance_of Hash
+      expect(body["ok"]).must_equal false
+      expect(body["message"]).must_equal "Not found"
     end
   end
 
@@ -92,11 +94,11 @@ describe VideosController do
     it "will respond with bad request and errors for an invalid movie" do
       # Arrange
       video_hash = {
-        title: "Alf the movie",
-        overview: "The most early 90s movie of all time",
-        release_date: "December 16th 2025",
-        total_inventory: 6,
-        available_inventory: 6
+            title: "Alf the movie",
+            overview: "The most early 90s movie of all time",
+            release_date: "December 16th 2025",
+            total_inventory: 6,
+            available_inventory: 6
       }
   
       video_hash[:title] = nil
@@ -113,5 +115,126 @@ describe VideosController do
   
       must_respond_with :bad_request
     end
+  end
+
+  describe "checkout" do
+
+    before do
+      @video = videos(:wonder_woman)
+      @customer = customers(:customer_one)
+      @rental_hash = {
+          video_id: @video.id,
+          customer_id: @customer.id,
+          due_date: Date.today + 7
+      }
+    end
+
+    it "will checkout a video to a customer with valid ids" do
+
+
+      expect{post checkout_path, params: @rental_hash}.must_change "Rental.count", 1
+      must_respond_with :ok
+
+      body = JSON.parse(response.body)
+      expect(body["customer_id"]).must_equal @customer.id
+      expect(body["video_id"]).must_equal @video.id
+
+    end
+
+    it "will respond with 404 with invalid ids" do
+      @rental_hash[:video_id] = -1
+
+      expect{post checkout_path, params: @rental_hash}.wont_change "Rental.count"
+      must_respond_with :not_found
+    end
+
+    it "will increase the customer's videos_checked_out_count by one" do
+      count = @customer.videos_checked_out_count
+
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+      body = JSON.parse(response.body)
+      expect(body["videos_checked_out_count"]).must_equal count + 1
+    end
+
+    it "will decrease the video's available_inventory by one" do
+      count = @video.available_inventory
+
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+      body = JSON.parse(response.body)
+      expect(body["available_inventory"]).must_equal count - 1
+    end
+
+    it "create a due date" do
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+      body = JSON.parse(response.body)
+      expect(body["due_date"]).wont_be_nil
+    end
+
+    it "will respond with 200 with valid ids" do
+      post checkout_path, params: @rental_hash
+      must_respond_with :ok
+    end
+  end
+
+  describe "checkin" do
+    before do
+      @customer = customers(:customer_one)
+      @video = videos(:wonder_woman)
+      rental_hash = {
+          video_id: @video.id,
+          customer_id: @customer.id,
+          due_date: Date.today + 7
+      }
+      post checkout_path, params: rental_hash
+      @customer.reload
+      @video.reload
+
+      @checkin_hash = {
+          video_id: @video.id,
+          customer_id: @customer.id,
+      }
+    end
+
+    it "will respond with 404 with invalid customer id" do
+      @checkin_hash[:customer_id] = -1
+      count = @customer.videos_checked_out_count
+
+      post checkin_path, params: @checkin_hash
+      must_respond_with :not_found
+      expect(@customer.videos_checked_out_count).must_equal count
+
+    end
+
+    it "will respond with 404 with invalid video id" do
+      @checkin_hash[:video_id] = -1
+      count = @customer.videos_checked_out_count
+
+      post checkin_path, params: @checkin_hash
+      must_respond_with :not_found
+      expect(@customer.videos_checked_out_count).must_equal count
+    end
+
+    it "will decrease customer.videos_checked_out_count by one" do
+      count = @customer.videos_checked_out_count
+
+      post checkin_path, params: @checkin_hash
+      @customer.reload
+      must_respond_with :ok
+      expect(@customer.videos_checked_out_count).must_equal count - 1
+    end
+
+    it "will increase video.available_inventory by one" do
+      count = @video.available_inventory
+
+      post checkin_path, params: @checkin_hash
+      @video.reload
+      must_respond_with :ok
+      expect(@video.available_inventory).must_equal count + 1
+    end
+
+
   end
 end
